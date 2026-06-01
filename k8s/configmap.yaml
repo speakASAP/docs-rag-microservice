@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: docs-rag-microservice-config
+  namespace: statex-apps
+  labels:
+    app: docs-rag-microservice
+    managed-by: k8s-migration
+data:
+  NODE_ENV: "production"
+  SERVICE_NAME: "docs-rag-microservice"
+  DOMAIN: "docs-rag.alfares.cz"
+  PORT: "3397"
+  AUTH_SERVICE_URL: "http://auth-microservice.statex-apps.svc.cluster.local:3370"
+  LOGGING_SERVICE_URL: "http://logging-microservice.statex-apps.svc.cluster.local:3367"
+  LOGGING_SERVICE_API_PATH: "/api/logs"
+  NOTIFICATION_SERVICE_URL: "http://notifications-microservice.statex-apps.svc.cluster.local:3368"
+  AI_SERVICE_URL: "http://ai-microservice.statex-apps.svc.cluster.local:3380"
+  MONITORING_SERVICE_URL: "http://monitoring-microservice.statex-apps.svc.cluster.local:3395"
+  QDRANT_URL: "http://qdrant.statex-apps.svc.cluster.local:6333"
+  QDRANT_COLLECTION: "ecosystem-docs"
+  QDRANT_VECTOR_SIZE: "768"
+  OLLAMA_URL: "http://192.168.88.53:11434"
+  OLLAMA_EMBEDDING_MODEL: "nomic-embed-text"
+  DB_HOST: "192.168.88.53"
+  DB_PORT: "5432"
+  DB_USER: "dbadmin"
+  DB_NAME: "docs_rag"
+  GIT_SYNC_INTERVAL_HOURS: "6"
+  GIT_BASE_PATH: "/data/repos"

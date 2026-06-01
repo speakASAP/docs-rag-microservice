@@ -1,0 +1,6 @@
+{
+  "stage": "deployed",
+  "health": "ok",
+  "cycle": 0,
+  "notes": "Service running in K8s. OPENAI_API_KEY needs to be set in Vault before ingestion works."
+}

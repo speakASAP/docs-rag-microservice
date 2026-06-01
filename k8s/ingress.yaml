@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: docs-rag-microservice
+  namespace: statex-apps
+  labels:
+    app: docs-rag-microservice
+    managed-by: k8s-migration
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - docs-rag.alfares.cz
+      secretName: docs-rag-microservice-tls
+  rules:
+    - host: docs-rag.alfares.cz
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: docs-rag-microservice
+                port:
+                  number: 3397
