@@ -219,7 +219,7 @@ NOTIFICATION_SERVICE_URL=http://notifications-microservice:3368
 
 # ── Database (PostgreSQL) ──
 DATABASE_URL=
-DB_HOST=localhost
+DB_HOST=db-server-postgres
 DB_PORT=5432
 DB_USER=dbadmin
 DB_PASSWORD=
@@ -2174,7 +2174,7 @@ data:
   LOGGING_SERVICE_URL: "http://logging-microservice.statex-apps.svc.cluster.local:3367"
   NOTIFICATION_SERVICE_URL: "http://notifications-microservice.statex-apps.svc.cluster.local:3368"
 
-  DB_HOST: "192.168.88.53"
+  DB_HOST: "db-server-postgres"
   DB_PORT: "5432"
   DB_USER: "dbadmin"
   DB_NAME: "docs_rag"
@@ -2369,7 +2369,7 @@ VAULT_ADDR=http://127.0.0.1:8200 vault status
 
 # Write secrets (replace values with real ones)
 VAULT_ADDR=http://127.0.0.1:8200 vault kv put secret/prod/docs-rag-microservice \
-  DATABASE_URL="postgresql://dbadmin:<PASSWORD>@192.168.88.53:5432/docs_rag" \
+  DATABASE_URL="postgresql://dbadmin:<PASSWORD>@db-server-postgres.statex-apps.svc.cluster.local:5432/docs_rag" \
   DB_PASSWORD="<PASSWORD>" \
   JWT_SECRET="<SAME_JWT_SECRET_AS_OTHER_SERVICES>" \
   OPENAI_API_KEY="<OPENAI_KEY>" \
