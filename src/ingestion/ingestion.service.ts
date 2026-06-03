@@ -8,6 +8,7 @@ import { GitSyncService } from './git-sync.service';
 import { MarkdownChunkerService } from './markdown-chunker.service';
 import { EmbeddingService } from './embedding.service';
 import { QdrantService } from '../qdrant/qdrant.service';
+import { ECOSYSTEM_REPOS } from './repo-registry';
 
 @Injectable()
 export class IngestionService {
@@ -24,13 +25,14 @@ export class IngestionService {
     private readonly qdrant: QdrantService,
   ) {}
 
-  async triggerIngestion(repoName: string, repoUrl: string, force = false): Promise<IngestionJob> {
+  async triggerIngestion(repoName: string, repoUrl: string, force = false, localPath = false): Promise<IngestionJob> {
     const job = this.jobRepo.create({
       repoName,
       repoUrl,
       status: 'pending',
       chunksProcessed: 0,
       chunksTotal: 0,
+      localPath,
     });
     await this.jobRepo.save(job);
 
@@ -46,7 +48,9 @@ export class IngestionService {
     await this.jobRepo.save(job);
 
     try {
-      const localPath = await this.gitSync.cloneOrPull(job.repoName, job.repoUrl);
+      const localPath = job.localPath
+        ? this.gitSync.getLocalPath(job.repoName)
+        : await this.gitSync.cloneOrPull(job.repoName, job.repoUrl);
       const commitHash = await this.gitSync.getHeadCommit(localPath);
 
       if (!force && job.lastCommitHash === commitHash) {
@@ -131,5 +135,15 @@ export class IngestionService {
 
   async getStatus(): Promise<IngestionJob[]> {
     return this.jobRepo.find({ order: { createdAt: 'DESC' }, take: 50 });
+  }
+
+  async triggerAll(force = false): Promise<{ queued: number; repos: string[] }> {
+    const repos: string[] = [];
+    for (const repo of ECOSYSTEM_REPOS) {
+      await this.triggerIngestion(repo.repoName, repo.repoUrl, force, repo.localPath);
+      repos.push(repo.repoName);
+    }
+    this.logger.log(`trigger-all: queued ${repos.length} repos`);
+    return { queued: repos.length, repos };
   }
 }

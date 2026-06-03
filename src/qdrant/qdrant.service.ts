@@ -28,7 +28,7 @@ export class QdrantService implements OnModuleInit {
 
   constructor() {
     const url = process.env.QDRANT_URL || 'http://localhost:6333';
-    this.collectionName = process.env.QDRANT_COLLECTION || 'ecosystem_docs';
+    this.collectionName = process.env.QDRANT_COLLECTION || 'ecosystem-docs';
     this.vectorSize = parseInt(process.env.QDRANT_VECTOR_SIZE || '768', 10);
     this.client = new QdrantClient({ url });
   }

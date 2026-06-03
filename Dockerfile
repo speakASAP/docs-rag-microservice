@@ -26,6 +26,6 @@ USER node
 EXPOSE 3397
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=20s --retries=3 \
-  CMD wget -qO- http://localhost:3397/health || exit 1
+  CMD node -e "fetch('http://localhost:3397/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
 
 CMD ["node", "dist/main.js"]

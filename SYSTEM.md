@@ -8,12 +8,13 @@
 
 ## Key services
 - PostgreSQL: docs_rag database — chunk metadata, ingestion jobs
-- Qdrant: vector DB at qdrant.statex-apps.svc.cluster.local:6333, collection: ecosystem_docs
-- OpenAI: text-embedding-3-small for embeddings
+- Qdrant: vector DB at qdrant.statex-apps.svc.cluster.local:6333, collection: ecosystem-docs
+- Ollama: nomic-embed-text (768-dim) at host:11434 for embeddings
 
 ## API Endpoints
 - GET /health — public, liveness check
-- POST /ingestion/trigger — trigger repo ingestion (JWT required)
+- POST /ingestion/trigger — trigger single repo ingestion (JWT required)
+- POST /ingestion/trigger-all — trigger all 35 ecosystem repos (JWT required)
 - GET /ingestion/status — list recent ingestion jobs (JWT required)
 - POST /retrieval/search — semantic + filtered search (JWT required)
 - POST /retrieval/agent-context — token-limited context for AI agents (JWT required)

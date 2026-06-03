@@ -13,6 +13,9 @@ export class IngestionJob {
   @Column('varchar', { length: 500 })
   repoUrl!: string;
 
+  @Column('boolean', { default: false })
+  localPath!: boolean;
+
   @Column('varchar', { length: 20, default: 'pending' })
   status!: JobStatus;
 

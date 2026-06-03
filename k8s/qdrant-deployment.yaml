@@ -46,7 +46,9 @@ spec:
             periodSeconds: 10
       volumes:
         - name: qdrant-storage
-          emptyDir: {}
+          hostPath:
+            path: /data/qdrant-storage
+            type: DirectoryOrCreate
 ---
 apiVersion: v1
 kind: Service

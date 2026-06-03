@@ -25,6 +25,11 @@ spec:
         - name: wait-postgres
           image: busybox:1.36
           command: ['sh', '-c', 'until nc -z db-server-postgres 5432; do echo waiting for postgres; sleep 2; done']
+      volumes:
+        - name: git-repos
+          hostPath:
+            path: /home/ssf/Documents/Github
+            type: Directory
       containers:
         - name: app
           image: localhost:5000/docs-rag-microservice:latest
@@ -66,3 +71,7 @@ spec:
             limits:
               memory: "1Gi"
               cpu: "1000m"
+          volumeMounts:
+            - name: git-repos
+              mountPath: /data/repos
+              readOnly: true

@@ -6,8 +6,9 @@ import { parseOrThrow } from '../contracts/parse-or-throw';
 
 const TriggerIngestionRequestSchema = z.object({
   repoName: z.string().min(1),
-  repoUrl: z.string().url(),
+  repoUrl: z.string().min(1).default('local'),
   force: z.boolean().default(false),
+  localPath: z.boolean().default(false),
 });
 
 const IngestionStatusResponseSchema = z.object({
@@ -33,8 +34,15 @@ export class IngestionController {
   @HttpCode(202)
   @UsePipes(new ZodValidationPipe(TriggerIngestionRequestSchema))
   async trigger(@Body() body: TriggerIngestionRequest) {
-    const job = await this.ingestionService.triggerIngestion(body.repoName, body.repoUrl, body.force);
+    const job = await this.ingestionService.triggerIngestion(body.repoName, body.repoUrl, body.force, body.localPath);
     return { jobId: job.id, status: job.status, repoName: job.repoName };
+  }
+
+  @Post('trigger-all')
+  @HttpCode(202)
+  async triggerAll(@Body() body: { force?: boolean }) {
+    const force = body?.force ?? false;
+    return this.ingestionService.triggerAll(force);
   }
 
   @Get('status')

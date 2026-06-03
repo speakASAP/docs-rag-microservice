@@ -1,6 +1,6 @@
 # docs-rag-microservice — CLAUDE.md
 
-Ecosystem RAG service. Ingests docs from Git repos, embeds via OpenAI, stores in Qdrant, serves hybrid search API.
+Ecosystem RAG service. Ingests docs from local repo paths, embeds via Ollama (`nomic-embed-text`), stores in Qdrant, serves hybrid search API.
 
 Read SYSTEM.md for ports, endpoints, and deployment details.
 
