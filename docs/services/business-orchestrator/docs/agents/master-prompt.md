@@ -17,7 +17,7 @@ If they differ, interpret as: programme is complete, but runtime currently opera
 
 Query the RAG service first — saves 2000–5000 tokens per query:
 - **URL:** `http://docs-rag-microservice.statex-apps.svc.cluster.local:3397`
-- **Endpoint:** `POST /retrieval/agent-context` with `{"query": "...", "maxTokens": 3000, "repoName": "business-orchestrator"}`
+- **Endpoint:** `POST /retrieval/agent-context` with `{"query": "business-orchestrator ...", "maxTokens": 3000, "repoName": "docs-rag-microservice"}`
 - **Auth:** `Authorization: Bearer <JWT_TOKEN>` (service JWT, HS256)
 - All 61 business-orchestrator docs are indexed. Query RAG before opening any file.
 

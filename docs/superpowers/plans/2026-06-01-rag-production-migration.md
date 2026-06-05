@@ -6,7 +6,7 @@
 
 **Architecture:** The service already runs in K8s at port 3397 with Qdrant for vector storage and Ollama (`nomic-embed-text`) for embeddings. Key gaps: Ollama only binds to `127.0.0.1` (unreachable from pods), no PVC for git repos clone dir, no auto-ingestion registry for all ecosystem repos, no `local-path` ingestion (docs live on-disk already — cloning from GitHub is unnecessary), and SYSTEM.md/external-secret miss the `OPENAI_API_KEY` entry that was the original design intent (now replaced by Ollama). Docs in each service's CLAUDE.md/AGENTS.md/SYSTEM.md/README.md need a backlink to the RAG service so agents know to query there.
 
-**Tech Stack:** NestJS 10, TypeScript, Qdrant, Ollama nomic-embed-text (768-dim), PostgreSQL, K8s (statex-apps namespace), Vault ESO for secrets.
+**Tech Stack:** NestJS 11, TypeScript, Qdrant, Ollama nomic-embed-text (768-dim), PostgreSQL, K8s (statex-apps namespace), Vault ESO for secrets.
 
 ---
 

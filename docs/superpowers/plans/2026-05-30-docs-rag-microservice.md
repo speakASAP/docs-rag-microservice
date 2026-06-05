@@ -2,11 +2,11 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build a centralized RAG service that ingests docs from all statex ecosystem Git repos, generates embeddings via OpenAI, stores vectors in Qdrant, and exposes a hybrid search API for AI agents — reducing token usage by replacing raw repo reads.
+**Goal:** Build a centralized RAG service that ingests docs from all statex ecosystem Git repos, generates embeddings via Ollama, stores vectors in Qdrant, and exposes vector search and agent-context APIs for AI agents — reducing token usage by replacing raw repo reads.
 
-**Architecture:** NestJS microservice (port 3396) following ecosystem conventions (Zod contracts, JWT service-auth, TypeORM/Postgres for metadata, Qdrant for vectors, ESO/Vault for secrets, K8s deployment). Git repos are cloned into a persistent volume, docs are chunked semantically, embeddings are stored in Qdrant with rich metadata, and retrieval is hybrid (vector + BM25 keyword).
+**Architecture:** NestJS microservice (port 3397) following ecosystem conventions (Zod contracts, JWT service-auth, TypeORM/Postgres for metadata, Qdrant for vectors, ESO/Vault for secrets, K8s deployment). Git repos are cloned into a persistent volume, docs are chunked semantically, embeddings are stored in Qdrant with rich metadata, and retrieval is vector search via Qdrant.
 
-**Tech Stack:** NestJS 10, TypeScript, TypeORM + PostgreSQL (metadata), Qdrant (vectors), OpenAI text-embedding-3-small, simple-git (repo sync), marked (markdown parsing), Zod (contracts), K8s + ESO/Vault (secrets).
+**Tech Stack:** NestJS 11, TypeScript, TypeORM + PostgreSQL (metadata), Qdrant (vectors), Ollama nomic-embed-text, simple-git (repo sync), marked (markdown parsing), Zod (contracts), K8s + ESO/Vault (secrets).
 
 ---
 
@@ -2503,7 +2503,7 @@ Expected: `context` field contains meaningful text, `estimatedTokens < 2000`.
 # docs-rag-microservice — SYSTEM.md
 
 ## Stack
-- Runtime: Node.js 20 + NestJS 10
+- Runtime: Node.js 20 + NestJS 11
 - Language: TypeScript
 - Port: 3397
 - Domain: docs-rag.alfares.cz
@@ -2533,7 +2533,7 @@ Service-to-service JWT (HS256). JWT_SECRET from Vault. @Public() for /health onl
 ```markdown
 # docs-rag-microservice — CLAUDE.md
 
-Ecosystem RAG service. Ingests docs from Git repos, embeds via OpenAI, stores in Qdrant, serves hybrid search API.
+Ecosystem RAG service. Ingests docs from Git repos, embeds via Ollama, stores in Qdrant, serves vector search and agent-context APIs.
 
 Read SYSTEM.md for ports, endpoints, and deployment details.
 
@@ -2614,10 +2614,10 @@ gh issue comment 1 --repo speakASAP/docs-rag-microservice --body "## Implementat
 - TypeORM entities: DocumentChunk + IngestionJob
 - QdrantService: collection management, batch upsert, vector search
 - MarkdownChunkerService: semantic heading-based splitting, doc type detection
-- EmbeddingService: OpenAI text-embedding-3-small, batch + retry
+- EmbeddingService: Ollama nomic-embed-text, batch + retry
 - GitSyncService: simple-git clone/pull, markdown file walking
 - IngestionService: full pipeline orchestration (git → chunk → embed → qdrant)
-- RetrievalService: hybrid search + agent-context (token-limited)
+- RetrievalService: vector search + agent-context (token-limited)
 - Kubernetes manifests: Qdrant deployment, configmap, ExternalSecret, deployment, service, ingress
 - Vault secret path created at secret/prod/docs-rag-microservice
 - 14+ unit tests passing

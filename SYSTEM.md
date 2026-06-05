@@ -1,7 +1,7 @@
 # docs-rag-microservice — SYSTEM.md
 
 ## Stack
-- Runtime: Node.js 20 + NestJS 10
+- Runtime: Node.js 20 + NestJS 11
 - Language: TypeScript
 - Port: 3397
 - Domain: docs-rag.alfares.cz

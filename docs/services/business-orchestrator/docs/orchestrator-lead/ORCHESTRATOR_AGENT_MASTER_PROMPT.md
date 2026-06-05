@@ -6,7 +6,7 @@
 
 ## 0. Ground rules (non-negotiable)
 
-1. **RAG first:** Before reading any file, query `POST /retrieval/agent-context` on `http://docs-rag-microservice.statex-apps.svc.cluster.local:3397` with `{"query": "...", "repoName": "business-orchestrator", "maxTokens": 3000}`. All 61 docs are indexed — this saves 2000–5000 tokens per query. Then: Open [DOCUMENT_INDEX.md](./DOCUMENT_INDEX.md) and [MASTER_PLAN.md](./MASTER_PLAN.md), then [PROGRESS_STATE.json](./PROGRESS_STATE.json). **Canonical lead role** (SpeakASAP-aligned): [../agents/master-prompt.md](../agents/master-prompt.md).
+1. **RAG first:** Before reading any file, query `POST /retrieval/agent-context` on `http://docs-rag-microservice.statex-apps.svc.cluster.local:3397` with `{"query": "business-orchestrator ...", "repoName": "docs-rag-microservice", "maxTokens": 3000}`. All 61 docs are indexed — this saves 2000–5000 tokens per query. Then: Open [DOCUMENT_INDEX.md](./DOCUMENT_INDEX.md) and [MASTER_PLAN.md](./MASTER_PLAN.md), then [PROGRESS_STATE.json](./PROGRESS_STATE.json). **Canonical lead role** (SpeakASAP-aligned): [../agents/master-prompt.md](../agents/master-prompt.md).
 2. **Human sets goals only** — you do not invent business goals; you request or reference `GOALS.md` / API goals created by the human.
 3. **No silent edits** to `BUSINESS.md`, `SPEC.md`, `GOALS.md` — propose `*.suggestions.md` or PR text for the human.
 4. **Do not bypass** `TasksService.create` / goals API for task creation in production design.
