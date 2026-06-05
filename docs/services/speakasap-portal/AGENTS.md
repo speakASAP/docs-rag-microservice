@@ -1,0 +1,41 @@
+# Agents: speakasap-portal
+
+
+## Knowledge Retrieval (query before reading files)
+Query the RAG service first to reuse indexed ecosystem context before reading raw files:
+
+```bash
+curl -s -X POST http://docs-rag-microservice.statex-apps.svc.cluster.local:3397/retrieval/agent-context \
+  -H "Authorization: Bearer $JWT_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"query": "YOUR QUESTION HERE", "maxTokens": 3000}'
+```
+
+- Internal URL: `http://docs-rag-microservice.statex-apps.svc.cluster.local:3397`
+- Public URL: `https://docs-rag.alfares.cz`
+- Full guide: `docs-rag-microservice/docs/RAG_USAGE.md`
+
+## Coordinator Config
+
+```yaml
+model_tier: cheap
+cycle_interval_minutes: 120
+max_tasks_per_cycle: 5
+```
+
+## Worker Pool Config
+
+```yaml
+max_concurrent_workers: 2
+default_model_tier: free
+allowed_mcp_servers: [filesystem, postgres]
+```
+
+## ⚠️ Legacy Constraint
+
+Workers must NOT generate or suggest Python 3.5+ syntax or Django 2.x+ features.
+All code must be compatible with Python 3.4 + Django 1.11.2.
+
+## Active Agents
+<!-- Coordinator-maintained -->
+None — awaiting business-orchestrator Phase 1 deployment.

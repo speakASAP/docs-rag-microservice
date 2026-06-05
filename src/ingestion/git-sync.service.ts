@@ -12,7 +12,7 @@ export class GitSyncService {
   private readonly reposDir: string;
 
   constructor() {
-    this.reposDir = process.env.GIT_REPOS_DIR || '/data/repos';
+    this.reposDir = process.env.GIT_BASE_PATH || process.env.GIT_REPOS_DIR || '/data/repos';
   }
 
   async cloneOrPull(repoName: string, repoUrl: string): Promise<string> {

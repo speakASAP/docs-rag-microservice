@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { randomUUID } from 'crypto';
@@ -11,8 +11,10 @@ import { QdrantService } from '../qdrant/qdrant.service';
 import { ECOSYSTEM_REPOS } from './repo-registry';
 
 @Injectable()
-export class IngestionService {
+export class IngestionService implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(IngestionService.name);
+  private scheduledTimer?: NodeJS.Timeout;
+  private scheduledRunActive = false;
 
   constructor(
     @InjectRepository(IngestionJob)
@@ -24,6 +26,37 @@ export class IngestionService {
     private readonly embedder: EmbeddingService,
     private readonly qdrant: QdrantService,
   ) {}
+
+  onModuleInit(): void {
+    const enabled = process.env.SCHEDULED_INGESTION_ENABLED === 'true';
+    if (!enabled) return;
+
+    const intervalHours = Number(process.env.GIT_SYNC_INTERVAL_HOURS || '6');
+    const intervalMs = Math.max(1, intervalHours) * 60 * 60 * 1000;
+    this.scheduledTimer = setInterval(() => {
+      this.runScheduledIngestion().catch((err) => {
+        this.logger.error(`Scheduled ingestion failed: ${err instanceof Error ? err.message : String(err)}`);
+      });
+    }, intervalMs);
+    this.logger.log(`Scheduled ingestion enabled every ${intervalHours} hour(s)`);
+  }
+
+  onModuleDestroy(): void {
+    if (this.scheduledTimer) clearInterval(this.scheduledTimer);
+  }
+
+  private async runScheduledIngestion(): Promise<void> {
+    if (this.scheduledRunActive) {
+      this.logger.warn('Scheduled ingestion skipped because a previous scheduled run is still active');
+      return;
+    }
+    this.scheduledRunActive = true;
+    try {
+      await this.triggerAll(false);
+    } finally {
+      this.scheduledRunActive = false;
+    }
+  }
 
   async triggerIngestion(repoName: string, repoUrl: string, force = false, localPath = false): Promise<IngestionJob> {
     const job = this.jobRepo.create({
@@ -53,9 +86,17 @@ export class IngestionService {
         : await this.gitSync.cloneOrPull(job.repoName, job.repoUrl);
       const commitHash = await this.gitSync.getHeadCommit(localPath);
 
-      if (!force && job.lastCommitHash === commitHash) {
+      const latestCompleted = await this.jobRepo.findOne({
+        where: { repoName: job.repoName, status: 'completed' },
+        order: { updatedAt: 'DESC' },
+      });
+
+      if (!force && latestCompleted?.lastCommitHash === commitHash) {
         this.logger.log(`${job.repoName} is up to date at ${commitHash}`);
         job.status = 'completed';
+        job.lastCommitHash = commitHash;
+        job.chunksProcessed = latestCompleted.chunksProcessed;
+        job.chunksTotal = latestCompleted.chunksTotal;
         await this.jobRepo.save(job);
         return;
       }

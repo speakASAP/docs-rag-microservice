@@ -101,3 +101,6 @@ local_settings.py
 *.tar.gz
 *.rar
 *.7z
+
+# Local Qdrant data
+qdrant-storage/

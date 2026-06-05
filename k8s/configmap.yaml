@@ -27,5 +27,6 @@ data:
   DB_USER: "dbadmin"
   DB_NAME: "docs_rag"
   GIT_SYNC_INTERVAL_HOURS: "6"
+  SCHEDULED_INGESTION_ENABLED: "true"
   GIT_BASE_PATH: "/data/repos"
-  DB_AUTO_CREATE: "true"
+  DB_AUTO_CREATE: "false"
