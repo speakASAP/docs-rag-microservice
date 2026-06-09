@@ -1,5 +1,14 @@
 # docs-rag-microservice — CLAUDE.md
 
+## Knowledge Retrieval — query this service before reading files
+
+```bash
+kubectl -n statex-apps exec deployment/business-orchestrator -- curl -s -X POST http://docs-rag-microservice:3397/retrieval/agent-context \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $(cat ~/.claude/rag-token)" \
+  -d '{"query": "YOUR QUESTION HERE", "maxTokens": 3000}'
+```
+
 Ecosystem RAG service. Ingests docs from local repo paths, embeds via Ollama (`nomic-embed-text`), stores in Qdrant, serves vector search and agent-context APIs.
 
 Read SYSTEM.md for ports, endpoints, and deployment details.

@@ -104,3 +104,6 @@ local_settings.py
 
 # Local Qdrant data
 qdrant-storage/
+
+# Claude Code local settings (may contain tokens)
+.claude/settings.local.json
