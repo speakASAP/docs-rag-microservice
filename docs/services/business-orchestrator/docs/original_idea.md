@@ -15,7 +15,7 @@ The platform must:
 
 Current situation:
 
-- there are many microservices/projects (about 20);
+- there are many microservices/projects (about 40);
 - no project is generating stable revenue yet;
 - everything is on development stage;
 - manual coordination does not scale.
