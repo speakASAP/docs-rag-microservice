@@ -21,6 +21,6 @@
 
 ### Consumers
 
-orders-microservice, marketing-microservice, business-orchestrator, all applications.
+orders-microservice, marketing-microservice, runlayer, all applications.
 
 **Ops**: `curl http://notifications-microservice:3368/health` · `kubectl logs -n statex-apps -l app=notifications-microservice -f` · `./scripts/deploy.sh`

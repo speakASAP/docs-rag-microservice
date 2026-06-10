@@ -30,7 +30,7 @@ Both tools are inherited automatically by any Claude Code subprocess, including 
 |---|---|---|
 | Claude Code sessions (developer) | ✅ PreToolUse hook | ✅ Plugin auto-activates |
 | `ai-microservice` subprocess (CC CLI) | ✅ Inherits hook | ✅ Inherits plugin |
-| `business-orchestrator` agents | ✅ via ai-microservice | ✅ via ai-microservice |
+| `runlayer` agents | ✅ via ai-microservice | ✅ via ai-microservice |
 | `agentic-email-processing-system` | ✅ via ai-microservice | ✅ via ai-microservice |
 
 ---

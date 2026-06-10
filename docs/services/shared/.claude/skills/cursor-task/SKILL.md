@@ -23,7 +23,7 @@ GITHUB_DIR=$([ "$IS_MAC" = "true" ] && echo "/Users/sergiystashok/Documents/GitH
 
 From the user's argument or context:
 
-- **Service name** (e.g. "business-orchestrator")
+- **Service name** (e.g. "runlayer")
 - **Task description** (what needs to be created)
 
 ## Step 3 — Find next task number

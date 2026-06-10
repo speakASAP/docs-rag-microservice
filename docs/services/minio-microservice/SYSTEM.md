@@ -21,7 +21,7 @@ MinIO S3-compatible storage. Kubernetes (`statex-apps` namespace).
 | Consumer | Usage |
 |---------|-------|
 | speakasap-portal | Store + serve lesson MP3 recordings |
-| business-orchestrator | Task artifact storage |
+| runlayer | Task artifact storage |
 
 ## Secrets
 

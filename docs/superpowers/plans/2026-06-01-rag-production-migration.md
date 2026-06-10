@@ -359,7 +359,7 @@ export const ECOSYSTEM_REPOS: RepoEntry[] = [
 
   // AI & orchestration
   { repoName: 'ai-microservice', repoUrl: 'git@github.com:speakASAP/ai-microservice.git', localPath: true },
-  { repoName: 'business-orchestrator', repoUrl: 'git@github.com:speakASAP/business-orchestrator.git', localPath: true },
+  { repoName: 'runlayer', repoUrl: 'git@github.com:speakASAP/runlayer.git', localPath: true },
   { repoName: 'prompts-microservice', repoUrl: 'git@github.com:speakASAP/prompts.git', localPath: true },
   { repoName: 'docs-rag-microservice', repoUrl: 'git@github.com:speakASAP/docs-rag-microservice.git', localPath: true },
 
@@ -692,7 +692,7 @@ Public: `https://docs-rag.alfares.cz`
 
 Run this for each:
 ```bash
-for svc in ai-microservice auth-microservice business-orchestrator notifications-microservice monitoring-microservice; do
+for svc in ai-microservice auth-microservice runlayer notifications-microservice monitoring-microservice; do
   AGENTS_FILE="/home/ssf/Documents/Github/$svc/AGENTS.md"
   if [ -f "$AGENTS_FILE" ]; then
     # Prepend RAG block after first line

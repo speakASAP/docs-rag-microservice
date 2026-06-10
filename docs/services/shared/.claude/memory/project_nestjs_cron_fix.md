@@ -12,7 +12,7 @@ Node.js v22+ has a native `Reflect.decorate` that does NOT convert `null` descri
 
 ## Permanent Fix (in source code)
 
-**File:** `business-orchestrator/src/main.ts`
+**File:** `runlayer/src/main.ts`
 
 Monkey-patch `Reflect.decorate` immediately after `import 'reflect-metadata'`:
 
@@ -38,9 +38,9 @@ ConfigMap `bo-startup-patch` in `statex-apps` namespace contains a `patch.js` th
 
 ## K8s Deployment Gotcha
 
-`business-orchestrator` K8s container name is `app` (not `business-orchestrator`). Strategic merge patch that specifies wrong container name adds a SECOND container and wipes `envFrom` from the original `app` container. Always use the correct container name or `kubectl replace -f` with full manifest.
+`runlayer` K8s container name is `app` (not `runlayer`). Strategic merge patch that specifies wrong container name adds a SECOND container and wipes `envFrom` from the original `app` container. Always use the correct container name or `kubectl replace -f` with full manifest.
 
-**Why:** `envFrom` references `business-orchestrator-config` (ConfigMap) and `business-orchestrator-secret` (Secret) for all DB/Redis/etc credentials.
+**Why:** `envFrom` references `runlayer-config` (ConfigMap) and `runlayer-secret` (Secret) for all DB/Redis/etc credentials.
 
 ## Verification
 

@@ -34,7 +34,7 @@ kubectl get pods -n statex-apps   # Check pod status
 | ai-microservice                                        | 10.43.229.22  | 3380 |
 | crypto-ai-agent                                        | 10.43.213.125 | 3000 |
 | statex                                                 | 10.43.160.94  | 3000 |
-| business-orchestrator                                  | 10.43.129.234 | 3390 |
+| runlayer                                  | 10.43.129.234 | 3390 |
 | *(see `kubectl get svc -n statex-apps` for full list)* |               |      |
 
 

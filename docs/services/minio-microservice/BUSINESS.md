@@ -14,7 +14,7 @@ S3-compatible object storage for lesson recordings and file artifacts. Private b
 
 ## Consumers
 
-speakasap-portal (lesson recordings), business-orchestrator (task artifacts).
+speakasap-portal (lesson recordings), runlayer (task artifacts).
 
 ## SLA
 

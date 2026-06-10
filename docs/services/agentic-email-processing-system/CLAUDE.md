@@ -25,7 +25,7 @@ Read this repo's `BUSINESS.md` → `SYSTEM.md` → `AGENTS.md` → `TASKS.md` �
 
 ### Events
 
-- Classified events → RabbitMQ → business-orchestrator (email signals → task triggers)
+- Classified events → RabbitMQ → runlayer (email signals → task triggers)
 
 ### Quick ops
 

@@ -20,7 +20,7 @@ Use this checklist when adding any new endpoint or inter-service call to any mic
 - [ ] Outbound request is validated: `parseOrThrow(TheirRequestSchema, payload, 'caller.callee.request')`
 - [ ] Inbound response is validated: `parseOrThrow(TheirResponseSchema, raw, 'caller.callee.response')`
 - [ ] If calling ai-microservice: use `AiCompleteRequestSchema` / `AiCompleteResponseSchema` from `src/contracts`
-- [ ] Run `./shared/scripts/check-contract-parity.sh` — must exit 0 before deploying either `business-orchestrator` or `ai-microservice`
+- [ ] Run `./shared/scripts/check-contract-parity.sh` — must exit 0 before deploying either `runlayer` or `ai-microservice`
 
 ## New Microservice (from scratch)
 
@@ -38,7 +38,7 @@ Use this checklist when adding any new endpoint or inter-service call to any mic
 
 - [ ] `schemaVersion` field bumped from `'1.0'` to `'2.0'` in schema and all callers
 - [ ] Both sides (producer + consumer) updated in same deploy window
-- [ ] If change touches `ai-complete.contract.ts`: BOTH `business-orchestrator` AND `ai-microservice` must be updated
+- [ ] If change touches `ai-complete.contract.ts`: BOTH `runlayer` AND `ai-microservice` must be updated
 - [ ] Run `./shared/scripts/check-contract-parity.sh` after updating both files — confirms parity
 
 ---
@@ -47,7 +47,7 @@ Use this checklist when adding any new endpoint or inter-service call to any mic
 
 | Service | Contracts dir | Filter |
 |---------|--------------|--------|
-| business-orchestrator | `src/contracts/` (18+ files) | `src/common/filters/contract-violation.filter.ts` |
+| runlayer | `src/contracts/` (18+ files) | `src/common/filters/contract-violation.filter.ts` |
 | ai-microservice | `src/contracts/` (11 files) | `src/common/filters/contract-violation.filter.ts` |
 
 Standard doc: `shared/docs/CONTRACT_STANDARD.md`

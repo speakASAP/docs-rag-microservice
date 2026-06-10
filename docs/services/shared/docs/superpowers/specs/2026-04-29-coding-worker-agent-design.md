@@ -1,5 +1,5 @@
 ---
-title: CodingWorkerAgent — Autonomous Coding Agent in business-orchestrator
+title: CodingWorkerAgent — Autonomous Coding Agent in runlayer
 date: 2026-04-29
 status: approved
 ---
@@ -8,7 +8,7 @@ status: approved
 
 ## Goal
 
-Enable `business-orchestrator` to autonomously write, deploy, and validate code changes across ecosystem services — no human involvement required during the execution phase. Humans review output after the fact via Telegram/email escalations and the orchestrator dashboard.
+Enable `runlayer` to autonomously write, deploy, and validate code changes across ecosystem services — no human involvement required during the execution phase. Humans review output after the fact via Telegram/email escalations and the orchestrator dashboard.
 
 ## Scope
 
@@ -20,7 +20,7 @@ Enable `business-orchestrator` to autonomously write, deploy, and validate code 
 
 ## Architecture Overview
 
-`CodingWorkerAgent` is a new agent type inside `business-orchestrator`, sitting alongside the existing `WorkerAgent` pool. The existing task state machine gains a new task type: `type: coding`. When `ProjectCoordinator` creates a task with `type: coding`, it routes to `CodingWorkerAgent` instead of the generic `WorkerAgent`.
+`CodingWorkerAgent` is a new agent type inside `runlayer`, sitting alongside the existing `WorkerAgent` pool. The existing task state machine gains a new task type: `type: coding`. When `ProjectCoordinator` creates a task with `type: coding`, it routes to `CodingWorkerAgent` instead of the generic `WorkerAgent`.
 
 ### Execution pipeline
 
@@ -90,7 +90,7 @@ Key methods:
 The `tasks` table already has a `type TEXT NOT NULL` column (migration 003). New additive columns only:
 
 ```sql
-ALTER TABLE business_orchestrator.tasks
+ALTER TABLE runlayer.tasks
   ADD COLUMN target_service VARCHAR(100),
   ADD COLUMN smoke_test_urls JSONB DEFAULT '[]',
   ADD COLUMN coding_attempts INTEGER NOT NULL DEFAULT 0,
@@ -175,7 +175,7 @@ Goal: <task goal>
 Last error: <error summary from coding_error_log[2]>
 Attempts: 3/3
 
-Review: https://orchestrator.alfares.cz/tasks/<id>
+Review: https://runlayer.alfares.cz/tasks/<id>
 ```
 
 Channels: Telegram + email (uses existing `TELEGRAM_CHAT_ID` + `EMAIL_TO` env vars).

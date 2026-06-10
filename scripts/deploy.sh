@@ -55,6 +55,11 @@ docker push "$IMAGE"
 docker push "$IMAGE_LATEST"
 deploy_timing_phase_end "Push image"
 
+deploy_timing_phase_start "Apply Qdrant"
+kubectl apply -f "$PROJECT_ROOT/k8s/qdrant-deployment.yaml" -n "$NAMESPACE"
+deploy_timing_k8s_rollout_wait kubectl qdrant "$NAMESPACE"
+deploy_timing_phase_end "Apply Qdrant"
+
 deploy_timing_phase_start "Apply K8s manifests"
 kubectl apply -f "$PROJECT_ROOT/k8s/external-secret.yaml" -n "$NAMESPACE"
 kubectl apply -f "$PROJECT_ROOT/k8s/configmap.yaml" -n "$NAMESPACE"

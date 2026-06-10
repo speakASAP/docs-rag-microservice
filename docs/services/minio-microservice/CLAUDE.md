@@ -20,7 +20,7 @@
 
 ### Consumers
 
-speakasap-portal (lesson recordings), business-orchestrator (task artifacts).
+speakasap-portal (lesson recordings), runlayer (task artifacts).
 
 docker compose logs -f
 

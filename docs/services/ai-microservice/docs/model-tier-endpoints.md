@@ -124,4 +124,4 @@ curl -sS -o /dev/stderr -w "%{http_code}" -X POST "${BASE}/ai/complete" \
 - `AGENTS.md` — tier → model names (ecosystem contract).
 - `docs/superpowers/plans/2026-04-12-unified-llm-gateway-stages.md` — staged rollout and smoke order.
 - `litellm_config.yaml` — proxy routes and fallbacks.
-- `business-orchestrator/src/worker/ai-http.client.ts` — production client: `POST .../ai/complete` with `model_tier` in body and cache key.
+- `runlayer/src/worker/ai-http.client.ts` — production client: `POST .../ai/complete` with `model_tier` in body and cache key.

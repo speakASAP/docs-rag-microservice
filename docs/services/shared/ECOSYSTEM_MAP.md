@@ -66,7 +66,7 @@
 | statex | app | various | alfares.cz | AI-powered business automation platform |
 | school-committee | app | 4800 | strilkove.cz | Czech primary school parent committee platform (QR payments, tasks, feedback) |
 | **ORCHESTRATION** |
-| business-orchestrator | orch | 3390/3391 | orchestrator.alfares.cz | AI agent orchestration brain |
+| runlayer | orch | 3390/3391 | runlayer.alfares.cz | AI agent orchestration brain |
 | **HUB** |
 | shared | hub | — | — | Ecosystem docs, scripts, standards |
 | **STATIC** |
@@ -95,7 +95,7 @@
 | marketing-microservice | ✓ | ✓ | ✓ | ✓ | — | — | — | ✓ | — |
 | prompts-microservice | ✓ | ✓ | ✓ | — | — | — | — | — | — |
 | agentic-email | — | ✓ | ✓ | — | ✓ | — | — | — | — |
-| business-orchestrator | ✓ | ✓ | ✓ | ✓ | ✓ | — | — | — | — |
+| runlayer | ✓ | ✓ | ✓ | ✓ | ✓ | — | — | — | — |
 | backups-microservice | ✓ | ✓ | ✓ | ✓ | — | — | — | — | — |
 | docs-rag-microservice | ✓ | ✓ | ✓ | ✓ | ✓ | — | — | — | — |
 
@@ -107,11 +107,11 @@
 | `order.updated` | orders-microservice | warehouse, allegro, aukro, bazos |
 | `order.shipped` | orders-microservice | notifications |
 | `stock.updated` | warehouse-microservice | allegro, aukro, bazos, heureka |
-| `task.created` | business-orchestrator | worker agents |
-| `task.completed` | business-orchestrator | logging, dashboard |
-| `task.failed` | business-orchestrator | logging, notifications |
-| `project.updated` | business-orchestrator | logging, dashboard |
-| `business.escalated` | business-orchestrator | notifications |
+| `task.created` | runlayer | worker agents |
+| `task.completed` | runlayer | logging, dashboard |
+| `task.failed` | runlayer | logging, notifications |
+| `project.updated` | runlayer | logging, dashboard |
+| `business.escalated` | runlayer | notifications |
 
 ## Port Reference
 

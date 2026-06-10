@@ -1,6 +1,6 @@
 # task-01 — Stock reservation + payment settlement (order-service)
 
-**Parent spec:** `business-orchestrator/docs/agents/AGENT12_STOCK_RESERVATION.md` (TASK-P2-08)
+**Parent spec:** `runlayer/docs/agents/AGENT12_STOCK_RESERVATION.md` (TASK-P2-08)
 
 ## Context
 
@@ -33,4 +33,4 @@ cd /home/ssf/Documents/Github/flipflop-service/services/order-service && npx tsc
 cd /home/ssf/Documents/Github/flipflop-service/services/order-service && npm run build
 ```
 
-Then run **AGENT12V** checklist: `business-orchestrator/docs/agents/AGENT12V_STOCK_RESERVATION_VALIDATE.md`.
+Then run **AGENT12V** checklist: `runlayer/docs/agents/AGENT12V_STOCK_RESERVATION_VALIDATE.md`.

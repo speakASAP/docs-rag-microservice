@@ -22,7 +22,7 @@ IS_MAC=$([ "$(uname -s)" = "Darwin" ] && echo "true" || echo "false")
 | notifications-microservice | notifications-microservice-blue | 3368 |
 | payments-microservice | payments-microservice-blue | 3468 |
 | ai-microservice | ai-microservice-orchestrator-blue | 3380 |
-| business-orchestrator | business-orchestrator-blue | 3390 |
+| runlayer | runlayer-blue | 3390 |
 | nginx-microservice | nginx-microservice | 80/443 |
 
 For services not listed above, check their .env for PORT.
@@ -56,7 +56,7 @@ On Mac, wrap each command in `ssh alfares "..."`.
 One line per service:
 
 - **UP** ✓ auth-microservice — healthy, uptime 3 days
-- **DEGRADED** ⚠ business-orchestrator — up but /health returns 503
+- **DEGRADED** ⚠ runlayer — up but /health returns 503
 - **DOWN** ✗ logging-microservice — container not found
 
 If errors found, show them below the summary line.

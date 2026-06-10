@@ -2,7 +2,7 @@
 
 **Version:** 1.0  
 **Status:** Active  
-**Reference implementations:** `business-orchestrator/src/contracts/`, `ai-microservice/src/contracts/`
+**Reference implementations:** `runlayer/src/contracts/`, `ai-microservice/src/contracts/`
 
 ---
 
@@ -132,16 +132,16 @@ The filter returns HTTP 500 with:
 }
 ```
 
-Services with a `NotificationsClient` should additionally fire-and-forget an escalation alert (see `business-orchestrator/src/common/filters/contract-violation.filter.ts`).
+Services with a `NotificationsClient` should additionally fire-and-forget an escalation alert (see `runlayer/src/common/filters/contract-violation.filter.ts`).
 
 ---
 
 ## `AiCompleteRequest` / `AiCompleteResponse` — Shared Contract
 
-These two schemas are the **most critical shared contract** in the ecosystem. business-orchestrator calls ai-microservice; both sides MUST validate against the same shape.
+These two schemas are the **most critical shared contract** in the ecosystem. runlayer calls ai-microservice; both sides MUST validate against the same shape.
 
 Canonical definition lives in:
-- `business-orchestrator/src/contracts/ai-complete.contract.ts`
+- `runlayer/src/contracts/ai-complete.contract.ts`
 - `ai-microservice/src/contracts/ai-complete.contract.ts`
 
 They must remain byte-for-byte identical. Any change requires updating both services simultaneously.
@@ -187,7 +187,7 @@ export function parseOrThrow<T>(schema: ZodSchema<T>, data: unknown, context: st
 
 ### Parity guard script
 
-Run before deploying either `business-orchestrator` or `ai-microservice`:
+Run before deploying either `runlayer` or `ai-microservice`:
 
 ```bash
 ./shared/scripts/check-contract-parity.sh
@@ -201,10 +201,10 @@ Exits 0 if `ai-complete.contract.ts` schema definitions are identical across bot
 
 | Service | Behaviour |
 |---------|-----------|
-| `business-orchestrator` | Logs + fire-and-forget escalation via `notifications-microservice` |
+| `runlayer` | Logs + fire-and-forget escalation via `notifications-microservice` |
 | `ai-microservice` | Logs only |
 
-This is correct. `business-orchestrator` owns business escalations. Do not "fix" `ai-microservice` to also escalate.
+This is correct. `runlayer` owns business escalations. Do not "fix" `ai-microservice` to also escalate.
 
 ### No SuccessEnvelopeSchema
 

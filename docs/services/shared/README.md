@@ -29,7 +29,7 @@ Multiple microservices on a production server, accessible via SSH or HTTPS. Cros
 | **aukro-service**          | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **beauty**                 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **bazos-service**          | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **business-orchestrator**  | ✅ | ✅ | ✅ | ✅ | ✅ | |
+| **runlayer**  | ✅ | ✅ | ✅ | ✅ | ✅ | |
 | **crypto-ai-agent**        | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **ecosystem-console**      | — | — | — | ✅ | | |
 | **flipflop-service**       | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |

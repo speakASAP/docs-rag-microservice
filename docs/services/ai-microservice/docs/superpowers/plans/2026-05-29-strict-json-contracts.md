@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Enforce strict, Zod-validated JSON contracts on every inter-agent and inter-service boundary in ai-microservice, so all input and output shapes are validated at runtime with a clear `ContractViolationError` on failure — mirroring the approach already used in business-orchestrator (see issue #21).
+**Goal:** Enforce strict, Zod-validated JSON contracts on every inter-agent and inter-service boundary in ai-microservice, so all input and output shapes are validated at runtime with a clear `ContractViolationError` on failure — mirroring the approach already used in runlayer (see issue #21).
 
 **Architecture:** Add a `src/contracts/` directory with Zod schemas for every request/response shape across all six modules (ai, task, voice, email-triage, shop-assistant, claude-code). Wire validation into NestJS using a global `ZodValidationPipe` for request bodies and a thin `parseOrThrow` helper for service outputs. No class-validator migration — class-validator is removed from request-body paths once Zod pipes are wired in; existing DTOs are kept in sync as TypeScript types derived from Zod.
 
@@ -1291,11 +1291,11 @@ git commit -m "feat(contracts): add contracts barrel export"
 - [x] All response shapes have output Zod schemas
 - [x] `ContractViolationError` wraps Zod errors with clear messages
 - [x] `ZodValidationPipe` returns `BadRequestException` with structured details
-- [x] `schemaVersion: '1.0'` present in all schemas (consistent with business-orchestrator)
+- [x] `schemaVersion: '1.0'` present in all schemas (consistent with runlayer)
 - [x] `parseOrThrow` used consistently at every output boundary
 - [x] All schemas have matching tests in `contracts.spec.ts`
 
-**Gaps addressed vs business-orchestrator issue #21:**
-- `parseOrThrow` pattern matches what business-orchestrator uses
+**Gaps addressed vs runlayer issue #21:**
+- `parseOrThrow` pattern matches what runlayer uses
 - `schemaVersion` field aligns with existing convention
 - Zod is the single validation library (class-validator kept in existing DTOs, Zod used for all new contract validation)

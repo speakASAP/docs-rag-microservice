@@ -14,7 +14,7 @@ Required for every **application** and **microservice** repo in the Statex works
 | `PLAN.md` | Human approves | Versioned execution plan from SPEC |
 | `SYSTEM.md` | Human primary | Ports, stack, deploy, env names, integrations |
 | `AGENTS.md` | Human + coordinator | Agent boundaries, commands, logging |
-| `GOALS.md` | **Human only** | Active goals for business-orchestrator (DB `goals` table is authoritative) |
+| `GOALS.md` | **Human only** | Active goals for runlayer (DB `goals` table is authoritative) |
 | `TASKS.md` | Agents + human | Backlog ≤ 30 items; every task needs `goal_id` |
 | `STATE.json` | Orchestrator | Stage, health, cycle metadata (DB `state_snapshot` is authoritative) |
 

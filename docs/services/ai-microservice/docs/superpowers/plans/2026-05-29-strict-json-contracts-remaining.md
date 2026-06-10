@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Close the remaining contract enforcement gaps in ai-microservice so every request body is validated by Zod (not class-validator) and every response is validated by `parseOrThrow` — making enforcement 100% consistent with business-orchestrator.
+**Goal:** Close the remaining contract enforcement gaps in ai-microservice so every request body is validated by Zod (not class-validator) and every response is validated by `parseOrThrow` — making enforcement 100% consistent with runlayer.
 
 **Architecture:** The `src/contracts/` directory and all Zod schemas already exist. The gap is: 4 controllers still use class-validator DTOs for request body validation instead of `ZodValidationPipe`, shop-assistant controller has no `parseOrThrow` on responses, and the claude-code 404 branch returns an uncontracted plain object. This plan replaces each class-validator DTO with the corresponding Zod schema already in `src/contracts/`, adds response schemas for shop-assistant, and wires `parseOrThrow` at every output boundary.
 
@@ -860,7 +860,7 @@ gh issue comment 2 --repo speakASAP/ai-microservice --body "## Completed
 - Deleted: src/ai/dto/complete-request.dto.ts, src/task/dto/task-draft.dto.ts, src/voice/dto/transcribe.dto.ts, src/claude-code/dto/execute-code.dto.ts
 
 **Outcome:**
-All HTTP boundaries in ai-microservice now use Zod for both input and output validation. Full parity with business-orchestrator contract enforcement standard. TypeScript builds clean, full test suite passes."
+All HTTP boundaries in ai-microservice now use Zod for both input and output validation. Full parity with runlayer contract enforcement standard. TypeScript builds clean, full test suite passes."
 
 gh issue close 2 --repo speakASAP/ai-microservice
 ```

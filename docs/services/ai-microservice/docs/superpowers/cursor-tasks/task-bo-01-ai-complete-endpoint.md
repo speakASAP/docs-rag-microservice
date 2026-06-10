@@ -10,7 +10,7 @@
 
 ## Context
 
-`business-orchestrator` (NestJS service) calls `POST /ai/complete` on the AI orchestrator (port 3380) for LLM inference. The endpoint is implemented; see shipped code above.
+`runlayer` (NestJS service) calls `POST /ai/complete` on the AI orchestrator (port 3380) for LLM inference. The endpoint is implemented; see shipped code above.
 
 ---
 
@@ -44,7 +44,7 @@ MODEL_TIER_MAP = {
 @app.post("/ai/complete")
 async def ai_complete(request: AiCompleteRequest, req: Request):
     """
-    Generic LLM completion endpoint for business-orchestrator.
+    Generic LLM completion endpoint for runlayer.
     Accepts model_tier (free|cheap|smart), system_prompt, user_prompt.
     Returns the raw JSON-parsed LLM response, or {"text": "..."} for non-JSON responses.
     """

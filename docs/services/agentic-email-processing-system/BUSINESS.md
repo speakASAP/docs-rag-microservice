@@ -14,7 +14,7 @@ Autonomous AI email triage: classify inbound emails by intent, extract informati
 
 ## Consumers
 
-statex, business-orchestrator (email signals → task triggers).
+statex, runlayer (email signals → task triggers).
 
 ## SLA
 

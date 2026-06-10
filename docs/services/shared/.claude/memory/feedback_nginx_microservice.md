@@ -10,7 +10,7 @@ Never manually edit any file under `~/Documents/Github/nginx-microservice/` — 
 
 **How to apply:**
 
-- Service nginx config lives in `<service>/nginx/` (e.g. `nginx/nginx-api-routes.conf`, `nginx/orchestrator.alfares.cz.conf`)
+- Service nginx config lives in `<service>/nginx/` (e.g. `nginx/nginx-api-routes.conf`, `nginx/runlayer.alfares.cz.conf`)
 - To fix broken nginx behavior: add a post-deploy block in `scripts/deploy.sh` that uses `sed -i` to patch the generated blue/green conf files, then reloads nginx via `$NGINX_MICROSERVICE_PATH/scripts/reload-nginx.sh`
 - Pattern: `minio-microservice/scripts/deploy.sh` (sed-i patching), `agentic-email-processing-system/scripts/deploy.sh` (full-file replacement for short domain)
 - Known limitation documented in `shared/docs/NGINX_LOCAL_CONFIG.md §6`: `proxy_pass http://$VAR/path;` strips the URI suffix when host is a variable — fix with `sed -i 's|proxy_pass http://\$TARGET_UPSTREAM/[^;]*;|proxy_pass http://$TARGET_UPSTREAM;|g'`

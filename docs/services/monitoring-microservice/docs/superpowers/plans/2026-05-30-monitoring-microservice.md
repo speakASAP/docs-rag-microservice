@@ -973,7 +973,7 @@ const ECOSYSTEM_SERVICES = [
   { name: 'suppliers-microservice', port: 3202, domain: 'supplier.alfares.cz', category: 'ecommerce' },
   { name: 'leads-microservice', port: 4400, domain: 'leads.alfares.cz', category: 'business' },
   { name: 'marketing-microservice', port: 4600, domain: 'marketing.alfares.cz', category: 'business' },
-  { name: 'business-orchestrator', port: 3390, domain: 'orchestrator.alfares.cz', category: 'orchestration' },
+  { name: 'runlayer', port: 3390, domain: 'runlayer.alfares.cz', category: 'orchestration' },
   { name: 'agentic-email-processing-system', port: 3374, domain: 'aeps.alfares.cz', category: 'business' },
   { name: 'flipflop-service', port: 3200, domain: 'flipflop.alfares.cz', category: 'application' },
   { name: 'crypto-ai-agent', port: 4200, domain: 'crypto-ai-agent.alfares.cz', category: 'application' },
@@ -1536,7 +1536,7 @@ data:
             - http://payments-microservice:3468/health
             - http://leads-microservice:4400/health
             - http://marketing-microservice:4600/health
-            - http://business-orchestrator:3390/health
+            - http://runlayer:3390/health
             - http://prompts-microservice:4750/health
             - http://shop-assistant:4500/health
             - http://school-committee:4800/health
@@ -2707,7 +2707,7 @@ export const MOCK_SERVICES = [
   { name: 'warehouse-microservice', category: 'ecommerce', healthy: true, responseTimeMs: 62, domain: 'warehouse.alfares.cz' },
   { name: 'orders-microservice', category: 'ecommerce', healthy: true, responseTimeMs: 48, domain: 'orders.alfares.cz' },
   { name: 'payments-microservice', category: 'ecommerce', healthy: true, responseTimeMs: 38, domain: 'payments.alfares.cz' },
-  { name: 'business-orchestrator', category: 'orchestration', healthy: true, responseTimeMs: 95, domain: 'orchestrator.alfares.cz' },
+  { name: 'runlayer', category: 'orchestration', healthy: true, responseTimeMs: 95, domain: 'runlayer.alfares.cz' },
   { name: 'leads-microservice', category: 'business', healthy: true, responseTimeMs: 41, domain: 'leads.alfares.cz' },
   { name: 'shop-assistant', category: 'application', healthy: false, responseTimeMs: 0, domain: 'shop-assistant.alfares.cz', error: 'Connection timeout' },
 ];
@@ -3326,4 +3326,4 @@ Implementation in progress — proceeding through 12 tasks."
 - ✅ BUSINESS.md, SYSTEM.md, AGENTS.md, TASKS.md, STATE.json, GOALS.md — Task 1
 - ⚠️ Backup monitoring — backups-microservice health probe added to blackbox scrape targets; deep backup-specific metrics are future work
 - ⚠️ Distributed tracing (OpenTelemetry) — out of scope for v1 per spec ("evaluate" section)
-- ⚠️ AI-assisted anomaly detection — future work, reuses business-orchestrator patterns
+- ⚠️ AI-assisted anomaly detection — future work, reuses runlayer patterns

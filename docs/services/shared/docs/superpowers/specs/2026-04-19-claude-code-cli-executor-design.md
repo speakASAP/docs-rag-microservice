@@ -2,14 +2,14 @@
 
 **Date:** 2026-04-19  
 **Scope:** Add async Claude Code CLI execution to ai-microservice as sibling to `/ai/complete`  
-**Integration:** Reuse existing RabbitMQ + DB patterns from business-orchestrator
+**Integration:** Reuse existing RabbitMQ + DB patterns from runlayer
 
 ---
 
 ## Architecture
 
 ```
-business-orchestrator (coordinator)
+runlayer (coordinator)
   └─→ POST /ai/claude-code-execute (ai-microservice)
       ├─ Validate + create job record in DB
       ├─ Enqueue to RabbitMQ
@@ -141,7 +141,7 @@ CREATE TABLE claude_code_jobs (
 - Metrics (duration, status counts)
 
 **Phase 3 (1 day):** E2E test
-- Integration test with business-orchestrator
+- Integration test with runlayer
 - Verify task → enqueue → execute → validate → poll flow
 
 ---
@@ -160,7 +160,7 @@ CREATE TABLE claude_code_jobs (
 
 ## Integration Point
 
-**business-orchestrator coordinator** calls this endpoint when a task type is `claude_code_execute`:
+**runlayer coordinator** calls this endpoint when a task type is `claude_code_execute`:
 1. POST to create job, get job_id
 2. Poll GET endpoint until status != 'queued' and != 'executing'
 3. Check exit_code + validation_passed

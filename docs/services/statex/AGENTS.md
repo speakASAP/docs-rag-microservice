@@ -39,4 +39,3 @@ allowed_mcp_servers: [filesystem, postgres, playwright]
 
 ## Active Agents
 <!-- Coordinator-maintained -->
-None — awaiting business-orchestrator Phase 1 deployment.

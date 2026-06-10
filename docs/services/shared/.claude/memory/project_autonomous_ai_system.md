@@ -6,14 +6,14 @@ originSessionId: 3741defb-78e1-480e-ae9e-ca57c38f8e70
 ---
 ## Implementation Status: 53% Complete (8/15 features)
 
-### Already Implemented ✅ (business-orchestrator)
+### Already Implemented ✅ (runlayer)
 1. **State Machine** — task lifecycle: PENDING → RUNNING → VALIDATING → SUCCESS/FAILED/RETRY
 2. **Task Structure** — includes id, repo/service, branch, instructions, expected_outcome, retry_count, max_retries, cost_limit
 3. **Idempotency** — state tracking prevents duplicate execution
 4. **Logging** — full cycle history in PROGRESS_STATE.json, task logs, retry history
 5. **Validator** — AGENT*V_*VALIDATE.md pattern for each phase (phase-specific validators)
 6. **Cost Control** — monthly LLM budget cap: 1,000,000 units tracked per task
-7. **Scheduler** — business-orchestrator coordinator cycles (cron-based)
+7. **Scheduler** — runlayer coordinator cycles (cron-based)
 8. **Output Format** — JSON: {task_id, state, result, error_type, retries_used, logs_reference}
 
 ### Partially Implemented ⚠️

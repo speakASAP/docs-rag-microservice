@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Replace the broken LiteLLM/Ollama multi-tier routing with a direct Anthropic API call using `claude-sonnet-4-6` for every request, while keeping the `model_tier` field in the request contract so business-orchestrator needs zero changes.
+**Goal:** Replace the broken LiteLLM/Ollama multi-tier routing with a direct Anthropic API call using `claude-sonnet-4-6` for every request, while keeping the `model_tier` field in the request contract so runlayer needs zero changes.
 
 **Architecture:** `AiService.complete()` calls the Anthropic API directly via `fetch` using the `ANTHROPIC_API_KEY` already in Vault. The `model_tier` field in `CompleteRequestDto` is accepted but ignored — every call goes to `claude-sonnet-4-6`. LiteLLM and Ollama K8s containers are removed from the deployment. Token counting is preserved from the Anthropic usage response.
 

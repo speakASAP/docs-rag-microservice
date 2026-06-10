@@ -3,7 +3,7 @@
 ## Knowledge Retrieval — query this service before reading files
 
 ```bash
-kubectl -n statex-apps exec deployment/business-orchestrator -- curl -s -X POST http://docs-rag-microservice:3397/retrieval/agent-context \
+kubectl -n statex-apps exec deployment/docs-rag-microservice -- curl -s -X POST http://docs-rag-microservice:3397/retrieval/agent-context \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $(cat ~/.claude/rag-token)" \
   -d '{"query": "YOUR QUESTION HERE", "maxTokens": 3000}'

@@ -18,7 +18,7 @@
 | aukro-service | aukro.alfares.cz | |
 | auth-microservice | auth.alfares.cz | |
 | bazos-service | bazos.alfares.cz | |
-| business-orchestrator | orchestrator.alfares.cz | |
+| runlayer | runlayer.alfares.cz | |
 | catalog-microservice | catalog.alfares.cz | |
 | crypto-ai-agent | crypto-ai-agent.alfares.cz | |
 | ecosystem-console | ecosystem-console.alfares.cz | |

@@ -15,7 +15,7 @@ export const ECOSYSTEM_REPOS: RepoEntry[] = [
   { repoName: 'nginx-microservice', repoUrl: 'git@github.com:speakASAP/nginx-microservice.git', localPath: true },
   { repoName: 'vault-microservice', repoUrl: 'git@github.com:speakASAP/vault-microservice.git', localPath: true },
   { repoName: 'ai-microservice', repoUrl: 'git@github.com:speakASAP/ai-microservice.git', localPath: true },
-  { repoName: 'business-orchestrator', repoUrl: 'git@github.com:speakASAP/business-orchestrator.git', localPath: true },
+  { repoName: 'runlayer', repoUrl: 'git@github.com:speakASAP/runlayer.git', localPath: true },
   { repoName: 'prompts-microservice', repoUrl: 'git@github.com:speakASAP/prompts.git', localPath: true },
   { repoName: 'docs-rag-microservice', repoUrl: 'git@github.com:speakASAP/docs-rag-microservice.git', localPath: true },
   { repoName: 'catalog-microservice', repoUrl: 'git@github.com:speakASAP/catalog-microservice.git', localPath: true },

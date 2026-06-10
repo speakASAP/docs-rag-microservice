@@ -18,7 +18,7 @@ GITHUB_DIR=$([ "$IS_MAC" = "true" ] && echo "/Users/sergiystashok/Documents/GitH
 
 ## Validation steps
 
-Given a service name (e.g. "business-orchestrator", "auth-microservice"), run all checks below.
+Given a service name (e.g. "runlayer", "auth-microservice"), run all checks below.
 On Mac, wrap each server-side command in `ssh alfares "..."`.
 
 **1. TypeScript build** (skip for Python services):

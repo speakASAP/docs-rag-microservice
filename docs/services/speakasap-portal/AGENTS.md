@@ -38,4 +38,3 @@ All code must be compatible with Python 3.4 + Django 1.11.2.
 
 ## Active Agents
 <!-- Coordinator-maintained -->
-None — awaiting business-orchestrator Phase 1 deployment.

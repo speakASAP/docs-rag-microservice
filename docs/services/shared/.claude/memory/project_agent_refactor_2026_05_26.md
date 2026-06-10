@@ -13,9 +13,9 @@ Three independent work items. Execute in this order to minimize dependencies.
 
 **Why:** Token-economy routing (LiteLLM/Ollama) has been broken for 1 month. Replacing with Claude-only baseline to unblock multi-agent system testing. Contracts and human-in-the-loop added in same session.
 
-### Item 1 — JSON Contracts (business-orchestrator)
-- **GitHub:** https://github.com/speakASAP/business-orchestrator/issues/19
-- **Plan:** `business-orchestrator/docs/superpowers/plans/2026-05-26-agent-json-contracts.md`
+### Item 1 — JSON Contracts (runlayer)
+- **GitHub:** https://github.com/speakASAP/runlayer/issues/19
+- **Plan:** `runlayer/docs/superpowers/plans/2026-05-26-agent-json-contracts.md`
 - **Status:** NOT STARTED
 - **What:** Add `src/contracts/` with Zod schemas (TaskPayload, AgentResult, ValidationRequest, ValidationResult, AiCompleteRequest/Response). Validate at worker intake + validator output + AI response.
 - **How to apply:** Do this first — it defines interfaces the other two items conform to.
@@ -28,16 +28,16 @@ Three independent work items. Execute in this order to minimize dependencies.
 - **Key:** ANTHROPIC_API_KEY is already in Vault (`secret/prod/ai-microservice`). No token budget logic removed — kept for future re-activation.
 - **How to apply:** Do this second. Unblocks reliable end-to-end testing.
 
-### Item 3 — AWAITING_USER Status + GUI (business-orchestrator)
-- **GitHub:** https://github.com/speakASAP/business-orchestrator/issues/18
-- **Plan:** `business-orchestrator/docs/superpowers/plans/2026-05-26-awaiting-user-status.md`
+### Item 3 — AWAITING_USER Status + GUI (runlayer)
+- **GitHub:** https://github.com/speakASAP/runlayer/issues/18
+- **Plan:** `runlayer/docs/superpowers/plans/2026-05-26-awaiting-user-status.md`
 - **Status:** NOT STARTED
 - **What:** Add `awaiting_user` task status + `pendingQuestion` column. Worker detects `__needs_user_input: true` in LLM response. Dashboard shows yellow "Needs Your Answer" panel. POST `/api/dashboard/tasks/:id/answer` resumes task.
-- **DB migration required:** `pending_question TEXT NULL` on `business_orchestrator.tasks`.
+- **DB migration required:** `pending_question TEXT NULL` on `runlayer.tasks`.
 - **How to apply:** Do this last. Builds on stable Claude routing from Item 2.
 
 ### Architecture Notes (from exploration)
-- business-orchestrator at port 3390; ai-microservice at 3380
+- runlayer at port 3390; ai-microservice at 3380
 - Task statuses before this work: `created | assigned | in_progress | validation | done | failed | cancelled`
 - After this work adds: `awaiting_user`
 - Agent types: `global_coordinator` (smart, 5min), `project_coordinator` (cheap, 60min), `worker` (free, 10s dispatch), `validator` (free+cheap)

@@ -1,12 +1,7 @@
 # Memory Index
 
-- [NestJS @Cron Fix](project_nestjs_cron_fix.md) — Node.js v22+/v24 + reflect-metadata bug; monkey-patch in main.ts; K8s container name is `app` not `business-orchestrator`
-- [K8s Migration COMPLETE (2026-05-05)](project_kubernetes_phase_a_fixed.md) — services use Kubernetes DNS; PostgreSQL and Redis use `db-server-postgres` and `db-server-redis` in `statex-apps`
-- [Speakasap K8s Migration Complete (2026-05-26)](project_speakasap_k8s_migration.md) — All 13 speakasap services in K8s; Prisma OpenSSL fix (use openssl-3.0.x binary); K8s has separate internal postgres from host postgres; Prisma OpenSSL fix (use openssl-3.0.x binary)
-- [K8s Phase B: superseded](project_kubernetes_phase_b_dockerization.md) — All phases done; see K8s Migration COMPLETE entry above
+- [NestJS @Cron Fix](project_nestjs_cron_fix.md) — Node.js v22+/v24 + reflect-metadata bug; monkey-patch in main.ts; K8s container name is `app` not `runlayer`
 - [Server Command Authorization](feedback_server_commands.md) — Run production commands (curl, docker, runbooks) directly without asking permission
-- [Business Orchestrator Design](project_business_orchestrator.md) — All 13 phases complete; currently BAU (business-as-usual) mode; 2+ businesses autonomous
-- [Business Orchestrator Ops](project_business_orchestrator_ops.md) — Auth/public endpoints, agent seeding, deploy tag collision fix, psql pattern, coordinator trigger, goals schema
 - [Production Server: alfares](project_production_server.md) — All services deploy to ssh alfares / ~/Documents/Github/ / statex is legacy
 - [Cursor IDE Delegation Workflow](feedback_cursor_workflow.md) — Simple tasks → write Cursor prompt file; complex tasks only → Claude Code handles directly
 - [No Git Commit or Push](feedback_no_git_commit.md) — Never run git commit/push; ask user in chat with suggested message and wait

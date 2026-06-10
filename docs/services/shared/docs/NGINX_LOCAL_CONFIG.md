@@ -105,7 +105,7 @@ location /api/businesses {
 
 When `proxy_pass` contains a variable in the host part (`$TARGET_UPSTREAM`), nginx cannot perform URI substitution at config-parse time. At runtime it forwards only the literal path from the directive (`/api/businesses`), discarding the request URI suffix. A request to `/api/businesses/abc/projects` arrives at the container as `/api/businesses`.
 
-**Fix pattern (used by business-orchestrator, minio-microservice):** In the service's `deploy.sh` post-deploy block, use `sed -i` to strip the path suffix from all `proxy_pass` directives in the generated blue/green configs, then reload nginx:
+**Fix pattern (used by runlayer, minio-microservice):** In the service's `deploy.sh` post-deploy block, use `sed -i` to strip the path suffix from all `proxy_pass` directives in the generated blue/green configs, then reload nginx:
 
 ```bash
 for _conf in "$NGINX_BG_DIR/${DOMAIN}.blue.conf" "$NGINX_BG_DIR/${DOMAIN}.green.conf"; do
@@ -117,7 +117,7 @@ done
 
 Without a path component, nginx forwards the full request URI to the upstream unchanged.
 
-**Reference files:** `business-orchestrator/scripts/deploy.sh` (post-deploy block), `business-orchestrator/nginx/orchestrator.alfares.cz.conf` (correct config shape), `minio-microservice/scripts/deploy.sh` (same pattern for S3 routes).
+**Reference files:** `runlayer/scripts/deploy.sh` (post-deploy block), `runlayer/nginx/runlayer.alfares.cz.conf` (correct config shape), `minio-microservice/scripts/deploy.sh` (same pattern for S3 routes).
 
 ---
 
@@ -129,4 +129,4 @@ Without a path component, nginx forwards the full request URI to the upstream un
 - **Example deploy.sh with post-deploy config copy:** `agentic-email-processing-system/scripts/deploy.sh`  
 - **Example nginx-api-routes.conf:** `statex/nginx/nginx-api-routes.conf`, `agentic-email-processing-system/nginx/nginx-api-routes.conf`  
 - **Example domain config template:** `agentic-email-processing-system/nginx/aeps.alfares.cz.conf`  
-- **Example proxy_pass patch (nested REST routes):** `business-orchestrator/scripts/deploy.sh`, `minio-microservice/scripts/deploy.sh`
+- **Example proxy_pass patch (nested REST routes):** `runlayer/scripts/deploy.sh`, `minio-microservice/scripts/deploy.sh`
