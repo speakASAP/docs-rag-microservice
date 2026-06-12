@@ -2,5 +2,5 @@
   "stage": "deployed",
   "health": "ok",
   "cycle": 0,
-  "notes": "Service running in K8s. OPENAI_API_KEY needs to be set in Vault before ingestion works."
+  "notes": "Service running in K8s. JWT_TOKEN is wired from Vault through ExternalSecret for authenticated agent and ingestion calls; embeddings use Ollama via OLLAMA_URL."
 }
