@@ -16,7 +16,7 @@ Test credentials:
 from playwright.sync_api import sync_playwright
 
 EMAIL = 'test@example.com'
-PASSWORD = '70fdxIwqY7qUg7vXgaWUm/GBPPH5pAYy'
+PASSWORD = '<REDACTED_SYNTHETIC_PASSWORD>'
 BASE = 'https://runlayer.alfares.cz'
 
 with sync_playwright() as p:

@@ -1,0 +1,68 @@
+nodes:
+  - id: VISION-001
+    type: vision
+    path: 01_vision/VISION.md
+  - id: BUS-001
+    type: business_case
+    path: 02_business_case/BUSINESS_CASE.md
+  - id: SYS-001
+    type: system
+    path: 04_systems/SYS-001-docs-rag-service.md
+  - id: FEAT-003
+    type: feature
+    path: 10_features/FEAT-003-operational-readiness.md
+  - id: TASK-001
+    type: task
+    path: 11_tasks/TASK-001-implement-ips-standard.md
+  - id: GOAL-IMPACT-TASK-001
+    type: goal_impact
+    path: 22_goal_impact/GOAL-IMPACT-TASK-001.md
+  - id: EP-TASK-001
+    type: execution_plan
+    path: 21_execution_plans/EP-TASK-001-implement-ips-standard.md
+  - id: PROMPT-TASK-001-implement-ips-standard
+    type: coding_prompt
+    path: 14_prompts/PROMPT-TASK-001-implement-ips-standard.md
+  - id: CP-TASK-001-implement-ips-standard
+    type: context_package
+    path: 13_context_packages/CP-TASK-001-implement-ips-standard.md
+  - id: VAL-TASK-001-ips-adoption
+    type: validation_report
+    path: 12_validation/VAL-TASK-001-ips-adoption.md
+  - id: ADR-001
+    type: adr
+    path: 07_decisions/ADR-001-documentation-rag-service.md
+edges:
+  - from: BUS-001
+    type: traces_to
+    to: VISION-001
+  - from: SYS-001
+    type: traces_to
+    to: VISION-001
+  - from: FEAT-003
+    type: traces_to
+    to: SYS-001
+  - from: TASK-001
+    type: implements
+    to: FEAT-003
+  - from: TASK-001
+    type: impacts_goal
+    to: GOAL-IMPACT-TASK-001
+  - from: EP-TASK-001
+    type: derives_from
+    to: TASK-001
+  - from: EP-TASK-001
+    type: generates
+    to: PROMPT-TASK-001-implement-ips-standard
+  - from: EP-TASK-001
+    type: constrained_by
+    to: ADR-001
+  - from: PROMPT-TASK-001-implement-ips-standard
+    type: derives_from
+    to: EP-TASK-001
+  - from: PROMPT-TASK-001-implement-ips-standard
+    type: included_in_context
+    to: CP-TASK-001-implement-ips-standard
+  - from: VAL-TASK-001-ips-adoption
+    type: validates
+    to: TASK-001

@@ -1784,7 +1784,7 @@ quest.completed: { questId, userId, completedAt, rewards }
 ```typescript
 // ❌ BAD - Hardcoded values
 const dbUrl = 'postgresql://user:pass@db-server-postgres.statex-apps.svc.cluster.local:5432/db';
-const apiKey = 'sk-1234567890';
+const apiKey = '<REDACTED_SYNTHETIC_API_KEY>';
 const serviceUrl = 'https://api.example.com';
 
 // ✅ GOOD - Environment variables
