@@ -1,3 +1,16 @@
+# Repository Agent Instructions
+
+Shared rules live here:
+
+- Codex profile: `/home/ssf/.codex/AGENTS.md`
+- Cross-agent standard: `/home/ssf/.ai-agent-standards/CROSS_AGENT_AUTOMATION_STANDARD.md`
+- Repository operations: `AGENT_OPERATIONS.md`
+
+Read those first, then follow the repository-specific notes below and the current planning/status files.
+
+
+## Repository-Specific Notes
+
 # AGENTS.md
 
 ## Boundaries
@@ -30,4 +43,3 @@ Query the RAG service first — saves 2000-5000 tokens per query:
 - Documentation audit: `npm run docs:audit`
 - Pre-coding gate: `npm run gate:pre-coding`
 - Deployment readiness gate: `npm run gate:deployment -- --target TASK-001`
-
