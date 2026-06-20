@@ -1,5 +1,5 @@
 {
-  "created_at": "2026-06-13T18:41:03Z",
+  "created_at": "2026-06-20T05:53:50Z",
   "gate": "deployment_readiness",
   "next_step": "ready_for_deployment_review",
   "pre_coding_gate": {
@@ -75,6 +75,16 @@
       "line": 75,
       "marker": "[MISSING: ...]",
       "path": "23_documentation_contracts/DOCUMENTATION_COMPLETENESS_STANDARD.md"
+    },
+    {
+      "line": 60,
+      "marker": "[MISSING: ...]",
+      "path": "AGENT_OPERATIONS.md"
+    },
+    {
+      "line": 60,
+      "marker": "[UNKNOWN: ...]",
+      "path": "AGENT_OPERATIONS.md"
     }
   ],
   "validation_reports": {
