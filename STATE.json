@@ -9,8 +9,12 @@
   "tasks_failed_last_cycle": 0,
   "open_task_ids": [],
   "last_milestone": "task-001-ips-adoption-validated",
-  "next_focus": "[MISSING: next approved IPS task for runtime or product work]",
+  "next_focus": "Project completed/frozen: no active goals, plans, tasks, blockers, or human/AI actions pending as of 2026-06-21.",
   "blockers": [],
   "budget_units_used": 0,
-  "notes": "Service running in K8s. JWT_TOKEN is wired from Vault through ExternalSecret for authenticated agent and ingestion calls; embeddings use Ollama via OLLAMA_URL. TASK-001 IPS adoption is complete and validated in 12_validation/VAL-TASK-001-ips-adoption.md."
+  "notes": "Service running in K8s. JWT_TOKEN is wired from Vault through ExternalSecret for authenticated agent and ingestion calls; embeddings use Ollama via OLLAMA_URL. TASK-001 IPS adoption is complete and validated in 12_validation/VAL-TASK-001-ips-adoption.md.",
+  "project_status": "completed_frozen",
+  "completed_at": "2026-06-21",
+  "frozen_at": "2026-06-21",
+  "updated_at": "2026-06-21"
 }
