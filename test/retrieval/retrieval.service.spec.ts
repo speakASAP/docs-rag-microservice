@@ -48,4 +48,12 @@ describe('RetrievalService', () => {
     expect(ctx.context).toBeTruthy();
     expect(ctx.sources).toHaveLength(1);
   });
+
+  it('returns empty agent context when embedding retrieval is unavailable', async () => {
+    mockEmbedder.embedSingle.mockRejectedValueOnce(new Error('fetch failed'));
+    const ctx = await service.agentContext({ query: 'deployment', maxTokens: 2000 });
+    expect(ctx.context).toBe('');
+    expect(ctx.sources).toHaveLength(0);
+    expect(ctx.estimatedTokens).toBe(0);
+  });
 });

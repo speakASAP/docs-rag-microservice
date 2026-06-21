@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { EmbeddingService } from '../ingestion/embedding.service';
 import { QdrantService, SearchOptions } from '../qdrant/qdrant.service';
 
@@ -46,6 +46,8 @@ const WORDS_PER_TOKEN = 0.75;
 
 @Injectable()
 export class RetrievalService {
+  private readonly logger = new Logger(RetrievalService.name);
+
   constructor(
     private readonly embedder: EmbeddingService,
     private readonly qdrant: QdrantService,
@@ -87,13 +89,25 @@ export class RetrievalService {
     const maxTokens = req.maxTokens ?? 3000;
     const limit = Math.min(20, Math.ceil(maxTokens / 200));
 
-    const response = await this.search({
-      query: req.query,
-      limit,
-      repoName: req.repoName,
-      docType: req.docType,
-      scoreThreshold: 0.6,
-    });
+    let response: SearchResponse;
+    try {
+      response = await this.search({
+        query: req.query,
+        limit,
+        repoName: req.repoName,
+        docType: req.docType,
+        scoreThreshold: 0.6,
+      });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      this.logger.warn(`Agent context retrieval unavailable: ${message}`);
+      return {
+        query: req.query,
+        context: '',
+        sources: [],
+        estimatedTokens: 0,
+      };
+    }
 
     const contextParts: string[] = [];
     const sources: AgentContextResponse['sources'] = [];
