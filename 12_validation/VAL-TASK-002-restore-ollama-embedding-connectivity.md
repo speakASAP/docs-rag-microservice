@@ -2,7 +2,7 @@
 
 ```yaml
 id: VAL-TASK-002
-status: in_progress
+status: reviewed
 owner: platform-engineering
 created: 2026-07-02
 upstream:
@@ -20,9 +20,10 @@ Runtime configuration, embedding model availability, Docs/RAG rollout, and Clipl
 
 ## Summary
 
-Docs/RAG embedding connectivity repair is in progress. The active Docker
-Ollama endpoint is reachable on host port `11435`, and `nomic-embed-text`
-returns 768-dimensional embeddings from inside the Docs/RAG pod.
+Docs/RAG embedding connectivity repair is complete. The active Docker
+Ollama endpoint is reachable on host port `11435`, `nomic-embed-text`
+returns 768-dimensional embeddings from inside the Docs/RAG pod, and
+Cliplot Docs/RAG preflight now passes.
 
 ## Upstream goal
 
@@ -45,11 +46,27 @@ preDeploy.embeddingLength=768
 config.OLLAMA_URL=http://192.168.88.53:11435
 ```
 
-Final deploy and Cliplot readiness evidence will be appended after rollout.
+```text
+commit=2d17181
+deploy.image=localhost:5000/docs-rag-microservice:2d17181
+deploy.rollout=success
+deploy.health=pass
+runtime.OLLAMA_URL=http://192.168.88.53:11435
+runtime.tagsStatus=200
+runtime.hasNomic=true
+runtime.embeddingStatus=200
+runtime.embeddingLength=768
+cliplot.DOCS_RAG_PREFLIGHT=pass
+cliplot.docsRagStatusHttp=200
+cliplot.embeddingBackendUrl=http://192.168.88.53:11435
+cliplot.embeddingHttp=200
+cliplot.CLIPLOT_READINESS_BUNDLE=pass
+```
+
 
 ## Gate evidence
 
-Pending final gate rerun after deployment.
+`npm run docs:audit`, `npm run gate:pre-coding`, and `npm run gate:deployment -- --target TASK-002` passed before deployment.
 
 ## Invariant evidence
 
@@ -67,6 +84,9 @@ Configuration and validation commands are repeatable; live model pull is an exte
 
 - Ollama model availability precheck passed.
 - Embedding vector shape precheck passed.
+- Docs/RAG deployment passed.
+- Cliplot Docs/RAG preflight passed.
+- Cliplot readiness bundle passed.
 
 ## Failed criteria
 
@@ -80,8 +100,7 @@ port `11435`.
 
 ## Recommendation
 
-Deploy the ConfigMap correction, rerun Docs/RAG preflight, and only then run
-controlled ingestion if required by the consuming service.
+Ready for review. Controlled ingestion may now be run when required by a consuming service because preflight passes.
 
 ## Traceability confirmation
 

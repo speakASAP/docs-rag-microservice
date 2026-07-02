@@ -2,7 +2,7 @@
 
 ```yaml
 id: TASK-002
-status: validating
+status: reviewed
 owner: platform-engineering
 created: 2026-07-02
 upstream:

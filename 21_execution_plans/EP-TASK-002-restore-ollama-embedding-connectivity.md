@@ -2,7 +2,7 @@
 
 ```yaml
 id: EP-TASK-002
-status: validating
+status: reviewed
 owner: platform-engineering
 source_task: ../11_tasks/TASK-002-restore-ollama-embedding-connectivity.md
 vision: 01_vision/VISION.md
@@ -113,6 +113,6 @@ from the Docs/RAG pod and Cliplot readiness scripts.
 - [x] Active Ollama endpoint identified.
 - [x] Embedding model available.
 - [x] Config updated.
-- [ ] Deployment complete.
-- [ ] Cliplot preflight passes.
-- [ ] Validation report finalized.
+- [x] Deployment complete.
+- [x] Cliplot preflight passes.
+- [x] Validation report finalized.

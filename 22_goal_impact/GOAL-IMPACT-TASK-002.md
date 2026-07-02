@@ -10,7 +10,7 @@ upstream_links:
   - ../04_systems/SYS-001-docs-rag-service.md
 primary_goal: Restore documentation retrieval freshness through working embeddings.
 impact_level: high
-status: validating
+status: reviewed
 owner: platform-engineering
 created: 2026-07-02
 upstream:
