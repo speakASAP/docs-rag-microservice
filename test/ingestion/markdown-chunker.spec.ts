@@ -31,4 +31,10 @@ describe('MarkdownChunkerService', () => {
     const chunks = service.chunk(md, 'large.md', { repoName: 'test-repo' });
     expect(chunks.length).toBeGreaterThan(1);
   });
+  it('splits long unbroken tokens by character length', () => {
+    const longToken = 'a'.repeat(5000);
+    const chunks = service.chunk(`# Long Token\n\n${longToken}`, 'logs.md', { repoName: 'test-repo' });
+    expect(chunks.length).toBeGreaterThan(1);
+    expect(Math.max(...chunks.map((chunk) => chunk.text.length))).toBeLessThanOrEqual(1820);
+  });
 });

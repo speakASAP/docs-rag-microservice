@@ -17,6 +17,7 @@ export interface DocumentChunkData {
 }
 
 const MAX_CHUNK_WORDS = 400;
+const MAX_CHUNK_CHARS = 1800;
 
 @Injectable()
 export class MarkdownChunkerService {
@@ -75,12 +76,27 @@ export class MarkdownChunkerService {
   }
 
   private splitByWordCount(text: string, maxWords: number): string[] {
+    const wordChunks = this.splitByWords(text, maxWords);
+    return wordChunks.flatMap((chunk) => this.splitByCharacters(chunk, MAX_CHUNK_CHARS));
+  }
+
+  private splitByWords(text: string, maxWords: number): string[] {
     const words = text.split(/\s+/).filter(Boolean);
     if (words.length <= maxWords) return [text];
 
     const chunks: string[] = [];
     for (let i = 0; i < words.length; i += maxWords) {
       chunks.push(words.slice(i, i + maxWords).join(' '));
+    }
+    return chunks;
+  }
+
+  private splitByCharacters(text: string, maxChars: number): string[] {
+    if (text.length <= maxChars) return [text];
+
+    const chunks: string[] = [];
+    for (let i = 0; i < text.length; i += maxChars) {
+      chunks.push(text.slice(i, i + maxChars));
     }
     return chunks;
   }
