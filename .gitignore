@@ -107,3 +107,6 @@ qdrant-storage/
 
 # Claude Code local settings (may contain tokens)
 .claude/settings.local.json
+
+# Python caches
+__pycache__/

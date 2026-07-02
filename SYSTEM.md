@@ -9,7 +9,7 @@
 ## Key services
 - PostgreSQL: docs_rag database — chunk metadata, ingestion jobs
 - Qdrant: vector DB at qdrant.statex-apps.svc.cluster.local:6333, collection: ecosystem-docs
-- Ollama: nomic-embed-text (768-dim) at host:11434 for embeddings
+- Ollama: nomic-embed-text (768-dim) at Docker Ollama host port 11435 for embeddings
 
 ## API Endpoints
 - GET /health — public, liveness check

@@ -8,13 +8,13 @@
   "tasks_active": 0,
   "tasks_failed_last_cycle": 0,
   "open_task_ids": [],
-  "last_milestone": "task-001-ips-adoption-validated",
-  "next_focus": "Project completed/frozen: no active goals, plans, tasks, blockers, or human/AI actions pending as of 2026-06-21.",
+  "last_milestone": "task-002-ollama-embedding-connectivity-restored",
+  "next_focus": "Docs/RAG embedding backend connectivity restored through Docker Ollama host port 11435; monitor Cliplot readiness and docs-rag ingestion evidence.",
   "blockers": [],
   "budget_units_used": 0,
-  "notes": "Service running in K8s. JWT_TOKEN is wired from Vault through ExternalSecret for authenticated agent and ingestion calls; embeddings use Ollama via OLLAMA_URL. TASK-001 IPS adoption is complete and validated in 12_validation/VAL-TASK-001-ips-adoption.md.",
-  "project_status": "completed_frozen",
+  "notes": "Service running in K8s. JWT_TOKEN is wired from Vault through ExternalSecret for authenticated agent and ingestion calls; embeddings use Ollama via OLLAMA_URL=http://192.168.88.53:11435. TASK-002 restored embedding connectivity after legacy host port 11434 drift.",
+  "project_status": "active_operational_maintenance",
   "completed_at": "2026-06-21",
   "frozen_at": "2026-06-21",
-  "updated_at": "2026-06-21"
+  "updated_at": "2026-07-02"
 }

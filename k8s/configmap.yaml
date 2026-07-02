@@ -20,7 +20,7 @@ data:
   QDRANT_URL: "http://qdrant.statex-apps.svc.cluster.local:6333"
   QDRANT_COLLECTION: "ecosystem-docs"
   QDRANT_VECTOR_SIZE: "768"
-  OLLAMA_URL: "http://192.168.88.53:11434"
+  OLLAMA_URL: "http://192.168.88.53:11435"
   OLLAMA_EMBEDDING_MODEL: "nomic-embed-text"
   DB_HOST: "db-server-postgres.statex-apps.svc.cluster.local"
   DB_PORT: "5432"
