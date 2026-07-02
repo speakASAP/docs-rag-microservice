@@ -47,6 +47,12 @@ nodes:
   - id: VAL-TASK-002-restore-ollama-embedding-connectivity
     type: validation_report
     path: 12_validation/VAL-TASK-002-restore-ollama-embedding-connectivity.md
+  - id: PROMPT-TASK-002-restore-ollama-embedding-connectivity
+    type: coding_prompt
+    path: 14_prompts/PROMPT-TASK-002-restore-ollama-embedding-connectivity.md
+  - id: CP-TASK-002-restore-ollama-embedding-connectivity
+    type: context_package
+    path: 13_context_packages/CP-TASK-002-restore-ollama-embedding-connectivity.md
 edges:
   - from: BUS-001
     type: traces_to
@@ -99,3 +105,12 @@ edges:
   - from: VAL-TASK-002-restore-ollama-embedding-connectivity
     type: validates
     to: TASK-002
+  - from: EP-TASK-002
+    type: generates
+    to: PROMPT-TASK-002-restore-ollama-embedding-connectivity
+  - from: PROMPT-TASK-002-restore-ollama-embedding-connectivity
+    type: derives_from
+    to: EP-TASK-002
+  - from: PROMPT-TASK-002-restore-ollama-embedding-connectivity
+    type: included_in_context
+    to: CP-TASK-002-restore-ollama-embedding-connectivity
