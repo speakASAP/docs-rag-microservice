@@ -91,7 +91,13 @@ export class IngestionService implements OnModuleInit, OnModuleDestroy {
         order: { updatedAt: 'DESC' },
       });
 
-      if (!force && latestCompleted?.lastCommitHash === commitHash) {
+      const canReuseLatestCompleted =
+        !force &&
+        commitHash !== 'unknown' &&
+        latestCompleted?.lastCommitHash === commitHash &&
+        latestCompleted.chunksTotal > 0;
+
+      if (canReuseLatestCompleted) {
         this.logger.log(`${job.repoName} is up to date at ${commitHash}`);
         job.status = 'completed';
         job.lastCommitHash = commitHash;
