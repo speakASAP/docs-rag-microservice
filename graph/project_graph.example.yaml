@@ -53,6 +53,24 @@ nodes:
   - id: CP-TASK-002-restore-ollama-embedding-connectivity
     type: context_package
     path: 13_context_packages/CP-TASK-002-restore-ollama-embedding-connectivity.md
+  - id: TASK-003
+    type: task
+    path: 11_tasks/TASK-003-ollama-embedding-operational-hardening.md
+  - id: GOAL-IMPACT-TASK-003
+    type: goal_impact
+    path: 22_goal_impact/GOAL-IMPACT-TASK-003.md
+  - id: EP-TASK-003
+    type: execution_plan
+    path: 21_execution_plans/EP-TASK-003-ollama-embedding-operational-hardening.md
+  - id: PROMPT-TASK-003-ollama-embedding-operational-hardening
+    type: coding_prompt
+    path: 14_prompts/PROMPT-TASK-003-ollama-embedding-operational-hardening.md
+  - id: CP-TASK-003-ollama-embedding-operational-hardening
+    type: context_package
+    path: 13_context_packages/CP-TASK-003-ollama-embedding-operational-hardening.md
+  - id: VAL-TASK-003-ollama-embedding-operational-hardening
+    type: validation_report
+    path: 12_validation/VAL-TASK-003-ollama-embedding-operational-hardening.md
 edges:
   - from: BUS-001
     type: traces_to
@@ -114,3 +132,30 @@ edges:
   - from: PROMPT-TASK-002-restore-ollama-embedding-connectivity
     type: included_in_context
     to: CP-TASK-002-restore-ollama-embedding-connectivity
+  - from: TASK-003
+    type: implements
+    to: FEAT-003
+  - from: TASK-003
+    type: impacts_goal
+    to: GOAL-IMPACT-TASK-003
+  - from: TASK-003
+    type: decomposes_into
+    to: EP-TASK-003
+  - from: EP-TASK-003
+    type: derives_from
+    to: TASK-003
+  - from: EP-TASK-003
+    type: constrained_by
+    to: ADR-001
+  - from: EP-TASK-003
+    type: generates
+    to: PROMPT-TASK-003-ollama-embedding-operational-hardening
+  - from: PROMPT-TASK-003-ollama-embedding-operational-hardening
+    type: derives_from
+    to: EP-TASK-003
+  - from: PROMPT-TASK-003-ollama-embedding-operational-hardening
+    type: included_in_context
+    to: CP-TASK-003-ollama-embedding-operational-hardening
+  - from: VAL-TASK-003-ollama-embedding-operational-hardening
+    type: validates
+    to: TASK-003

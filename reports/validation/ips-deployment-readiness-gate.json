@@ -1,5 +1,5 @@
 {
-  "created_at": "2026-07-02T05:27:18Z",
+  "created_at": "2026-07-03T22:46:45Z",
   "gate": "deployment_readiness",
   "next_step": "ready_for_deployment_review",
   "pre_coding_gate": {
@@ -19,7 +19,7 @@
     "score": 100,
     "status": "PASS"
   },
-  "target": "TASK-002",
+  "target": "TASK-003",
   "unresolved_markers": [
     {
       "line": 16,
@@ -85,17 +85,23 @@
       "line": 60,
       "marker": "[UNKNOWN: ...]",
       "path": "AGENT_OPERATIONS.md"
+    },
+    {
+      "line": 43,
+      "marker": "[MISSING: current ingestion schedule and target paths]",
+      "path": "docs/business-process-control-plane/HOLIDAY_DISCOUNT_ADOPTION.md"
     }
   ],
   "validation_reports": {
     "matching_reports": [
-      "12_validation/VAL-TASK-002-restore-ollama-embedding-connectivity.md"
+      "12_validation/VAL-TASK-003-ollama-embedding-operational-hardening.md"
     ],
     "reports": [
       "12_validation/VAL-TASK-001-ips-adoption.md",
-      "12_validation/VAL-TASK-002-restore-ollama-embedding-connectivity.md"
+      "12_validation/VAL-TASK-002-restore-ollama-embedding-connectivity.md",
+      "12_validation/VAL-TASK-003-ollama-embedding-operational-hardening.md"
     ],
     "status": "pass",
-    "target": "TASK-002"
+    "target": "TASK-003"
   }
 }

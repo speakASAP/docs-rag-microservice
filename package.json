@@ -12,7 +12,9 @@
     "test:cov": "jest --coverage",
     "docs:audit": "python3 scripts/strict_doc_audit.py --format markdown --fail-on-issues",
     "gate:pre-coding": "python3 scripts/pre_coding_gate.py --root .",
-    "gate:deployment": "python3 scripts/deployment_readiness_gate.py --root ."
+    "gate:deployment": "python3 scripts/deployment_readiness_gate.py --root .",
+    "readiness:embedding-backend": "bash scripts/check-embedding-backend.sh",
+    "repair:embedding-backend": "bash scripts/repair-embedding-backend.sh"
   },
   "dependencies": {
     "@nestjs/common": "^11.1.24",

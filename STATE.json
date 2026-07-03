@@ -8,13 +8,13 @@
   "tasks_active": 0,
   "tasks_failed_last_cycle": 0,
   "open_task_ids": [],
-  "last_milestone": "task-002-ollama-embedding-connectivity-validated",
-  "next_focus": "Controlled Docs/RAG ingestion can run after consuming-service approval; embedding preflight is healthy.",
+  "last_milestone": "task-003-ollama-embedding-operational-hardening",
+  "next_focus": "Embedding backend has a read-only gate and guarded repair path; keep Cliplot readiness bundle green before controlled ingestion.",
   "blockers": [],
   "budget_units_used": 0,
   "notes": "Service running in K8s. JWT_TOKEN is wired from Vault through ExternalSecret for authenticated agent and ingestion calls; embeddings use Ollama via OLLAMA_URL=http://192.168.88.53:11435. TASK-002 restored and validated embedding connectivity.",
   "project_status": "active_operational_maintenance",
   "completed_at": "2026-06-21",
   "frozen_at": "2026-06-21",
-  "updated_at": "2026-07-02"
+  "updated_at": "2026-07-04"
 }
