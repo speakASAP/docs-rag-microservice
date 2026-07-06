@@ -60,7 +60,7 @@ export class CentralLogger extends ConsoleLogger {
     setTimeout(() => {
       void fetch(this.centralLogUrl as string, {
         method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        headers: centralLogHeaders(),
         body: JSON.stringify(payload),
       }).catch(() => undefined);
     }, 0);
@@ -83,6 +83,14 @@ export class CentralLogger extends ConsoleLogger {
       ...(Object.keys(sanitizedMetadata).length > 0 ? { metadata: sanitizedMetadata } : {}),
     };
   }
+}
+
+function centralLogHeaders(): Record<string, string> {
+  const token = process.env.LOGGING_SERVICE_TOKEN;
+  return {
+    'content-type': 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
 }
 
 function buildLoggingUrl(baseUrl?: string, apiPath = '/api/logs'): string | undefined {

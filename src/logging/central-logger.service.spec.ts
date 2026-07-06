@@ -58,6 +58,31 @@ describe('CentralLogger', () => {
     expect(body.metadata.nested.safe).toBe('ok');
   });
 
+  it('adds bearer authorization when LOGGING_SERVICE_TOKEN is set', async () => {
+    const fetchMock = jest.fn().mockResolvedValue({ ok: true });
+    global.fetch = fetchMock as unknown as typeof fetch;
+    process.env.LOGGING_SERVICE_URL = 'http://logging-microservice:3367';
+    process.env.LOGGING_SERVICE_TOKEN = 'central-token';
+
+    const logger = new CentralLogger();
+    jest.spyOn(console, 'log').mockImplementation(() => undefined);
+
+    logger.log('token auth smoke', 'SmokeContext');
+
+    await jest.runAllTimersAsync();
+    await Promise.resolve();
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      'http://logging-microservice:3367/api/logs',
+      expect.objectContaining({
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer central-token',
+        },
+      }),
+    );
+  });
+
   it('keeps logging fail-open when central transport rejects', () => {
     global.fetch = jest.fn().mockRejectedValue(new Error('network down')) as unknown as typeof fetch;
     process.env.LOGGING_SERVICE_URL = 'http://logging-microservice:3367';
