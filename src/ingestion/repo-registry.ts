@@ -2,6 +2,7 @@ export interface RepoEntry {
   repoName: string;
   repoUrl: string;
   localPath: boolean;
+  localAbsolutePath?: string;
 }
 
 export const ECOSYSTEM_REPOS: RepoEntry[] = [
@@ -42,4 +43,22 @@ export const ECOSYSTEM_REPOS: RepoEntry[] = [
   { repoName: 'statex', repoUrl: 'git@github.com:speakASAP/statex.git', localPath: true },
   { repoName: 'statex-ecosystem', repoUrl: 'git@github.com:speakASAP/statex-ecosystem.git', localPath: true },
   { repoName: 'vault', repoUrl: 'git@github.com:speakASAP/vault.git', localPath: true },
+  {
+    repoName: 'claude-profile',
+    repoUrl: 'local:///home/ssf/.claude',
+    localPath: true,
+    localAbsolutePath: '/home/ssf/.claude',
+  },
+  {
+    repoName: 'codex-profile',
+    repoUrl: 'local:///home/ssf/.codex',
+    localPath: true,
+    localAbsolutePath: '/home/ssf/.codex',
+  },
+  {
+    repoName: 'cursor-profile',
+    repoUrl: 'local:///home/ssf/.cursor',
+    localPath: true,
+    localAbsolutePath: '/home/ssf/.cursor',
+  },
 ];

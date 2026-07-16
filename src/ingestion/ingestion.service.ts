@@ -58,7 +58,13 @@ export class IngestionService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  async triggerIngestion(repoName: string, repoUrl: string, force = false, localPath = false): Promise<IngestionJob> {
+  async triggerIngestion(
+    repoName: string,
+    repoUrl: string,
+    force = false,
+    localPath = false,
+    localAbsolutePath?: string,
+  ): Promise<IngestionJob> {
     const job = this.jobRepo.create({
       repoName,
       repoUrl,
@@ -69,20 +75,20 @@ export class IngestionService implements OnModuleInit, OnModuleDestroy {
     });
     await this.jobRepo.save(job);
 
-    this.runIngestion(job, force).catch((err) => {
+    this.runIngestion(job, force, localAbsolutePath).catch((err) => {
       this.logger.error(`Ingestion failed for ${repoName}: ${err.message}`);
     });
 
     return job;
   }
 
-  private async runIngestion(job: IngestionJob, force: boolean): Promise<void> {
+  private async runIngestion(job: IngestionJob, force: boolean, localAbsolutePath?: string): Promise<void> {
     job.status = 'running';
     await this.jobRepo.save(job);
 
     try {
       const localPath = job.localPath
-        ? this.gitSync.getLocalPath(job.repoName)
+        ? this.gitSync.getLocalPath(job.repoName, localAbsolutePath)
         : await this.gitSync.cloneOrPull(job.repoName, job.repoUrl);
       const commitHash = await this.gitSync.getHeadCommit(localPath);
 
@@ -108,6 +114,10 @@ export class IngestionService implements OnModuleInit, OnModuleDestroy {
       }
 
       const files = await this.gitSync.listMarkdownFiles(localPath);
+      const agentInstructionFiles = files.filter((filePath) => /(AGENTS|CLAUDE|GEMINI)\.md$/i.test(filePath));
+      this.logger.log(
+        `${job.repoName}: markdown files=${files.length}, agent instruction files=${agentInstructionFiles.length}`,
+      );
       job.chunksTotal = files.length;
       await this.jobRepo.save(job);
 
@@ -187,7 +197,7 @@ export class IngestionService implements OnModuleInit, OnModuleDestroy {
   async triggerAll(force = false): Promise<{ queued: number; repos: string[] }> {
     const repos: string[] = [];
     for (const repo of ECOSYSTEM_REPOS) {
-      await this.triggerIngestion(repo.repoName, repo.repoUrl, force, repo.localPath);
+      await this.triggerIngestion(repo.repoName, repo.repoUrl, force, repo.localPath, repo.localAbsolutePath);
       repos.push(repo.repoName);
     }
     this.logger.log(`trigger-all: queued ${repos.length} repos`);

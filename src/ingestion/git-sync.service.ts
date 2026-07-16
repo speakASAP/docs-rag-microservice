@@ -51,8 +51,8 @@ export class GitSyncService {
     return fs.promises.readFile(filePath, 'utf-8');
   }
 
-  getLocalPath(repoName: string): string {
-    return path.join(this.reposDir, repoName);
+  getLocalPath(repoName: string, localAbsolutePath?: string): string {
+    return localAbsolutePath ? path.resolve(localAbsolutePath) : path.join(this.reposDir, repoName);
   }
 
   private walkDir(dir: string, results: string[]): void {

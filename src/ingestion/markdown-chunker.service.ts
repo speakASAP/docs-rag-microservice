@@ -108,7 +108,9 @@ export class MarkdownChunkerService {
     if (lower.includes('runbook') || lower.includes('ops')) return 'runbook';
     if (lower.includes('api') || lower.includes('swagger')) return 'api-docs';
     if (lower.includes('k8s') || lower.includes('kubernetes')) return 'infrastructure';
-    if (lower.includes('claude.md') || lower.includes('agents.md')) return 'agent-instructions';
+    if (lower.includes('claude.md') || lower.includes('agents.md') || lower.includes('gemini.md')) {
+      return 'agent-instructions';
+    }
     if (lower.includes('system.md')) return 'system';
     if (lower.includes('business.md') || lower.includes('goals')) return 'business';
     return 'documentation';
