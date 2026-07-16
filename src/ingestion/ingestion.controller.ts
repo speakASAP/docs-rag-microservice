@@ -9,6 +9,7 @@ const TriggerIngestionRequestSchema = z.object({
   repoUrl: z.string().min(1).default('local'),
   force: z.boolean().default(false),
   localPath: z.boolean().default(false),
+  localAbsolutePath: z.string().optional(),
 });
 
 const IngestionStatusResponseSchema = z.object({
@@ -34,7 +35,13 @@ export class IngestionController {
   @HttpCode(202)
   @UsePipes(new ZodValidationPipe(TriggerIngestionRequestSchema))
   async trigger(@Body() body: TriggerIngestionRequest) {
-    const job = await this.ingestionService.triggerIngestion(body.repoName, body.repoUrl, body.force, body.localPath);
+    const job = await this.ingestionService.triggerIngestion(
+      body.repoName,
+      body.repoUrl,
+      body.force,
+      body.localPath,
+      body.localAbsolutePath,
+    );
     return { jobId: job.id, status: job.status, repoName: job.repoName };
   }
 

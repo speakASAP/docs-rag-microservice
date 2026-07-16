@@ -65,17 +65,22 @@ export class IngestionService implements OnModuleInit, OnModuleDestroy {
     localPath = false,
     localAbsolutePath?: string,
   ): Promise<IngestionJob> {
+    const registryEntry = ECOSYSTEM_REPOS.find((repo) => repo.repoName === repoName);
+    const resolvedLocalAbsolutePath = localAbsolutePath ?? registryEntry?.localAbsolutePath;
+    const resolvedLocalPath = localPath || Boolean(registryEntry?.localPath);
+    const resolvedRepoUrl = repoUrl === 'local' && registryEntry ? registryEntry.repoUrl : repoUrl;
+
     const job = this.jobRepo.create({
       repoName,
-      repoUrl,
+      repoUrl: resolvedRepoUrl,
       status: 'pending',
       chunksProcessed: 0,
       chunksTotal: 0,
-      localPath,
+      localPath: resolvedLocalPath,
     });
     await this.jobRepo.save(job);
 
-    this.runIngestion(job, force, localAbsolutePath).catch((err) => {
+    this.runIngestion(job, force, resolvedLocalAbsolutePath).catch((err) => {
       this.logger.error(`Ingestion failed for ${repoName}: ${err.message}`);
     });
 
@@ -113,7 +118,8 @@ export class IngestionService implements OnModuleInit, OnModuleDestroy {
         return;
       }
 
-      const files = await this.gitSync.listMarkdownFiles(localPath);
+      const allFiles = await this.gitSync.listMarkdownFiles(localPath);
+      const files = this.filterIngestionFiles(job.repoName, allFiles);
       const agentInstructionFiles = files.filter((filePath) => /(AGENTS|CLAUDE|GEMINI)\.md$/i.test(filePath));
       this.logger.log(
         `${job.repoName}: markdown files=${files.length}, agent instruction files=${agentInstructionFiles.length}`,
@@ -202,5 +208,11 @@ export class IngestionService implements OnModuleInit, OnModuleDestroy {
     }
     this.logger.log(`trigger-all: queued ${repos.length} repos`);
     return { queued: repos.length, repos };
+  }
+
+  private filterIngestionFiles(repoName: string, files: string[]): string[] {
+    if (!repoName.endsWith('-profile')) return files;
+
+    return files.filter((filePath) => /(AGENTS|CLAUDE|GEMINI)\.md$/i.test(filePath.replace(/\\/g, '/')));
   }
 }

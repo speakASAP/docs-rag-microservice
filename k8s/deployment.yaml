@@ -30,6 +30,18 @@ spec:
           hostPath:
             path: /home/ssf/Documents/Github
             type: Directory
+        - name: agent-claude-profile
+          hostPath:
+            path: /home/ssf/.claude
+            type: Directory
+        - name: agent-codex-profile
+          hostPath:
+            path: /home/ssf/.codex
+            type: Directory
+        - name: agent-cursor-profile
+          hostPath:
+            path: /home/ssf/.cursor
+            type: Directory
       containers:
         - name: app
           image: localhost:5000/docs-rag-microservice:latest
@@ -80,4 +92,13 @@ spec:
           volumeMounts:
             - name: git-repos
               mountPath: /data/repos
+              readOnly: true
+            - name: agent-claude-profile
+              mountPath: /data/agent-profiles/claude
+              readOnly: true
+            - name: agent-codex-profile
+              mountPath: /data/agent-profiles/codex
+              readOnly: true
+            - name: agent-cursor-profile
+              mountPath: /data/agent-profiles/cursor
               readOnly: true

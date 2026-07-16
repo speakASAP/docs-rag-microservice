@@ -45,20 +45,20 @@ export const ECOSYSTEM_REPOS: RepoEntry[] = [
   { repoName: 'vault', repoUrl: 'git@github.com:speakASAP/vault.git', localPath: true },
   {
     repoName: 'claude-profile',
-    repoUrl: 'local:///home/ssf/.claude',
+    repoUrl: 'local:///data/agent-profiles/claude',
     localPath: true,
-    localAbsolutePath: '/home/ssf/.claude',
+    localAbsolutePath: '/data/agent-profiles/claude',
   },
   {
     repoName: 'codex-profile',
-    repoUrl: 'local:///home/ssf/.codex',
+    repoUrl: 'local:///data/agent-profiles/codex',
     localPath: true,
-    localAbsolutePath: '/home/ssf/.codex',
+    localAbsolutePath: '/data/agent-profiles/codex',
   },
   {
     repoName: 'cursor-profile',
-    repoUrl: 'local:///home/ssf/.cursor',
+    repoUrl: 'local:///data/agent-profiles/cursor',
     localPath: true,
-    localAbsolutePath: '/home/ssf/.cursor',
+    localAbsolutePath: '/data/agent-profiles/cursor',
   },
 ];
