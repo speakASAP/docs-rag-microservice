@@ -82,7 +82,7 @@ kubectl apply -f "$PROJECT_ROOT/k8s/ingress.yaml" -n "$NAMESPACE"
 deploy_timing_phase_end "Apply K8s manifests"
 
 deploy_timing_phase_start "Update deployment image"
-kubectl set image "deployment/${SERVICE_NAME}" app="$IMAGE_LATEST" -n "$NAMESPACE"
+kubectl set image "deployment/${SERVICE_NAME}" app="$IMAGE" -n "$NAMESPACE"
 kubectl rollout restart "deployment/${SERVICE_NAME}" -n "$NAMESPACE"
 deploy_timing_phase_end "Update deployment image"
 
