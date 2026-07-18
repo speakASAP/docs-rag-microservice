@@ -34,8 +34,8 @@ Query the RAG service first — saves 2000-5000 tokens per query:
 ## Intent Preservation System
 - This repository follows the company standard in `/Users/Sergej.Stasok/Documents/Gitlab/intent-preservation-system`.
 - Preserve the chain: Vision -> Goal Impact -> System -> Feature -> Task -> Execution Plan -> Coding Prompt -> Code -> Validation.
-- Before implementation work, read the target task under `11_tasks/`, execution plan under `21_execution_plans/`, project invariants under `17_governance/PROJECT_INVARIANTS.md`, and applicable validation report under `12_validation/`.
-- Do not edit `00_constitution/CONSTITUTION.md` or `01_vision/VISION.md` after adoption. Human intent changes go through `01_vision/VISION_EVOLUTION.md`.
+- Before implementation work, read the target task under `docs/11_tasks/`, execution plan under `docs/21_execution_plans/`, project invariants under `docs/17_governance/PROJECT_INVARIANTS.md`, and applicable validation report under `docs/12_validation/`.
+- Do not edit `docs/00_constitution/CONSTITUTION.md` or `docs/01_vision/VISION.md` after adoption. Human intent changes go through `docs/01_vision/VISION_EVOLUTION.md`.
 - Declare sensitive-data, contract/schema, and replay/determinism impact in every task and execution plan.
 - Do not place secrets, real JWTs, raw production data, confidential identifiers, or customer data into docs, prompts, tests, logs, reports, or examples.
 
