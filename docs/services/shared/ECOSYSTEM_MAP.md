@@ -72,7 +72,6 @@
 | **STATIC** |
 | rehtani | static | — | rehtani.alfares.cz | Static site (Řehtání Četechovice) |
 | statex-ecosystem | static | 4710/4711 | statex-ecosystem.alfares.cz | Next.js ecosystem catalog (blue/green) |
-| openclaw | app | various | — | (see openclaw/CLAUDE.md) |
 
 ## Integration Matrix
 
