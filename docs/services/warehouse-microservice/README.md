@@ -446,7 +446,7 @@ export class OrderService {
 
   async createOrder(order: Order) {
     // ... create order logic
-    
+
     // Use shared notification service
     await this.notificationService.sendOrderConfirmation(
       order.userEmail,
@@ -582,7 +582,7 @@ cd ~/Documents/Github/ai-microservice
 - **Sync** (from local to prod, preserves domains/secrets): `./scripts/sync-env-intelligent.sh [--dry-run] [project]`
 - **Menu**: `./scripts/env-sync-quick.sh`
 
-Full documentation: [scripts/ENV_SYNC_README.md](scripts/ENV_SYNC_README.md). Config: `scripts/env-sync-config.sh` (DOMAIN_VARS, SECRET_VARS).
+Config: `scripts/env-sync-config.sh` (DOMAIN_VARS, SECRET_VARS).
 
 ---
 

@@ -16,7 +16,6 @@ Provision Vault secret paths, create `k8s/external-secret.yaml`, update `docs/19
 
 - `docs/19-vault-secrets.md` — secret categories and paths
 - `docs/18-kubernetes-deployment.md` — secrets from Vault section
-- `shared/docs/VAULT.md` — Vault ops reference
 - `shared/k8s/external-secrets/external-secret.yaml.tpl` — template
 
 ## Files likely touched

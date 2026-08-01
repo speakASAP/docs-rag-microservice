@@ -17,7 +17,7 @@ Documented in [shared/README.md](../shared/README.md) (Port Configuration Refere
 
 - Copy [`.env.example`](.env.example) to `.env` (never commit `.env`).
 - Required keys: `DOMAIN`, `SERVICE_NAME`, `NGINX_NETWORK_NAME`, `PORT`, `PORT_GREEN`, `CONTAINER_PORT`.
-- Template and canonical env names: [shared/docs/ENV_FILE_STANDARD.md](../shared/docs/ENV_FILE_STANDARD.md) (archetype B).
+- Template and canonical env names: (archetype B).
 - See [shared/docs/DEPLOY_STANDARD.md](../shared/docs/DEPLOY_STANDARD.md) and [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
 ## Development

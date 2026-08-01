@@ -47,9 +47,7 @@ Paths are relative to **repository root** unless noted as **sibling** (`../other
 
 | File | Purpose |
 | ---- | ------- |
-| [shared/docs/PROJECT_AGENT_DOCS_STANDARD.md](../../../shared/docs/PROJECT_AGENT_DOCS_STANDARD.md) | Required files per repo, reading order, anti-chaos |
 | [shared/README.md](../../../shared/README.md) | Ecosystem map, microservices list |
-| [shared/docs/cursor/CURSOR_SETUP.md](../../../shared/docs/cursor/CURSOR_SETUP.md) | Hooks, MCP, skills |
 | [CLAUDE.md](../../../CLAUDE.md) (workspace root) | Global workflow rules |
 
 ## E. Pilot project (phase 2): flipflop-service
@@ -61,7 +59,7 @@ When enabling pilot #2, ensure under **MCP_FILESYSTEM_ROOT** (usually parent of 
 - `flipflop-service/GOALS.md` (human)
 - Repo copies: `../../../flipflop-service/SPEC.md` from this folder (create if missing — same standard as PROJECT_AGENT_DOCS_STANDARD)
 
-Also: `flipflop-service` must have `BUSINESS.md`, `SYSTEM.md`, `AGENTS.md`, `TASKS.md`, `STATE.json` per standard.  
+Also: `flipflop-service` must have `BUSINESS.md`, `SYSTEM.md`, `AGENTS.md`, `TASKS.md`, `STATE.json` per standard.
 Repo path from workspace root: `flipflop-service/` (sibling of `runlayer/`).
 
 ## F. Runtime configuration

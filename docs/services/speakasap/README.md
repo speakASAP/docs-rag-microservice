@@ -36,7 +36,6 @@ Online education platform — language learning courses, assessments, certificat
 
 ## Key docs
 
-- Secrets: `../shared/docs/VAULT.md`
 - K8s ops: `../shared/docs/KUBERNETES_SETUP_GUIDE.md`
 - Deploy standard: `../shared/docs/DEPLOY_STANDARD.md`
 - Port allocation: `docs/infrastructure/PORT_ALLOCATION.md`

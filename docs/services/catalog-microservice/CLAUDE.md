@@ -16,4 +16,4 @@
 **Ops**: `curl http://catalog-microservice:3200/health` · `kubectl logs -n statex-apps deployment/catalog-microservice -f` · `./scripts/deploy.sh`
 
 ### Secrets
-All secrets in Vault at `secret/prod/catalog-microservice` — synced via ESO. See [`../shared/docs/VAULT.md`](../shared/docs/VAULT.md).
+All secrets in Vault at `secret/prod/catalog-microservice` — synced via ESO.

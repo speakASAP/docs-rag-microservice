@@ -22,4 +22,4 @@ Standard env keys for shared microservices. In K8s these come from `speakasap-se
 
 ## Secrets
 
-Never hardcode credentials. All secrets via Vault: `secret/prod/speakasap`. See `../../../shared/docs/VAULT.md`.
+Never hardcode credentials. All secrets via Vault: `secret/prod/speakasap`.

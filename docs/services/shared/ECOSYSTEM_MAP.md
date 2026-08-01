@@ -14,7 +14,7 @@
 **TLS:** ✅ cert-manager + Cloudflare DNS-01 — wildcard `*.alfares.cz` via Let's Encrypt
 **Secrets:** ✅ All in Vault → ESO → K8s Secrets (`statex-apps` namespace)
 **Remaining in Docker (permanent):** vault-microservice (HashiCorp Vault), k8s-registry (image registry :5000)
-**Database access (agents):** MCP `postgres` → [shared/docs/mcp/MCP_POSTGRES.md](docs/mcp/MCP_POSTGRES.md). Infrastructure SSOT: [database-server/docs/ARCHITECTURE.md](../database-server/docs/ARCHITECTURE.md).
+**Database access (agents):** MCP `postgres` → `postgres_agent_guide` first ([docs/mcp/MCP_POSTGRES.md](docs/mcp/MCP_POSTGRES.md)). Infrastructure SSOT: [database-server/docs/ARCHITECTURE.md](../database-server/docs/ARCHITECTURE.md).
 **Legacy (never migrating):** speakasap-portal — Django 1.11.2 legacy app on dedicated speakasap server
 
 → [K8s Roadmap](docs/K8S-PHASES-5-7-ROADMAP.md)

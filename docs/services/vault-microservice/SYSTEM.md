@@ -1,8 +1,5 @@
 # SYSTEM.md — vault-microservice
 
-> **All Vault operational procedures, scripts, backup, and disaster recovery:**
-> → [`shared/docs/VAULT.md`](../shared/docs/VAULT.md)
-
 ## Stack
 
 - **Image**: hashicorp/vault:1.15
@@ -40,6 +37,4 @@ curl http://localhost:8200/v1/sys/health | jq '{initialized,sealed,version}'
 # Start / auto-unseal
 ./scripts/deploy.sh
 
-# Full ops reference
-cat ../shared/docs/VAULT.md
 ```

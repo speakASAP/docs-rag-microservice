@@ -8,7 +8,7 @@ Centralized reverse proxy for all alfares.cz services. Runs as **Docker on host*
 - Blue/green switch only via `deploy-smart.sh` — never manual
 - SSL certs managed by Certbot — do not manually edit cert files
 - `*.alfares.cz` DNS-01 wildcard: keep `certbot/scripts/symlink-subdomains-to-wildcard.sh` `SUBDOMAINS` list aligned with every `*.alfares.cz` vhost
-- Secrets (Cloudflare API token) stored in Vault — see [../shared/docs/VAULT.md](../shared/docs/VAULT.md)
+- Secrets (Cloudflare API token) stored in Vault
 - Most downstream services run in **Kubernetes** (`statex-apps` namespace) — nginx proxies to their ClusterIP endpoints
 
 ## Architecture

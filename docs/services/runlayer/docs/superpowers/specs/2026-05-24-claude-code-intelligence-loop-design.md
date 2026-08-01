@@ -1,7 +1,7 @@
 # Spec: Claude Code Intelligence Loop
 
-**Date**: 2026-05-24  
-**Status**: Approved  
+**Date**: 2026-05-24
+**Status**: Approved
 **Author**: speakASAP + Claude Code
 
 ---
@@ -222,8 +222,8 @@ A running log page on the repo wiki. `GoalReviewService` appends one entry per r
 ```markdown
 ## 2026-05-24 — speakasap: "Add user onboarding flow" — needs_improvement
 
-**Verdict**: needs_improvement  
-**PR**: #42  
+**Verdict**: needs_improvement
+**PR**: #42
 **Summary**: The orchestrator created 4 tasks where CC would have created 2 broader tasks,
 leading to 3 unnecessary coordinator cycles and a planning inefficiency in the coding prompt.
 ```
@@ -240,7 +240,7 @@ leading to 3 unnecessary coordinator cycles and a planning inefficiency in the c
 | `CC_CLI_TIMEOUT_MS` | `120000` | Max milliseconds for any CC subprocess call |
 | `GITHUB_REPO` | _(required)_ | Repo slug for gh CLI calls, e.g. `speakASAP/runlayer` |
 
-All vars added to `docs/ENV_FILE_STANDARD.md` and the project's `external-secret.yaml`.
+All vars added to `docs/` and the project's `external-secret.yaml`.
 
 ---
 

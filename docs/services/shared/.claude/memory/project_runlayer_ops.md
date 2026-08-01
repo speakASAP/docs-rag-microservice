@@ -71,7 +71,7 @@ kubectl rollout status deployment/runlayer -n statex-apps
 
 ## Database access (agents)
 
-Use MCP server `postgres` — [shared/docs/mcp/MCP_POSTGRES.md](../../docs/mcp/MCP_POSTGRES.md). First tool: `postgres_agent_guide`.
+Use MCP server `postgres`: `postgres_agent_guide`.
 
 Database: `runlayer` on `db-server-postgres` in `statex-apps`. Tables are in schema `runlayer` (not `public`): `runlayer.goals`, `runlayer.tasks`, etc.
 

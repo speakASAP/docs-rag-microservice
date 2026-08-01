@@ -8,7 +8,7 @@ metadata:
 
 ## Production PostgreSQL access
 
-Agent entry point: [shared/docs/mcp/MCP_POSTGRES.md](../../docs/mcp/MCP_POSTGRES.md) — MCP `postgres` → `postgres_agent_guide` first.
+Agent entry point: MCP `postgres` → `postgres_agent_guide` first.
 
 Infrastructure SSOT: [database-server/docs/ARCHITECTURE.md](../../database-server/docs/ARCHITECTURE.md).
 

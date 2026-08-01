@@ -1,7 +1,7 @@
 # CORS and Auth URL Reference
 
 > **K8s managed** — `CORS_ORIGIN` and `AUTH_SERVICE_URL` are in K8s ConfigMap synced from Vault.
-> To update: see [`../shared/docs/VAULT.md`](../../shared/docs/VAULT.md) · path `secret/prod/auth-microservice`.
+> To update: see `secret/prod/auth-microservice`.
 
 ## Rules
 

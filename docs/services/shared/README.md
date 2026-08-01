@@ -69,18 +69,7 @@ Multiple microservices on a production server, accessible via SSH or HTTPS. Cros
 | **suppliers-microservice** | ✅ | ✅ | | |
 | **warehouse-microservice** | ✅ | ✅ | | |
 
-→ Ports, domains, K8s status: **[ECOSYSTEM_MAP.md](ECOSYSTEM_MAP.md)**
-
----
-
-## K8s Migration Status
-
-- **Phase A** (5 services): ✅ Running on k3s
-- **Phase B** (4 services): ✅ Complete
-- **Phases 5–7** (remaining services): 🔄 In progress
-- **Secrets**: All in Vault → ESO → K8s Secrets (`statex-apps` namespace)
-
-→ Roadmap: [docs/K8S-PHASES-5-7-ROADMAP.md](docs/K8S-PHASES-5-7-ROADMAP.md)
+→ Ports, domains: **[ECOSYSTEM_MAP.md](ECOSYSTEM_MAP.md)**
 
 ---
 
@@ -96,7 +85,6 @@ Multiple microservices on a production server, accessible via SSH or HTTPS. Cros
 | Nginx config standard | [docs/NGINX_LOCAL_CONFIG.md](docs/NGINX_LOCAL_CONFIG.md) |
 | `.env` / Vault rules | [docs/ENV_FILE_STANDARD.md](docs/ENV_FILE_STANDARD.md) |
 | K8s setup & ops | [docs/KUBERNETES_SETUP_GUIDE.md](docs/KUBERNETES_SETUP_GUIDE.md) |
-| K8s migration roadmap | [docs/K8S-PHASES-5-7-ROADMAP.md](docs/K8S-PHASES-5-7-ROADMAP.md) |
 | RBAC usage | [docs/RBAC_USAGE_GUIDE.md](docs/RBAC_USAGE_GUIDE.md) |
 | Auth frontend integration | [docs/AUTH_FRONTEND_INTEGRATION.md](docs/AUTH_FRONTEND_INTEGRATION.md) |
 | E-commerce architecture | [docs/UNIFIED_ECOMMERCE_ARCHITECTURE.md](docs/UNIFIED_ECOMMERCE_ARCHITECTURE.md) |

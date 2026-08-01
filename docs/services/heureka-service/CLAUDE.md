@@ -6,8 +6,8 @@
 
 ## heureka-service
 
-**Purpose**: Heureka.cz/sk XML product feed generation from catalog data. Auto-regenerates on stock updates.  
-**Domain**: https://heureka.alfares.cz  
+**Purpose**: Heureka.cz/sk XML product feed generation from catalog data. Auto-regenerates on stock updates.
+**Domain**: https://heureka.alfares.cz
 **Stack**: NestJS · PostgreSQL · Kubernetes (`statex-apps`)
 
 ### Key constraints
@@ -19,8 +19,7 @@
 
 ### Secrets
 
-All secrets in Vault at `secret/prod/heureka-service` → ESO → K8s Secret. Never hand-write secrets.  
-→ [VAULT.md](../shared/docs/VAULT.md)
+All secrets in Vault at `secret/prod/heureka-service` → ESO → K8s Secret. Never hand-write secrets.
 
 ### Events consumed
 

@@ -1,6 +1,6 @@
 # Database Server — Infrastructure SSOT
 
-> **AI agents:** do not use this file alone for queries. Start at [shared/docs/mcp/MCP_POSTGRES.md](../../shared/docs/mcp/MCP_POSTGRES.md) — call MCP `postgres` → `postgres_agent_guide` first.
+> **AI agents:** do not use this file alone for queries. call MCP `postgres` → `postgres_agent_guide` first.
 > This file documents production infrastructure and application configuration.
 
 ## Production State
@@ -18,7 +18,7 @@ Short names work only from pods in `statex-apps`. Use full DNS from other namesp
 ## Access Policy
 
 - **Production access is Kubernetes only** — service DNS inside the cluster.
-- **AI agents** use MCP server `postgres` exclusively — see [MCP_POSTGRES.md](../../shared/docs/mcp/MCP_POSTGRES.md).
+- **AI agents** use MCP server `postgres` exclusively.
 - No host IP, localhost, or port-forward as production or agent access.
 - Each service owns its own logical database and credentials.
 - Cross-service reads or writes go through service APIs or explicit integration contracts.
@@ -71,4 +71,4 @@ kubectl exec -n statex-apps deployment/db-server-postgres -- pg_isready -U dbadm
 
 ## Agents
 
-MCP server `postgres` — [shared/docs/mcp/MCP_POSTGRES.md](../../shared/docs/mcp/MCP_POSTGRES.md). First tool: `postgres_agent_guide`.
+MCP server `postgres` first tool: `postgres_agent_guide`.

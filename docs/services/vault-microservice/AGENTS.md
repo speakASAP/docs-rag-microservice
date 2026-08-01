@@ -1,5 +1,3 @@
-> **Vault operational reference:** [`shared/docs/VAULT.md`](../shared/docs/VAULT.md)
-
 # AGENTS.md — vault-microservice
 
 

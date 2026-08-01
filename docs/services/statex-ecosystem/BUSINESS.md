@@ -9,7 +9,7 @@ Public **Next.js catalog** of Statex applications and microservices with curated
 ## Constraints
 
 - Content must stay accurate vs [shared/README.md](../shared/README.md) and [shared/ECOSYSTEM_MAP.md](../shared/ECOSYSTEM_MAP.md).
-- No secrets in repo; use `.env` per [shared/docs/ENV_FILE_STANDARD.md](../shared/docs/ENV_FILE_STANDARD.md).
+- No secrets in repo.
 
 ## Consumers
 

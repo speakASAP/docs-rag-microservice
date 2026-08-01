@@ -1,10 +1,9 @@
 # Environment Variables
 
-All secrets live in Vault: `secret/prod/flipflop`  
-K8s injects them automatically via External Secrets Operator → `statex-apps` namespace.  
+All secrets live in Vault: `secret/prod/flipflop`
+K8s injects them automatically via External Secrets Operator → `statex-apps` namespace.
 For local dev: `vault kv get secret/prod/flipflop` or use Kubernetes service DNS + `.env`.
 
-> See `../shared/docs/ENV_FILE_STANDARD.md` for ecosystem-wide rules.
 
 ## Variable Reference
 

@@ -6,9 +6,9 @@ NestJS · PostgreSQL · Kubernetes (statex-apps namespace)
 
 ## Deployment
 
-**Mode:** Kubernetes (k3s, `statex-apps` namespace)  
-**Deploy:** `./scripts/deploy.sh` (builds image, pushes to registry, triggers rollout)  
-**Image:** `localhost:5000/heureka-service:latest`  
+**Mode:** Kubernetes (k3s, `statex-apps` namespace)
+**Deploy:** `./scripts/deploy.sh` (builds image, pushes to registry, triggers rollout)
+**Image:** `localhost:5000/heureka-service:latest`
 **Port:** 3000 (ClusterIP) → ingress → `heureka.alfares.cz`
 
 ```bash
@@ -35,8 +35,6 @@ vault kv get secret/prod/heureka-service
 # Force ESO re-sync
 kubectl annotate externalsecret heureka-service-secret force-sync=$(date +%s) -n statex-apps --overwrite
 ```
-
-→ Vault ops: [../shared/docs/VAULT.md](../shared/docs/VAULT.md)
 
 ## Integrations
 

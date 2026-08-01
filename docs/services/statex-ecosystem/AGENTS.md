@@ -21,5 +21,5 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 ## Project docs
 
-- `BUSINESS.md`, `SYSTEM.md`, `TASKS.md`, `STATE.json` — see [shared/docs/PROJECT_AGENT_DOCS_STANDARD.md](../shared/docs/PROJECT_AGENT_DOCS_STANDARD.md).
+- `BUSINESS.md`, `SYSTEM.md`, `TASKS.md`, `STATE.json`
 - Never commit or push; follow workspace `.cursor/rules/no-git-commit.mdc`.

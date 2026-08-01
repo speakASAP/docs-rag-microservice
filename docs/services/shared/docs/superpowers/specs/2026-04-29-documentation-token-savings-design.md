@@ -1,6 +1,6 @@
 # Documentation Token Savings — Design Spec
-**Date:** 2026-04-29  
-**Scope:** shared/ ecosystem documentation + all 27 per-service CLAUDE.md files  
+**Date:** 2026-04-29
+**Scope:** shared/ ecosystem documentation + all 27 per-service CLAUDE.md files
 **Approach:** Slim per-service CLAUDE.md (identity card pattern) + selective compression of large Tier 2 docs
 
 ---
@@ -86,7 +86,6 @@ kubectl get pods -n statex-apps -l app=<svc>
 - VAULT.md — already compact (56 lines)
 - ENV_FILE_STANDARD.md — already compact (40 lines)
 - DEPLOY_STANDARD.md — stays as-is (34 lines, the authoritative reference)
-- PROJECT_AGENT_DOCS_STANDARD.md — stays as-is (36 lines)
 - SYSTEM.md per-service files — not in scope (service-specific content)
 
 ---
@@ -105,7 +104,7 @@ Every service CLAUDE.md should follow this template after changes:
 ## <service-name>
 
 **Purpose**: <one sentence>
-**Port**: XXXX · **Domain**: `https://<domain>.alfares.cz`
+**Port**: XXXX **Domain**: `https://<domain>.alfares.cz`
 **Stack**: <stack line>
 
 ### Key constraints

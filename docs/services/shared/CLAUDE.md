@@ -5,7 +5,7 @@ These microservices can be cross-used by each other and by multiple applications
 
 Ecosystem map: [ECOSYSTEM_MAP.md](shared/ECOSYSTEM_MAP.md).
 
-Ecosystem defaults: [shared/docs/PROJECT_AGENT_DOCS_STANDARD.md](shared/docs/PROJECT_AGENT_DOCS_STANDARD.md).
+Ecosystem defaults: [docs/PROJECT_AGENT_DOCS_STANDARD.md](docs/PROJECT_AGENT_DOCS_STANDARD.md).
 
 Read this repo's `BUSINESS.md` → `SYSTEM.md` first.
 
@@ -20,7 +20,7 @@ Read this repo's `BUSINESS.md` → `SYSTEM.md` first.
 
 | File                                  | Purpose                               |
 | ------------------------------------- | ------------------------------------- |
-| `ECOSYSTEM_MAP.md`                    | Services, ports, K8s migration status |
+| `ECOSYSTEM_MAP.md`                    | Services, ports                       |
 | `SYSTEM.md`                           | Stack, deployment modes               |
 | `docs/VAULT.md`                       | Secrets: paths, ESO sync, quick ops   |
 | `docs/DEPLOY_STANDARD.md`             | Deploy pattern summary                |

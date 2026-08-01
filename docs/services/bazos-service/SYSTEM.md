@@ -32,17 +32,16 @@ Subscribes to `stock.updated` (RabbitMQ) → update/pause ads for out-of-stock i
 
 ## Secrets
 
-All secrets in Vault at `secret/prod/bazos-service`.  
-K8s: ESO syncs to `bazos-service-secret` every 5 min — see `k8s/external-secret.yaml`.  
-Local/Docker: `./shared/scripts/vault-env-gen.sh bazos-service prod`  
-→ [../shared/docs/VAULT.md](../shared/docs/VAULT.md)
+All secrets in Vault at `secret/prod/bazos-service`.
+K8s: ESO syncs to `bazos-service-secret` every 5 min — see `k8s/external-secret.yaml`.
+Local/Docker: `./shared/scripts/vault-env-gen.sh bazos-service prod`
 
 ## Deployment
 
-**Platform:** Kubernetes (k3s) · namespace `statex-apps`  
-**Image:** `localhost:5000/bazos-service:latest`  
-**Deploy:** `./scripts/deploy.sh`  
-**Logs:** `kubectl logs -n statex-apps -l app=bazos-service -f`  
+**Platform:** Kubernetes (k3s) · namespace `statex-apps`
+**Image:** `localhost:5000/bazos-service:latest`
+**Deploy:** `./scripts/deploy.sh`
+**Logs:** `kubectl logs -n statex-apps -l app=bazos-service -f`
 **Restart:** `kubectl rollout restart deployment/bazos-service -n statex-apps`
 
 → [../shared/docs/DEPLOY_STANDARD.md](../shared/docs/DEPLOY_STANDARD.md)

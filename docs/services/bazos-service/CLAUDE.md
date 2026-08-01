@@ -6,8 +6,8 @@
 
 ## bazos-service
 
-**Purpose**: Bazos.cz classifieds automation — create/update ads, manage multiple accounts, handle ad renewal and expiration.  
-**Domain**: https://bazos.alfares.cz  
+**Purpose**: Bazos.cz classifieds automation — create/update ads, manage multiple accounts, handle ad renewal and expiration.
+**Domain**: https://bazos.alfares.cz
 **Stack**: NestJS · PostgreSQL
 
 ### Key constraints
@@ -20,6 +20,6 @@
 - `stock.updated` from warehouse-microservice → removes/updates ads for out-of-stock items
 
 ### Secrets
-All secrets in Vault at `secret/prod/bazos-service`. → [../shared/docs/VAULT.md](../shared/docs/VAULT.md)
+All secrets in Vault at `secret/prod/bazos-service`.
 
 **Ops**: `kubectl logs -n statex-apps -l app=bazos-service -f` · `kubectl rollout restart deployment/bazos-service -n statex-apps` · `./scripts/deploy.sh`

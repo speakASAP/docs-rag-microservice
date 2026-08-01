@@ -6,9 +6,9 @@
 
 ## vault-microservice
 
-**Purpose**: HashiCorp Vault — centralized secret management for all Statex services.  
-**Port**: 8200 · **Domain**: https://vault.alfares.cz  
-**Stack**: HashiCorp Vault 1.15 · Docker (permanent — intentionally NOT in K8s)  
+**Purpose**: HashiCorp Vault — centralized secret management for all Statex services.
+**Port**: 8200 **Domain**: https://vault.alfares.cz
+**Stack**: HashiCorp Vault 1.15 · Docker (permanent — intentionally NOT in K8s)
 **Storage**: file backend at `/opt/vault/data` (persistent host bind mount)
 
 ### Key constraints
@@ -23,4 +23,4 @@
 - **CLI/admin**: `VAULT_ADDR=http://127.0.0.1:8200 vault <command>`
 - **Health**: `curl http://localhost:8200/v1/sys/health | jq '{initialized,sealed,version}'`
 
-**Ops**: `./scripts/deploy.sh` · `curl http://localhost:8200/v1/sys/health` · full ops in [`../shared/docs/VAULT.md`](../shared/docs/VAULT.md)
+**Ops**: `./scripts/deploy.sh` · `curl http://localhost:8200/v1/sys/health`

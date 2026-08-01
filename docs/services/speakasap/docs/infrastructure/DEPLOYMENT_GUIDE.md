@@ -5,7 +5,6 @@
 All services run in the `statex-apps` namespace on k3s.
 
 **Secrets flow:** Vault `secret/prod/speakasap` → ESO → K8s Secret `speakasap-secret` → pod `envFrom`.
-See `../../../shared/docs/VAULT.md` for Vault operations.
 
 **Deploy a service:**
 ```bash

@@ -11,7 +11,6 @@ Centralized reverse proxy managing SSL certificates (Let's Encrypt), routing, an
 - AI must never modify nginx configs that affect production routing without review
 - SSL certs managed by Certbot — do not manually edit
 - Blue/green switch only via `deploy-smart.sh`
-- Secrets via Vault — see [../shared/docs/VAULT.md](../shared/docs/VAULT.md)
 
 ## Consumers
 

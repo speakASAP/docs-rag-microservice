@@ -1,6 +1,6 @@
 # CLAUDE.md (agentic-email-processing-system)
 
-Ecosystem defaults: sibling [`../CLAUDE.md`](../CLAUDE.md) and [`../shared/docs/PROJECT_AGENT_DOCS_STANDARD.md`](../shared/docs/PROJECT_AGENT_DOCS_STANDARD.md).
+Ecosystem defaults: sibling [`../CLAUDE.md`](../CLAUDE.md).
 
 Read this repo's `BUSINESS.md` → `SYSTEM.md` → `AGENTS.md` → `TASKS.md` → `STATE.json` first.
 
@@ -8,8 +8,8 @@ Read this repo's `BUSINESS.md` → `SYSTEM.md` → `AGENTS.md` → `TASKS.md` �
 
 ## agentic-email-processing-system
 
-**Purpose**: Autonomous AI email triage — classify inbound emails by intent, extract information, auto-respond or escalate to human.  
-**Ports**: 3374 (blue) · 3375 (green)  
+**Purpose**: Autonomous AI email triage — classify inbound emails by intent, extract information, auto-respond or escalate to human.
+**Ports**: 3374 (blue) · 3375 (green)
 **Stack**: NestJS · PostgreSQL · RabbitMQ · ai-microservice
 
 ### Key constraints

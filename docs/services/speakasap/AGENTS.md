@@ -25,7 +25,7 @@ curl -s -X POST http://docs-rag-microservice.statex-apps.svc.cluster.local:3397/
 ## Deployment
 
 All services run on Kubernetes (`statex-apps` namespace). Manifests in `speakasap/k8s/`.
-Secrets: Vault → ESO → K8s Secrets. See `../shared/docs/VAULT.md`.
+Secrets: Vault → ESO → K8s Secrets.
 Deploy: `kubectl rollout restart deployment/<svc> -n statex-apps` or rebuild image + apply manifests.
 
 ## Coordinator Config

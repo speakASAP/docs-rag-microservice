@@ -21,7 +21,7 @@ Tables: `bazos_accounts`, `bazos_ads`, `bazos_orders`
 
 ## Secrets
 
-All secrets in Vault at `secret/prod/bazos-service` → K8s via ESO (`bazos-service-secret`). → [shared/docs/VAULT.md](../shared/docs/VAULT.md)
+All secrets in Vault at `secret/prod/bazos-service` → K8s via ESO (`bazos-service-secret`).
 
 ## API
 

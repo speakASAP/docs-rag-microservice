@@ -19,7 +19,6 @@
 
 - Orchestrator repo: `runlayer/`
 - Lead docs (this pack): `runlayer/docs/orchestrator-lead/`
-- Ecosystem standard: `shared/docs/PROJECT_AGENT_DOCS_STANDARD.md`
 - Sibling pilot (later): `flipflop-service/`
 
 ---

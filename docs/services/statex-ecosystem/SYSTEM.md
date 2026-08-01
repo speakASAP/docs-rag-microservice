@@ -15,17 +15,16 @@
 
 ## Deployment
 
-**Platform:** Kubernetes (k3s) · namespace `statex-apps`  
-**Image:** `localhost:5000/statex-ecosystem:latest`  
-**Deploy:** `./scripts/deploy.sh`  
-**Logs:** `kubectl logs -n statex-apps -l app=statex-ecosystem -f`  
+**Platform:** Kubernetes (k3s) · namespace `statex-apps`
+**Image:** `localhost:5000/statex-ecosystem:latest`
+**Deploy:** `./scripts/deploy.sh`
+**Logs:** `kubectl logs -n statex-apps -l app=statex-ecosystem -f`
 **Restart:** `kubectl rollout restart deployment/statex-ecosystem -n statex-apps`
 
 ## Secrets
 
-All secrets in Vault at `secret/prod/statex-ecosystem`.  
-Synced via ESO → K8s Secret `statex-ecosystem-secret`.  
-See [`../shared/docs/VAULT.md`](../shared/docs/VAULT.md).
+All secrets in Vault at `secret/prod/statex-ecosystem`.
+Synced via ESO → K8s Secret `statex-ecosystem-secret`.
 
 ## Docs
 

@@ -2,8 +2,8 @@
 
 Heureka.cz/sk XML feed generation service.
 
-**Domain**: https://heureka.alfares.cz  
-**Stack**: NestJS · PostgreSQL · Kubernetes (`statex-apps`)  
+**Domain**: https://heureka.alfares.cz
+**Stack**: NestJS · PostgreSQL · Kubernetes (`statex-apps`)
 **Port**: 3000 (ClusterIP)
 
 ## API
@@ -27,8 +27,7 @@ Heureka XML schema — validate with `curl https://heureka.alfares.cz/feed.xml |
 
 ## Secrets
 
-All secrets in Vault at `secret/prod/heureka-service` → ESO → K8s Secret `heureka-service-secret`.  
-→ [VAULT.md](../shared/docs/VAULT.md)
+All secrets in Vault at `secret/prod/heureka-service` → ESO → K8s Secret `heureka-service-secret`.
 
 ## Architecture · Deployment · Ops
 
