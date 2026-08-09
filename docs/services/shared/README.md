@@ -88,6 +88,5 @@ Multiple microservices on a production server, accessible via SSH or HTTPS. Cros
 | RBAC usage | [docs/RBAC_USAGE_GUIDE.md](docs/RBAC_USAGE_GUIDE.md) |
 | Auth frontend integration | [docs/AUTH_FRONTEND_INTEGRATION.md](docs/AUTH_FRONTEND_INTEGRATION.md) |
 | E-commerce architecture | [docs/UNIFIED_ECOMMERCE_ARCHITECTURE.md](docs/UNIFIED_ECOMMERCE_ARCHITECTURE.md) |
-| Env sync scripts | [scripts/ENV_SYNC_README.md](scripts/ENV_SYNC_README.md) |
 | K8s scripts | [scripts/K8S_SCRIPTS_README.md](scripts/K8S_SCRIPTS_README.md) |
 | Per-repo agent doc standard | [docs/PROJECT_AGENT_DOCS_STANDARD.md](docs/PROJECT_AGENT_DOCS_STANDARD.md) |

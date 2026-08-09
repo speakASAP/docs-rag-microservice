@@ -573,16 +573,13 @@ cd ~/Documents/Github/ai-microservice
 - Use HTTPS for all production service calls
 - Implement proper authentication for service-to-service communication
 
-### 6. **Environment Variables Sync (.env)**
+### 6. **Secrets (Vault)**
 
-`.env` files exist in three places: **local** (`/Users/sergiystashok/Documents/GitHub`), **statex** (`ssh alfares` → `/home/statex`), **sgipreal** (`ssh sgipreal` → `/home/sgipreal`). Use the scripts in `scripts/` to compare and sync:
+Secrets live in Vault at `secret/prod/<service>` and reach pods through
+External Secrets Operator. `.env` files are not synced between machines.
 
-- **Quick overview** (which projects differ): `./scripts/env-diff-summary.sh`
-- **Detailed comparison** (variable-by-variable): `./scripts/compare-env.sh` or `./scripts/compare-env.sh <project>`
-- **Sync** (from local to prod, preserves domains/secrets): `./scripts/sync-env-intelligent.sh [--dry-run] [project]`
-- **Menu**: `./scripts/env-sync-quick.sh`
-
-Config: `scripts/env-sync-config.sh` (DOMAIN_VARS, SECRET_VARS).
+- Read/write a secret: `/vault-secret <service> <list|get|set>`
+- Generate a service `.env` from Vault: `shared/scripts/vault-env-gen.sh <service>`
 
 ---
 

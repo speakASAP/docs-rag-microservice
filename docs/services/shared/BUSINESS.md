@@ -9,7 +9,7 @@ Single place for **cross-cutting documentation**, **standards**, and **scripts**
 ## Constraints
 
 - No application runtime in this repo — docs and tooling only.
-- Secrets never in markdown; env keys live in per-service `.env` (see `scripts/ENV_SYNC_README.md`).
+- Secrets never in markdown; they live in Vault at `secret/prod/<service>`.
 
 ## Consumers
 

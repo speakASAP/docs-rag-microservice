@@ -37,4 +37,3 @@
 Identity → Ports → Shared URLs → DB/Redis Kubernetes DNS → Secrets → App-specific
 
 → Archetype examples (NestJS, Next.js, multi-container): see [CREATE_SERVICE.md](./CREATE_SERVICE.md)
-→ Env sync scripts: [../scripts/ENV_SYNC_README.md](../scripts/ENV_SYNC_README.md)

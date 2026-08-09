@@ -12,12 +12,6 @@ Goals: **minimal context**, **no secrets** in prompts or generated edits.
 
 In **Cursor Settings → Hooks**, enable hooks so `.cursor/hooks.json` runs (secret blocking on prompt, shell, MCP; warning after file edits).
 
-## MacBook and server (independent)
-
-**MacBook and the server are separate.** There is no automated sync of Cursor or Claude user settings between machines (`~/.cursor/`, `~/.claude/`). Configure each machine independently. Shared **repo** config (e.g. `shared/.cursor/` via git) still applies after you pull on that machine.
-
-Rationale and manual alignment when you want it: [2026-04-06-cross-machine-sync-design.md](../superpowers/specs/2026-04-06-cross-machine-sync-design.md).
-
 ## Project rules (this repo)
 
 Located under `.cursor/rules/` at the workspace root:

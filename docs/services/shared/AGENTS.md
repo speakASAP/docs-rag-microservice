@@ -41,7 +41,7 @@ Work in **`shared/`** only unless the task explicitly spans sibling repos.
 
 1. Keep [README.md](README.md) and [ECOSYSTEM_MAP.md](ECOSYSTEM_MAP.md) consistent when services/ports change.
 2. Add or update **standards** under `docs/` (short, linkable); avoid duplicating per-repo `SYSTEM.md` content.
-3. Env tooling: follow [scripts/ENV_SYNC_README.md](scripts/ENV_SYNC_README.md); never put secret values in examples.
+3. Env tooling: secrets live in Vault (`secret/prod/<service>`); never put secret values in examples.
 
 ## Rules
 
