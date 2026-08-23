@@ -61,6 +61,53 @@ export class IngestionService implements OnModuleInit, OnModuleDestroy {
     if (this.scheduledTimer) clearInterval(this.scheduledTimer);
   }
 
+  private async createJob(repoName: string, repoUrl: string, localPath: boolean): Promise<IngestionJob> {
+    const registryEntry = ECOSYSTEM_REPOS.find((repo) => repo.repoName === repoName);
+    const job = this.jobRepo.create({
+      repoName,
+      repoUrl: repoUrl === 'local' && registryEntry ? registryEntry.repoUrl : repoUrl,
+      status: 'pending',
+      chunksProcessed: 0,
+      chunksTotal: 0,
+      localPath,
+    });
+    await this.jobRepo.save(job);
+    return job;
+  }
+
+  private async runAllSequentially(force: boolean): Promise<void> {
+    const total = ECOSYSTEM_REPOS.length;
+    const failures: string[] = [];
+    const startedAt = Date.now();
+    this.logger.log(`Sequential ingestion starting: ${total} repos (force=${force})`);
+
+    for (const [index, repo] of ECOSYSTEM_REPOS.entries()) {
+      const label = `[${index + 1}/${total}] ${repo.repoName}`;
+      const repoStartedAt = Date.now();
+      try {
+        const job = await this.createJob(repo.repoName, repo.repoUrl, repo.localPath);
+        await this.runIngestion(job, force, repo.localAbsolutePath);
+        this.logger.log(`${label} OK in ${Date.now() - repoStartedAt}ms`);
+      } catch (err) {
+        // One bad repo must not abandon the other 39; record and continue.
+        failures.push(repo.repoName);
+        this.logger.error(
+          `${label} FAILED after ${Date.now() - repoStartedAt}ms: ${err instanceof Error ? err.message : String(err)}`,
+          err instanceof Error ? err.stack : undefined,
+        );
+      }
+    }
+
+    const elapsed = Date.now() - startedAt;
+    if (failures.length > 0) {
+      this.logger.error(
+        `Sequential ingestion finished in ${elapsed}ms with ${failures.length}/${total} failures: ${failures.join(', ')}`,
+      );
+      return;
+    }
+    this.logger.log(`Sequential ingestion finished in ${elapsed}ms: all ${total} repos OK`);
+  }
+
   private async failStrandedJobs(): Promise<void> {
     const stranded = await this.jobRepo.find({ where: { status: 'running' } });
     if (stranded.length === 0) return;
@@ -102,15 +149,7 @@ export class IngestionService implements OnModuleInit, OnModuleDestroy {
     const resolvedLocalPath = localPath || Boolean(registryEntry?.localPath);
     const resolvedRepoUrl = repoUrl === 'local' && registryEntry ? registryEntry.repoUrl : repoUrl;
 
-    const job = this.jobRepo.create({
-      repoName,
-      repoUrl: resolvedRepoUrl,
-      status: 'pending',
-      chunksProcessed: 0,
-      chunksTotal: 0,
-      localPath: resolvedLocalPath,
-    });
-    await this.jobRepo.save(job);
+    const job = await this.createJob(repoName, resolvedRepoUrl, resolvedLocalPath);
 
     this.runIngestion(job, force, resolvedLocalAbsolutePath).catch((err) => {
       this.logger.error(`Ingestion failed for ${repoName}: ${err.message}`);
@@ -234,10 +273,21 @@ export class IngestionService implements OnModuleInit, OnModuleDestroy {
 
   async triggerAll(force = false): Promise<{ queued: number; repos: string[] }> {
     const repos: string[] = [];
+
+    // triggerIngestion returns as soon as the job row exists — the actual work
+    // runs detached. Calling it per repo therefore releases all 40 repos onto
+    // Ollama at once, which is exactly what produced the "fetch failed" storms.
+    // Run the repos through one sequential chain instead.
     for (const repo of ECOSYSTEM_REPOS) {
-      await this.triggerIngestion(repo.repoName, repo.repoUrl, force, repo.localPath, repo.localAbsolutePath);
       repos.push(repo.repoName);
     }
+
+    this.runAllSequentially(force).catch((err) => {
+      this.logger.error(
+        `Sequential ingestion run failed: ${err instanceof Error ? err.message : String(err)}`,
+        err instanceof Error ? err.stack : undefined,
+      );
+    });
     this.logger.log(`trigger-all: queued ${repos.length} repos`);
     return { queued: repos.length, repos };
   }
