@@ -1,6 +1,6 @@
 import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { LessThan, Repository } from 'typeorm';
 import { randomUUID } from 'crypto';
 import { IngestionJob } from '../database/entities/ingestion-job.entity';
 import { DocumentChunk } from '../database/entities/document-chunk.entity';
@@ -10,10 +10,18 @@ import { EmbeddingService } from './embedding.service';
 import { QdrantService } from '../qdrant/qdrant.service';
 import { ECOSYSTEM_REPOS } from './repo-registry';
 
+/**
+ * A running job writes progress after every chunk batch. If updatedAt has not
+ * moved in this long, the worker behind it is gone and the row is a lie.
+ */
+const STALE_RUNNING_JOB_MS = Number(process.env.STALE_RUNNING_JOB_MINUTES || '20') * 60 * 1000;
+const STALE_SWEEP_INTERVAL_MS = 5 * 60 * 1000;
+
 @Injectable()
 export class IngestionService implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(IngestionService.name);
   private scheduledTimer?: NodeJS.Timeout;
+  private staleSweepTimer?: NodeJS.Timeout;
   private scheduledRunActive = false;
 
   constructor(
@@ -38,6 +46,19 @@ export class IngestionService implements OnModuleInit, OnModuleDestroy {
       );
     });
 
+    this.staleSweepTimer = setInterval(() => {
+      this.failStaleRunningJobs().catch((err) => {
+        this.logger.error(
+          `Stale ingestion job sweep failed: ${err instanceof Error ? err.message : String(err)}`,
+          err instanceof Error ? err.stack : undefined,
+        );
+      });
+    }, STALE_SWEEP_INTERVAL_MS);
+    this.logger.log(
+      `Stale-running-job sweep every ${Math.round(STALE_SWEEP_INTERVAL_MS / 60000)} minute(s); ` +
+        `threshold ${Math.round(STALE_RUNNING_JOB_MS / 60000)} minute(s)`,
+    );
+
     const enabled = process.env.SCHEDULED_INGESTION_ENABLED === 'true';
     if (!enabled) {
       this.logger.warn(
@@ -59,6 +80,7 @@ export class IngestionService implements OnModuleInit, OnModuleDestroy {
 
   onModuleDestroy(): void {
     if (this.scheduledTimer) clearInterval(this.scheduledTimer);
+    if (this.staleSweepTimer) clearInterval(this.staleSweepTimer);
   }
 
   private async createJob(repoName: string, repoUrl: string, localPath: boolean): Promise<IngestionJob> {
@@ -120,6 +142,38 @@ export class IngestionService implements OnModuleInit, OnModuleDestroy {
     for (const job of stranded) {
       job.status = 'failed';
       job.errorMessage = 'Stranded in running state by a process restart; failed at startup';
+      await this.jobRepo.save(job);
+    }
+  }
+
+  /**
+   * The startup sweep alone is not enough. During a rolling update both pods are
+   * briefly alive: the new pod reaps, and the old pod's final write then puts the
+   * row back into 'running' with nothing left to reap it. Observed on 2026-08-23,
+   * when auth-microservice sat 'running' at 22/89 indefinitely.
+   *
+   * So also fail any job whose updatedAt has not moved for longer than a live
+   * ingestion ever leaves it untouched. Progress is written per chunk batch, so a
+   * genuinely running job updates far more often than this.
+   */
+  private async failStaleRunningJobs(): Promise<void> {
+    const cutoff = new Date(Date.now() - STALE_RUNNING_JOB_MS);
+    const stale = await this.jobRepo.find({
+      where: { status: 'running', updatedAt: LessThan(cutoff) },
+    });
+    if (stale.length === 0) return;
+
+    this.logger.error(
+      `Found ${stale.length} ingestion job(s) with no progress for over ` +
+        `${Math.round(STALE_RUNNING_JOB_MS / 60000)} minutes ` +
+        `(${[...new Set(stale.map((j) => j.repoName))].join(', ')}). Marking failed.`,
+    );
+
+    for (const job of stale) {
+      job.status = 'failed';
+      job.errorMessage =
+        `No progress for over ${Math.round(STALE_RUNNING_JOB_MS / 60000)} minutes ` +
+        `(stalled at ${job.chunksProcessed}/${job.chunksTotal} chunks); marked failed by the staleness reaper`;
       await this.jobRepo.save(job);
     }
   }

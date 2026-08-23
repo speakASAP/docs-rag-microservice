@@ -49,11 +49,13 @@ describe('RetrievalService', () => {
     expect(ctx.sources).toHaveLength(1);
   });
 
-  it('returns empty agent context when embedding retrieval is unavailable', async () => {
+  // An unreachable index must never look like "nothing matched": an agent that
+  // reads an empty context concludes the docs say nothing on the topic and acts
+  // on that. agentContext throws so the caller can tell the two apart.
+  it('raises when embedding retrieval is unavailable instead of returning empty', async () => {
     mockEmbedder.embedSingle.mockRejectedValueOnce(new Error('fetch failed'));
-    const ctx = await service.agentContext({ query: 'deployment', maxTokens: 2000 });
-    expect(ctx.context).toBe('');
-    expect(ctx.sources).toHaveLength(0);
-    expect(ctx.estimatedTokens).toBe(0);
+    await expect(service.agentContext({ query: 'deployment', maxTokens: 2000 })).rejects.toThrow(
+      /retrieval unavailable/i,
+    );
   });
 });
