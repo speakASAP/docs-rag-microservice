@@ -22,6 +22,12 @@ data:
   QDRANT_VECTOR_SIZE: "768"
   OLLAMA_URL: "http://192.168.88.53:11435"
   OLLAMA_EMBEDDING_MODEL: "nomic-embed-text"
+  # Ollama serves embeddings from one model instance; raising this saturates
+  # it and produces "fetch failed" storms rather than more throughput.
+  OLLAMA_EMBED_CONCURRENCY: "2"
+  OLLAMA_EMBED_TIMEOUT_MS: "60000"
+  # Minimum top-result similarity for agent-context to return an answer.
+  RAG_CONFIDENT_MATCH_SCORE: "0.74"
   DB_HOST: "db-server-postgres.statex-apps.svc.cluster.local"
   DB_PORT: "5432"
   DB_USER: "docs_rag"
