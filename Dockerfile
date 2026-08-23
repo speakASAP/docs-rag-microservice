@@ -13,6 +13,14 @@ RUN npm run build
 # ---- runner ----
 FROM node:20-slim AS runner
 
+# GitSyncService shells out to `git rev-parse HEAD` to detect whether a repo
+# changed since the last ingestion. Without the binary the spawn fails with
+# ENOENT, every repo revision falls back to 'unknown', and the incremental
+# check can never skip — forcing a full re-index of all repos on every run.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends git \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
 COPY package*.json ./
