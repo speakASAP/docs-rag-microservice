@@ -13,7 +13,6 @@ export const ECOSYSTEM_REPOS: RepoEntry[] = [
   { repoName: 'monitoring-microservice', repoUrl: 'git@github.com:speakASAP/monitoring-microservice.git', localPath: true },
   { repoName: 'backups-microservice', repoUrl: 'git@github.com:speakASAP/backups-microservice.git', localPath: true },
   { repoName: 'database-server', repoUrl: 'git@github.com:speakASAP/database-server.git', localPath: true },
-  { repoName: 'nginx-microservice', repoUrl: 'git@github.com:speakASAP/nginx-microservice.git', localPath: true },
   { repoName: 'vault-microservice', repoUrl: 'git@github.com:speakASAP/vault-microservice.git', localPath: true },
   { repoName: 'ai-microservice', repoUrl: 'git@github.com:speakASAP/ai-microservice.git', localPath: true },
   { repoName: 'runlayer', repoUrl: 'git@github.com:speakASAP/runlayer.git', localPath: true },
@@ -27,11 +26,41 @@ export const ECOSYSTEM_REPOS: RepoEntry[] = [
   { repoName: 'leads-microservice', repoUrl: 'https://github.com/speakASAP/leads-microservice.git', localPath: true },
   { repoName: 'marketing-microservice', repoUrl: 'https://github.com/speakASAP/marketing-microservice.git', localPath: true },
   { repoName: 'minio-microservice', repoUrl: 'https://github.com/speakASAP/minio.git', localPath: true },
-  { repoName: 'allegro-service', repoUrl: 'git@github.com:speakASAP/allegro-service.git', localPath: true },
-  { repoName: 'aukro-service', repoUrl: 'git@github.com:speakASAP/aukro-service.git', localPath: true },
-  { repoName: 'bazos-service', repoUrl: 'git@github.com:speakASAP/bazos-service.git', localPath: true },
-  { repoName: 'flipflop-service', repoUrl: 'git@github.com:speakASAP/flipflop-service.git', localPath: true },
-  { repoName: 'heureka-service', repoUrl: 'git@github.com:speakASAP/heureka-service.git', localPath: true },
+  {
+    repoName: 'allegro-service',
+    repoUrl: 'git@github.com:speakASAP/allegro-service.git',
+    localPath: true,
+    // Working tree is checked out as 'allegro', not 'allegro-service'.
+    localAbsolutePath: '/data/repos/allegro',
+  },
+  {
+    repoName: 'aukro-service',
+    repoUrl: 'git@github.com:speakASAP/aukro-service.git',
+    localPath: true,
+    // Working tree is checked out as 'aukro', not 'aukro-service'.
+    localAbsolutePath: '/data/repos/aukro',
+  },
+  {
+    repoName: 'bazos-service',
+    repoUrl: 'git@github.com:speakASAP/bazos-service.git',
+    localPath: true,
+    // Working tree is checked out as 'bazos', not 'bazos-service'.
+    localAbsolutePath: '/data/repos/bazos',
+  },
+  {
+    repoName: 'flipflop-service',
+    repoUrl: 'git@github.com:speakASAP/flipflop-service.git',
+    localPath: true,
+    // Working tree is checked out as 'flipflop', not 'flipflop-service'.
+    localAbsolutePath: '/data/repos/flipflop',
+  },
+  {
+    repoName: 'heureka-service',
+    repoUrl: 'git@github.com:speakASAP/heureka-service.git',
+    localPath: true,
+    // Working tree is checked out as 'heureka', not 'heureka-service'.
+    localAbsolutePath: '/data/repos/heureka',
+  },
   { repoName: 'speakasap', repoUrl: 'git@github.com:speakASAP/speakasap-new.git', localPath: true },
   { repoName: 'speakasap-portal', repoUrl: 'git@github.com:speakASAP/speakasap-portal.git', localPath: true },
   { repoName: 'shop-assistant', repoUrl: 'git@github.com:speakASAP/shop-assistant.git', localPath: true },
