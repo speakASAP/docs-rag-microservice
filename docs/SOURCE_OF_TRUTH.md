@@ -49,6 +49,19 @@ The index froze for 38 days while continuing to answer confidently. Chain:
 5. Separately, `Github/CLAUDE.md` is a symlink to `shared/CLAUDE.md`. The
    directory walker treated symlinks as neither file nor directory, so the
    ecosystem's most authoritative document was never indexed at all.
+6. Ollama was throttled to `NanoCpus=50000000` — **0.05 of one core**. Embedding
+   requests returned 200 but took 30–53 s each at 5.57 % CPU, so ingestion could
+   never finish within any sane window. Raised to 6 CPUs on 2026-08-23; embed
+   latency went from 30–53 s to **0.83 s**. This is the original cause of the
+   July outage, not a consequence of it.
+7. Six registry entries could never resolve. `repoName` doubles as the directory
+   name under `/data/repos`, but five working trees are checked out under a
+   shorter name than their GitHub repo (`allegro-service` → `allegro`, and the
+   same for `aukro`, `bazos`, `flipflop`, `heureka`). They failed every run with
+   `ENOENT`, silently hiding **881 markdown files**. `nginx-microservice` was
+   retired on 2026-06-17 and only survives as a tarball, so it failed for good.
+   Fixed by pointing the five at `localAbsolutePath` and deleting the retired
+   entry.
 
 **Lesson:** every one of these was a silent failure. None raised an alert. The
 index degraded into confident misinformation, which is worse than an outage —
@@ -60,6 +73,8 @@ an outage is visible.
 |---|---|
 | Scheduler-off is loud | `onModuleInit` logs at **warn** when `SCHEDULED_INGESTION_ENABLED != "true"` |
 | Stranded jobs cannot freeze a repo | `failStrandedJobs()` fails `running` jobs at startup, at **error** level |
+| Rolling updates cannot strand jobs | `failStaleRunningJobs()` sweeps every 5 min, failing `running` jobs idle past `STALE_RUNNING_JOB_MINUTES` (default 20). The startup reaper alone is not enough: during a rollout the terminating old pod can write a row back to `running` after the new pod has reaped it |
+| A repo dir renamed away from its repo name still indexes | Registry entries carry `localAbsolutePath`; ingestion honours it via `getLocalPath` |
 | Symlinked docs are indexed | `walkDir` resolves symlinks, dedupes by real path, guards cycles |
 | Unreadable git HEAD is visible | `getHeadCommit` logs at **error** before falling back to `unknown` |
 | Retrieval failure ≠ empty result | `agentContext` throws `ServiceUnavailableException` instead of returning `context: ''` |
@@ -83,3 +98,7 @@ failed" must stay distinguishable to the caller.
   assuming: query for a distinctive phrase and check the source path.
 - Treat a `confident: false` on a topic you know is documented as an **index
   bug**, not a documentation gap.
+- When a repo is renamed or its working tree checked out under a different
+  directory name, update `repo-registry.ts` in the same change. A registry entry
+  that cannot resolve fails quietly on every run and hides that repo's whole
+  documentation set.
