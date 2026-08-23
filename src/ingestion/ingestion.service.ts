@@ -28,8 +28,24 @@ export class IngestionService implements OnModuleInit, OnModuleDestroy {
   ) {}
 
   onModuleInit(): void {
+    // A pod restart mid-ingestion leaves jobs stranded in 'running' forever.
+    // They then shadow the last good job in the up-to-date check below, so a
+    // repo can silently stop re-indexing. Fail them loudly at startup.
+    this.failStrandedJobs().catch((err) => {
+      this.logger.error(
+        `Failed to reconcile stranded ingestion jobs: ${err instanceof Error ? err.message : String(err)}`,
+        err instanceof Error ? err.stack : undefined,
+      );
+    });
+
     const enabled = process.env.SCHEDULED_INGESTION_ENABLED === 'true';
-    if (!enabled) return;
+    if (!enabled) {
+      this.logger.warn(
+        'SCHEDULED_INGESTION_ENABLED is not "true" — the docs index will NOT refresh. ' +
+          'It will serve progressively staler results until re-enabled.',
+      );
+      return;
+    }
 
     const intervalHours = Number(process.env.GIT_SYNC_INTERVAL_HOURS || '6');
     const intervalMs = Math.max(1, intervalHours) * 60 * 60 * 1000;
@@ -43,6 +59,22 @@ export class IngestionService implements OnModuleInit, OnModuleDestroy {
 
   onModuleDestroy(): void {
     if (this.scheduledTimer) clearInterval(this.scheduledTimer);
+  }
+
+  private async failStrandedJobs(): Promise<void> {
+    const stranded = await this.jobRepo.find({ where: { status: 'running' } });
+    if (stranded.length === 0) return;
+
+    this.logger.error(
+      `Found ${stranded.length} ingestion job(s) stranded in 'running' from a previous process ` +
+        `(${[...new Set(stranded.map((j) => j.repoName))].join(', ')}). Marking failed.`,
+    );
+
+    for (const job of stranded) {
+      job.status = 'failed';
+      job.errorMessage = 'Stranded in running state by a process restart; failed at startup';
+      await this.jobRepo.save(job);
+    }
   }
 
   private async runScheduledIngestion(): Promise<void> {

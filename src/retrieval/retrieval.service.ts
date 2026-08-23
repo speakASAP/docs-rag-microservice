@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, ServiceUnavailableException } from '@nestjs/common';
 import { EmbeddingService } from '../ingestion/embedding.service';
 import { QdrantService, SearchOptions } from '../qdrant/qdrant.service';
 
@@ -40,9 +40,21 @@ export interface AgentContextResponse {
   context: string;
   sources: { repoName: string; filePath: string; heading: string; score: number }[];
   estimatedTokens: number;
+  /** False when no result cleared CONFIDENT_MATCH_SCORE; context is then empty by design. */
+  confident: boolean;
+  /** Similarity of the best match, 0 when nothing was returned. */
+  topScore: number;
+  /** Present only when confident is false: why no context was returned. */
+  notice?: string;
 }
 
 const WORDS_PER_TOKEN = 0.75;
+
+// Minimum top-result similarity for an assembled answer to be considered
+// trustworthy. Below this, weak chunks are withheld rather than presented as
+// an answer. Tuned against observed misses: an unanswerable query topped out
+// at ~0.72 while genuinely relevant hits score higher.
+const CONFIDENT_MATCH_SCORE = Number(process.env.RAG_CONFIDENT_MATCH_SCORE || '0.74');
 
 @Injectable()
 export class RetrievalService {
@@ -100,13 +112,18 @@ export class RetrievalService {
       });
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
-      this.logger.warn(`Agent context retrieval unavailable: ${message}`);
-      return {
-        query: req.query,
-        context: '',
-        sources: [],
-        estimatedTokens: 0,
-      };
+      // Never return an empty context in place of a failure: an agent cannot
+      // distinguish "nothing indexed" from "embedding backend is down", and a
+      // silent empty answer sends it off to burn tokens reading source files.
+      this.logger.error(
+        `Agent context retrieval FAILED for query="${req.query}" ` +
+          `repoName=${req.repoName ?? '-'} docType=${req.docType ?? '-'}: ${message}`,
+        err instanceof Error ? err.stack : undefined,
+      );
+      throw new ServiceUnavailableException(
+        `Docs RAG retrieval unavailable: ${message}. Do not treat this as "no results" — ` +
+          `the index could not be queried.`,
+      );
     }
 
     const contextParts: string[] = [];
@@ -130,11 +147,39 @@ export class RetrievalService {
       tokenCount += tokenEst;
     }
 
+    // A confident answer needs at least one strong match. Vector search always
+    // returns *something* above the 0.6 floor, so without this an unanswerable
+    // query yields a page of plausible near-misses that reads like an answer.
+    const topScore = response.results.length > 0 ? response.results[0].score : 0;
+    const confident = topScore >= CONFIDENT_MATCH_SCORE;
+
+    if (!confident) {
+      this.logger.warn(
+        `No confident match for query="${req.query}" ` +
+          `(top score ${topScore.toFixed(3)} < ${CONFIDENT_MATCH_SCORE}); ` +
+          `returning explicit no-match instead of ${response.results.length} weak chunks`,
+      );
+      return {
+        query: req.query,
+        context: '',
+        sources: [],
+        estimatedTokens: 0,
+        confident: false,
+        topScore,
+        notice:
+          `No confident match in the docs index (best score ${topScore.toFixed(3)}, ` +
+          `threshold ${CONFIDENT_MATCH_SCORE}). The index may not cover this topic or may be stale — ` +
+          `verify against the repository before relying on an answer.`,
+      };
+    }
+
     return {
       query: req.query,
       context: contextParts.join('\n\n'),
       sources,
       estimatedTokens: tokenCount,
+      confident: true,
+      topScore,
     };
   }
 }
