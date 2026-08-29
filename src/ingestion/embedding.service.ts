@@ -21,7 +21,12 @@ export class EmbeddingService {
   private readonly model: string;
 
   constructor() {
-    this.ollamaUrl = process.env.OLLAMA_URL || 'http://localhost:11434';
+    // Ollama listens on 11435, not its 11434 default: it runs as the container
+    // ai-microservice-ollama-green with OLLAMA_HOST=0.0.0.0:11435, on the host
+    // rather than in the cluster. Nothing has ever served 11434 here, so the
+    // old localhost:11434 fallback could only fail silently if OLLAMA_URL was
+    // unset. In production it is always set, from k8s/configmap.yaml.
+    this.ollamaUrl = process.env.OLLAMA_URL || 'http://192.168.88.53:11435';
     this.model = process.env.OLLAMA_EMBEDDING_MODEL || 'nomic-embed-text';
   }
 
