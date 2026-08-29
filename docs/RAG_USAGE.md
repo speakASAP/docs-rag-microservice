@@ -1,59 +1,81 @@
-# RAG Service Usage Guide
+# RAG Service Usage
 
-## Why use this service?
+docs-RAG provides candidate context from approved ecosystem Git repositories.
+It is not a documentation store and not an authority layer.
 
-Each query to this service instead of reading raw git files saves **2000–5000 tokens**.
-With 35 repos indexed, all ecosystem knowledge is searchable in one call.
+## Sources
+
+The canonical source list is:
+
+```text
+shared/config/ecosystem-repositories.json
+```
+
+Repositories with `docsRag: true` are mounted and indexed directly. There is no
+central copied snapshot.
 
 ## Endpoints
 
-All endpoints except `/health` require `Authorization: Bearer <JWT_TOKEN>` (service-to-service JWT, HS256). Embeddings are generated with Ollama using `OLLAMA_URL` and `OLLAMA_EMBEDDING_MODEL`.
-
 ### Semantic search
-```
+
+```http
 POST /retrieval/search
+Content-Type: application/json
+Authorization: <service token>
+
 {
-  "query": "how does vault secret rotation work",
+  "query": "deployment standard",
   "limit": 5,
   "repoName": "shared",
-  "docType": "runbook",
   "scoreThreshold": 0.5
 }
 ```
 
-### Agent context (token-budgeted)
-```
+### Agent context
+
+```http
 POST /retrieval/agent-context
+Content-Type: application/json
+Authorization: <service token>
+
 {
-  "query": "kubernetes deployment pattern for microservices",
+  "query": "new service integration requirements",
   "maxTokens": 3000,
   "repoName": "shared"
 }
 ```
-Returns pre-formatted context block ready to paste into an agent prompt.
 
-## Internal URL (K8s)
+Internal URL:
 `http://docs-rag-microservice.statex-apps.svc.cluster.local:3397`
 
-## Public URL
-`https://docs-rag.alfares.cz`
+Public URL: `https://docs-rag.alfares.cz`
 
-## Trigger re-ingestion
-```
-POST /ingestion/trigger
-{"repoName": "shared", "repoUrl": "local", "localPath": true, "force": true}
+## Reading results
 
-POST /ingestion/trigger-all
-{"force": false}
-```
+- Verify deployment, database, security and public-contract facts against the
+  cited Git file.
+- `confident: false` means direct Git investigation is required.
+- HTTP 503 means retrieval failed; it is not an empty result.
+- IPS context is graph-first. Semantic results may enrich a task context but
+  cannot replace explicit upstream links.
 
+## Ingestion
 
-## Documentation source of truth
+Trigger one registered source:
 
-The production knowledge base indexes markdown documentation from every ecosystem service repository mounted under `GIT_BASE_PATH`. A central snapshot can be refreshed with:
-
-```bash
-./scripts/sync-docs-snapshot.sh
+```json
+{"repoName":"shared","repoUrl":"local","force":true}
 ```
 
-The snapshot is stored under `docs/services/<repo-name>/` inside docs-rag-microservice so service documentation is available from this repository as well as through retrieval endpoints.
+Trigger all sources:
+
+```json
+{"force":false}
+```
+
+Supply authorization through a protected file or process substitution. Never
+print or commit the token.
+
+After authoritative documentation changes, verify a distinctive phrase returns
+the current repository path. After deleting stale documentation, use a forced
+reindex of its owning source so old vectors are removed.

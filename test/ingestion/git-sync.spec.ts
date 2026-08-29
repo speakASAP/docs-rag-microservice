@@ -29,6 +29,28 @@ describe('GitSyncService', () => {
     expect(files.some((f) => f.endsWith('README.md'))).toBe(true);
   });
 
+  it('skips AppleDouble files', async () => {
+    const repoDir = path.join(tmpDir, 'test-repo');
+    fs.mkdirSync(repoDir, { recursive: true });
+    fs.writeFileSync(path.join(repoDir, 'README.md'), '# Test');
+    fs.writeFileSync(path.join(repoDir, '._README.md'), '\u0000AppleDouble');
+
+    const files = await service.listMarkdownFiles(repoDir);
+    expect(files.map((file) => path.basename(file))).toEqual(['README.md']);
+  });
+
+  it('applies source-specific path exclusions', async () => {
+    const repoDir = path.join(tmpDir, 'test-repo');
+    fs.mkdirSync(path.join(repoDir, 'docs', 'services'), { recursive: true });
+    fs.mkdirSync(path.join(repoDir, 'docs', 'guides'), { recursive: true });
+    fs.writeFileSync(path.join(repoDir, 'docs', 'services', 'snapshot.md'), '# Snapshot');
+    fs.writeFileSync(path.join(repoDir, 'docs', 'guides', 'current.md'), '# Current');
+
+    const files = await service.listMarkdownFiles(repoDir, ['docs/services']);
+    expect(files.some((file) => file.endsWith('snapshot.md'))).toBe(false);
+    expect(files.some((file) => file.endsWith('current.md'))).toBe(true);
+  });
+
   it('reads file content', async () => {
     const repoDir = path.join(tmpDir, 'test-repo');
     fs.mkdirSync(repoDir, { recursive: true });

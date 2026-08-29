@@ -1,93 +1,83 @@
+import * as fs from 'fs';
+import * as path from 'path';
+
 export interface RepoEntry {
   repoName: string;
   repoUrl: string;
   localPath: boolean;
   localAbsolutePath?: string;
+  excludeMarkdownPaths?: string[];
 }
 
-export const ECOSYSTEM_REPOS: RepoEntry[] = [
-  { repoName: 'shared', repoUrl: 'git@github.com:speakASAP/shared.git', localPath: true },
-  { repoName: 'auth-microservice', repoUrl: 'https://github.com/speakASAP/auth-microservice.git', localPath: true },
-  { repoName: 'logging-microservice', repoUrl: 'git@github.com:speakASAP/logging-microservice.git', localPath: true },
-  { repoName: 'notifications-microservice', repoUrl: 'git@github.com:speakASAP/notifications-microservice.git', localPath: true },
-  { repoName: 'monitoring-microservice', repoUrl: 'git@github.com:speakASAP/monitoring-microservice.git', localPath: true },
-  { repoName: 'backups-microservice', repoUrl: 'git@github.com:speakASAP/backups-microservice.git', localPath: true },
-  { repoName: 'database-server', repoUrl: 'git@github.com:speakASAP/database-server.git', localPath: true },
-  { repoName: 'vault-microservice', repoUrl: 'git@github.com:speakASAP/vault-microservice.git', localPath: true },
-  { repoName: 'ai-microservice', repoUrl: 'git@github.com:speakASAP/ai-microservice.git', localPath: true },
-  { repoName: 'runlayer', repoUrl: 'git@github.com:speakASAP/runlayer.git', localPath: true },
-  { repoName: 'prompts-microservice', repoUrl: 'git@github.com:speakASAP/prompts.git', localPath: true },
-  { repoName: 'docs-rag-microservice', repoUrl: 'git@github.com:speakASAP/docs-rag-microservice.git', localPath: true },
-  { repoName: 'catalog-microservice', repoUrl: 'git@github.com:speakASAP/catalog-microservice.git', localPath: true },
-  { repoName: 'orders-microservice', repoUrl: 'git@github.com:speakASAP/orders-microservice.git', localPath: true },
-  { repoName: 'payments-microservice', repoUrl: 'git@github.com:speakASAP/payments-microservice.git', localPath: true },
-  { repoName: 'warehouse-microservice', repoUrl: 'git@github.com:speakASAP/warehouse-microservice.git', localPath: true },
-  { repoName: 'suppliers-microservice', repoUrl: 'git@github.com:speakASAP/suppliers-microservice.git', localPath: true },
-  { repoName: 'leads-microservice', repoUrl: 'https://github.com/speakASAP/leads-microservice.git', localPath: true },
-  { repoName: 'marketing-microservice', repoUrl: 'https://github.com/speakASAP/marketing-microservice.git', localPath: true },
-  { repoName: 'minio-microservice', repoUrl: 'https://github.com/speakASAP/minio.git', localPath: true },
-  {
-    repoName: 'allegro-service',
-    repoUrl: 'git@github.com:speakASAP/allegro-service.git',
-    localPath: true,
-    // Working tree is checked out as 'allegro', not 'allegro-service'.
-    localAbsolutePath: '/data/repos/allegro',
-  },
-  {
-    repoName: 'aukro-service',
-    repoUrl: 'git@github.com:speakASAP/aukro-service.git',
-    localPath: true,
-    // Working tree is checked out as 'aukro', not 'aukro-service'.
-    localAbsolutePath: '/data/repos/aukro',
-  },
-  {
-    repoName: 'bazos-service',
-    repoUrl: 'git@github.com:speakASAP/bazos-service.git',
-    localPath: true,
-    // Working tree is checked out as 'bazos', not 'bazos-service'.
-    localAbsolutePath: '/data/repos/bazos',
-  },
-  {
-    repoName: 'flipflop-service',
-    repoUrl: 'git@github.com:speakASAP/flipflop-service.git',
-    localPath: true,
-    // Working tree is checked out as 'flipflop', not 'flipflop-service'.
-    localAbsolutePath: '/data/repos/flipflop',
-  },
-  {
-    repoName: 'heureka-service',
-    repoUrl: 'git@github.com:speakASAP/heureka-service.git',
-    localPath: true,
-    // Working tree is checked out as 'heureka', not 'heureka-service'.
-    localAbsolutePath: '/data/repos/heureka',
-  },
-  { repoName: 'speakasap', repoUrl: 'git@github.com:speakASAP/speakasap-new.git', localPath: true },
-  { repoName: 'speakasap-portal', repoUrl: 'git@github.com:speakASAP/speakasap-portal.git', localPath: true },
-  { repoName: 'shop-assistant', repoUrl: 'git@github.com:speakASAP/shop-assistant.git', localPath: true },
-  { repoName: 'agentic-email-processing-system', repoUrl: 'git@github.com:speakASAP/agentic-email-processing-system.git', localPath: true },
-  { repoName: 'crypto-ai-agent', repoUrl: 'git@github.com:speakASAP/crypto-ai-agent.git', localPath: true },
-  { repoName: 'school-committee', repoUrl: 'git@github.com:speakASAP/school-committee.git', localPath: true },
-  { repoName: 'marathon', repoUrl: 'git@github.com:speakASAP/marathon.git', localPath: true },
-  { repoName: 'k8s-manifests', repoUrl: 'git@github.com:speakASAP/k8s-manifests.git', localPath: true },
-  { repoName: 'statex', repoUrl: 'git@github.com:speakASAP/statex.git', localPath: true },
-  { repoName: 'statex-ecosystem', repoUrl: 'git@github.com:speakASAP/statex-ecosystem.git', localPath: true },
-  { repoName: 'vault', repoUrl: 'git@github.com:speakASAP/vault.git', localPath: true },
-  {
-    repoName: 'claude-profile',
-    repoUrl: 'local:///data/agent-profiles/claude',
-    localPath: true,
-    localAbsolutePath: '/data/agent-profiles/claude',
-  },
-  {
-    repoName: 'codex-profile',
-    repoUrl: 'local:///data/agent-profiles/codex',
-    localPath: true,
-    localAbsolutePath: '/data/agent-profiles/codex',
-  },
-  {
-    repoName: 'cursor-profile',
-    repoUrl: 'local:///data/agent-profiles/cursor',
-    localPath: true,
-    localAbsolutePath: '/data/agent-profiles/cursor',
-  },
-];
+interface CatalogEntry {
+  id: string;
+  checkout: string;
+  github: string;
+  docsRag?: boolean;
+  excludeMarkdownPaths?: string[];
+}
+
+interface RepositoryCatalog {
+  schemaVersion: number;
+  repositories: CatalogEntry[];
+}
+
+function resolveCatalogPath(reposRoot: string): string {
+  const candidates = [
+    process.env.ECOSYSTEM_REPOSITORY_CATALOG,
+    path.join(reposRoot, 'shared', 'config', 'ecosystem-repositories.json'),
+    path.resolve(process.cwd(), '..', 'shared', 'config', 'ecosystem-repositories.json'),
+  ].filter((candidate): candidate is string => Boolean(candidate));
+
+  const catalogPath = candidates.find((candidate) => fs.existsSync(candidate));
+  if (!catalogPath) {
+    throw new Error(`Ecosystem repository catalog not found. Checked: ${candidates.join(', ')}`);
+  }
+  return catalogPath;
+}
+
+export function loadEcosystemRepos(
+  reposRoot = process.env.GIT_BASE_PATH || process.env.GIT_REPOS_DIR || '/data/repos',
+  catalogPath = resolveCatalogPath(reposRoot),
+): RepoEntry[] {
+  const catalog = JSON.parse(fs.readFileSync(catalogPath, 'utf-8')) as RepositoryCatalog;
+  if (catalog.schemaVersion !== 1 || !Array.isArray(catalog.repositories)) {
+    throw new Error(`Unsupported ecosystem repository catalog: ${catalogPath}`);
+  }
+
+  const repositories = catalog.repositories
+    .filter((entry) => entry.docsRag === true)
+    .map((entry): RepoEntry => ({
+      repoName: entry.id,
+      repoUrl: `${entry.github}.git`,
+      localPath: true,
+      localAbsolutePath:
+        entry.checkout === entry.id ? undefined : path.join(reposRoot, entry.checkout),
+      excludeMarkdownPaths: entry.excludeMarkdownPaths,
+    }));
+
+  const profiles: RepoEntry[] = [
+    {
+      repoName: 'claude-profile',
+      repoUrl: 'local:///data/agent-profiles/claude',
+      localPath: true,
+      localAbsolutePath: '/data/agent-profiles/claude',
+    },
+    {
+      repoName: 'codex-profile',
+      repoUrl: 'local:///data/agent-profiles/codex',
+      localPath: true,
+      localAbsolutePath: '/data/agent-profiles/codex',
+    },
+    {
+      repoName: 'cursor-profile',
+      repoUrl: 'local:///data/agent-profiles/cursor',
+      localPath: true,
+      localAbsolutePath: '/data/agent-profiles/cursor',
+    },
+  ];
+
+  return [...repositories, ...profiles];
+}
+
+export const ECOSYSTEM_REPOS: RepoEntry[] = loadEcosystemRepos();

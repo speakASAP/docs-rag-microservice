@@ -111,7 +111,7 @@ export class IngestionService implements OnModuleInit, OnModuleDestroy {
         await this.runIngestion(job, force, repo.localAbsolutePath);
         this.logger.log(`${label} OK in ${Date.now() - repoStartedAt}ms`);
       } catch (err) {
-        // One bad repo must not abandon the other 39; record and continue.
+        // One bad source must not abandon the rest; record and continue.
         failures.push(repo.repoName);
         this.logger.error(
           `${label} FAILED after ${Date.now() - repoStartedAt}ms: ${err instanceof Error ? err.message : String(err)}`,
@@ -217,6 +217,7 @@ export class IngestionService implements OnModuleInit, OnModuleDestroy {
     await this.jobRepo.save(job);
 
     try {
+      const registryEntry = ECOSYSTEM_REPOS.find((repo) => repo.repoName === job.repoName);
       const localPath = job.localPath
         ? this.gitSync.getLocalPath(job.repoName, localAbsolutePath)
         : await this.gitSync.cloneOrPull(job.repoName, job.repoUrl);
@@ -243,7 +244,11 @@ export class IngestionService implements OnModuleInit, OnModuleDestroy {
         return;
       }
 
-      const allFiles = await this.gitSync.listMarkdownFiles(localPath);
+      const excludedMarkdownPaths = registryEntry?.excludeMarkdownPaths ?? [];
+      const allFiles =
+        excludedMarkdownPaths.length > 0
+          ? await this.gitSync.listMarkdownFiles(localPath, excludedMarkdownPaths)
+          : await this.gitSync.listMarkdownFiles(localPath);
       const files = this.filterIngestionFiles(job.repoName, allFiles);
       const agentInstructionFiles = files.filter((filePath) => /(AGENTS|CLAUDE|GEMINI)\.md$/i.test(filePath));
       this.logger.log(

@@ -54,10 +54,13 @@ export class GitSyncService {
     }
   }
 
-  async listMarkdownFiles(dirPath: string): Promise<string[]> {
+  async listMarkdownFiles(dirPath: string, excludedRelativePaths: string[] = []): Promise<string[]> {
     const results: string[] = [];
     const rootReal = fs.realpathSync(dirPath);
-    this.walkDir(dirPath, results, new Set([rootReal]));
+    const normalizedExclusions = excludedRelativePaths.map((excluded) =>
+      excluded.replace(/\\/g, '/').replace(/^\/+|\/+$/g, ''),
+    );
+    this.walkDir(dirPath, dirPath, results, normalizedExclusions, new Set([rootReal]));
 
     // A symlink and its target resolve to the same file (Github/CLAUDE.md ->
     // shared/CLAUDE.md). Index each real file once, preferring the shortest
@@ -86,7 +89,13 @@ export class GitSyncService {
     return localAbsolutePath ? path.resolve(localAbsolutePath) : path.join(this.reposDir, repoName);
   }
 
-  private walkDir(dir: string, results: string[], visited: Set<string> = new Set()): void {
+  private walkDir(
+    rootDir: string,
+    dir: string,
+    results: string[],
+    excludedRelativePaths: string[],
+    visited: Set<string> = new Set(),
+  ): void {
     let entries: fs.Dirent[];
     try {
       entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -96,7 +105,18 @@ export class GitSyncService {
 
     for (const entry of entries) {
       if (EXCLUDED_DIRS.includes(entry.name)) continue;
+      // AppleDouble resource-fork files can contain NUL bytes and are not
+      // documentation even when their names end in .md.
+      if (entry.name.startsWith('._')) continue;
       const fullPath = path.join(dir, entry.name);
+      const relativePath = path.relative(rootDir, fullPath).replace(/\\/g, '/');
+      if (
+        excludedRelativePaths.some(
+          (excluded) => relativePath === excluded || relativePath.startsWith(`${excluded}/`),
+        )
+      ) {
+        continue;
+      }
 
       // Resolve symlinks: the ecosystem root exposes authoritative docs as
       // symlinks (e.g. Github/CLAUDE.md -> shared/CLAUDE.md). Dirent.isDirectory()
@@ -122,7 +142,7 @@ export class GitSyncService {
         const realPath = fs.realpathSync(fullPath);
         if (visited.has(realPath)) continue;
         visited.add(realPath);
-        this.walkDir(fullPath, results, visited);
+        this.walkDir(rootDir, fullPath, results, excludedRelativePaths, visited);
       } else if (isFile && MARKDOWN_EXTENSIONS.some((ext) => entry.name.endsWith(ext))) {
         results.push(fullPath);
       }
