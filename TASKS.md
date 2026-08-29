@@ -2,14 +2,16 @@
 
 ## Active
 
-- Complete direct-source ingestion from the shared repository catalog.
-- Verify every registered source finishes with a non-zero document count.
-- Verify `intent-preservation-system` and all operational repositories are
-  retrievable from their direct Git paths.
-- Verify AppleDouble files no longer fail `speakasap` ingestion.
-- Verify no result originates from `docs/services/`.
-- Delete the retired tracked snapshot and synchronization script after the
-  direct-source validation gate passes.
+- No documentation-authority migration task is active.
+
+## Completed
+
+- Loaded ingestion sources from the shared repository catalog.
+- Reindexed all registered repositories and agent profiles from direct paths.
+- Verified `intent-preservation-system` is independently retrievable.
+- Excluded AppleDouble files so `speakasap` ingestion completes.
+- Retired the tracked `docs/services/` snapshot and synchronization script.
+- Verified retrieval does not return a `docs/services/` path.
 
 ## Policy
 

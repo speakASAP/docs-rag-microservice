@@ -5,7 +5,7 @@ id: SUB-001
 status: approved
 owner: platform-engineering
 created: 2026-06-13
-last_updated: 2026-06-13
+last_updated: 2026-08-29
 completeness_level: complete
 upstream:
   - docs/04_systems/SYS-001-docs-rag-service.md
@@ -29,10 +29,14 @@ Sync repository documentation, chunk markdown content, generate embeddings, and 
 - Persist chunk metadata and ingestion job state.
 
 ## Interfaces
-`POST /ingestion/trigger`, `POST /ingestion/trigger-all`, `GET /ingestion/status`, `scripts/sync-docs-snapshot.sh`, Qdrant, and PostgreSQL.
+`POST /ingestion/trigger`, `POST /ingestion/trigger-all`,
+`GET /ingestion/status`, the shared ecosystem repository catalog, Qdrant, and
+PostgreSQL.
 
 ## Inputs
-Repository names, local paths, markdown files, force flags, embedding configuration, and JWT-authenticated ingestion requests.
+Cataloged repository names and checkout paths, markdown files, source-specific
+exclusions, force flags, embedding configuration, and JWT-authenticated
+ingestion requests.
 
 ## Outputs
 Ingestion jobs, document chunks, embeddings, Qdrant points, and ingestion status responses.
