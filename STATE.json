@@ -25,7 +25,5 @@
     "profile": "service",
     "artifact_index": "docs/registry/ARTIFACT_INDEX.json",
     "status_source": "human-and-agent-maintained; legacy compatibility: read-only mounted repository ingestion remains deployed, ingestion triggers are catalog-authoritative (docsRag=true), and post-deploy wisdom-quotes HEAD capture verification remains a follow-up"
-  },
-  "activeTask": "Catalog-authoritative ingestion trigger hardening and Wave 0 v1 registry artifacts are implemented and being validated for commit/deploy completion.",
-  "status": "review"
+  }
 }
