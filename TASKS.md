@@ -1,20 +1,24 @@
-# TASKS.md
+# Tasks
 
 ## Active
 
-- No documentation-authority migration task is active.
+No active implementation task.
+
+## Ready next
+
+Keep the shared repository catalog current when onboarding wisdom-quotes and future services.
+
+## Blocked
+
+No blocker is recorded for the documentation adoption baseline.
 
 ## Completed
 
-- Loaded ingestion sources from the shared repository catalog.
-- Reindexed all registered repositories and agent profiles from direct paths.
-- Verified `intent-preservation-system` is independently retrievable.
-- Excluded AppleDouble files so `speakasap` ingestion completes.
-- Retired the tracked `docs/services/` snapshot and synchronization script.
-- Verified retrieval does not return a `docs/services/` path.
+- Loaded sources from the shared repository catalog.
+- Reindexed registered repositories and agent profiles from direct paths.
+- Excluded AppleDouble files and retired the copied docs/services snapshot.
+- Completed IPS documentation adoption for this already-running production service.
 
-## Policy
+## Handoff
 
-New implementation work requires an IPS task, goal-impact record, execution
-plan and validation evidence. Git remains authoritative while ingestion is
-degraded.
+The adoption task is complete. Future catalog onboarding must preserve direct-source authority and carry its own IPS traceability and validation evidence.

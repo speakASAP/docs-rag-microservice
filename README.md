@@ -1,39 +1,33 @@
 # docs-rag-microservice
 
-Derived semantic retrieval over authoritative ecosystem documentation.
+## Status
 
-Git repositories remain the source of truth. The service reads approved sources
-from
-[`shared/config/ecosystem-repositories.json`](https://github.com/speakASAP/shared/blob/main/config/ecosystem-repositories.json),
-chunks Markdown, creates embeddings with Ollama, stores metadata in PostgreSQL
-and vectors in Qdrant.
+Operational production service with public health reporting.
 
-## Endpoints
+## Documentation authority
 
-- `GET /health` - public health check
-- `POST /retrieval/search` - filtered semantic candidates
-- `POST /retrieval/agent-context` - token-bounded agent context
-- `POST /ingestion/trigger` - ingest one registered source
-- `POST /ingestion/trigger-all` - ingest every registered source
-- `GET /ingestion/status` - recent ingestion status
+Git repositories are authoritative. BUSINESS.md, SYSTEM.md, and the artifacts named by ips-adoption.json are repository contracts; retrieval is advisory and critical claims require Git verification.
 
-Authenticated endpoints require the service-to-service token. Never print it.
+## Capabilities
 
-## Authority
+Catalog-scoped Markdown/MDX ingestion, Ollama embeddings, Qdrant semantic retrieval, token-bounded agent context, authenticated operations, and health reporting.
 
-Read [`docs/SOURCE_OF_TRUTH.md`](docs/SOURCE_OF_TRUTH.md). Retrieval output is
-candidate context, not policy. Critical facts must be verified against the
-returned Git path.
+## Interfaces
 
-The service indexes repositories directly. It does not maintain or index a
-copied `docs/services/` snapshot.
+Health, retrieval search, agent context, ingestion trigger, ingestion trigger-all, and ingestion status are HTTP interfaces. All except health require the service JWT.
 
 ## Development
 
-```bash
-npm test
-npm run build
-npm run docs:audit
-```
+Run npm test, npm run build, and npm run docs:audit.
 
-Deployment follows the shared runner declared by `deploy.config.sh`.
+## Configuration
+
+.env.example names configuration. PostgreSQL docs_rag, Qdrant ecosystem-docs, the shared repository catalog, and Docker-only Ollama on port 11435 are core dependencies.
+
+## Deployment
+
+The service runs in statex-apps using deploy.config.sh and the shared runner. Documentation work does not operate deployment, ingestion, or Ollama infrastructure.
+
+## Health and observability
+
+Health is public and backs Kubernetes startup, liveness, and readiness probes. CentralLogger sends sanitized logs to logging-microservice.

@@ -1,49 +1,25 @@
 # Repository Agent Instructions
 
-## Read first
+## Required reading
 
-1. `../shared/docs/DOCUMENTATION_AUTHORITY.md`
-2. `../shared/ECOSYSTEM_MAP.md`
-3. `BUSINESS.md`
-4. `SYSTEM.md`
-5. `docs/SOURCE_OF_TRUTH.md`
-6. `AGENT_OPERATIONS.md`
-7. `TASKS.md` and `STATE.json`
+Read shared documentation authority, the ecosystem map, BUSINESS.md, SYSTEM.md, docs/SOURCE_OF_TRUTH.md, AGENT_OPERATIONS.md, TASKS.md, STATE.json, and the IPS adoption standard.
 
-## Boundaries
+## Authority
 
-- Git is authoritative; docs-RAG is a derived projection.
-- Use retrieval for discovery and bounded context, then verify critical claims
-  against returned repository paths.
-- A retrieval failure or `confident: false` is not evidence that documentation
-  does not exist.
-- Repository participation comes only from
-  `shared/config/ecosystem-repositories.json`.
-- Do not recreate or ingest copied ecosystem snapshots.
-- Do not print service tokens, embeddings containing sensitive text, raw
-  production documents or customer data.
+Git is authoritative and docs-RAG is a derived projection. Use retrieval for discovery, then verify critical claims at returned paths. Retrieval failure or low confidence is not evidence of absence.
 
-## Commands
+## Intent preservation system
 
-```bash
-npm test
-npm run build
-npm run docs:audit
-npm run gate:pre-coding
-npm run gate:deployment -- --target <TASK-ID>
-```
+Preserve Vision to Goal Impact to System to Feature to Task to Execution Plan to Coding Prompt to Code to Validation. Follow task, plan, and validation artifacts before changing behavior.
 
-Deployment uses the shared runner. Trigger ingestion only with a token supplied
-through a protected file or process input, never a command-line literal.
+## Safety and operations
 
-## Intent Preservation System
+Do not print service tokens, sensitive embeddings, raw production documents, or customer data. Do not recreate snapshots, trigger ingestion, operate the deploy queue, or modify Ollama during documentation-only work.
 
-Preserve graph-first traceability:
+## Project-specific rules
 
-```text
-Vision -> Goal Impact -> System -> Feature -> Task -> Execution Plan -> Coding Prompt -> Code -> Validation
-```
+Participation comes only from the shared repository catalog; only docsRag true entries are indexed. Preserve AppleDouble and retired snapshot exclusions. Unconfident responses require Git fallback.
 
-Vector retrieval is optional semantic enrichment after mandatory graph links.
-Follow the repository IPS task, plan and validation artifacts before changing
-ingestion or retrieval behavior.
+## Required final report
+
+Report changed files, validation evidence, validation debt, blockers, deviations, and the next action.

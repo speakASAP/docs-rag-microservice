@@ -1,34 +1,30 @@
-# Goal Impact: TASK-001 IPS Adoption
+# GOAL-IMPACT-TASK-001: Bootstrap docs-rag-microservice
 
-```yaml
-id: GOAL-IMPACT-TASK-001
-artifact_type: task
-artifact_id: TASK-001
-artifact_path: ../11_tasks/TASK-001-implement-ips-standard.md
-upstream_links:
-  - ../01_vision/VISION.md
-  - ../02_business_case/BUSINESS_CASE.md
-primary_goal: Reduce AI token cost safely through centralized documentation retrieval.
-impact_level: high
-status: approved
-owner: platform-engineering
-created: 2026-06-13
-last_updated: 2026-06-13
-completeness_level: complete
-upstream:
-  - docs/01_vision/VISION.md
-  - docs/02_business_case/BUSINESS_CASE.md
-downstream:
-  - docs/21_execution_plans/EP-TASK-001-implement-ips-standard.md
-related_adrs:
-  - docs/07_decisions/ADR-001-documentation-rag-service.md
-```
+status: validated
 
-## Explanation
-IPS adoption gives future docs-rag-microservice changes a required path from vision and business goals through task plans, validation evidence, and deployment gates.
+## Goal
 
-## Evidence
-Existing service docs state the token-saving goal and target query categories; runtime docs define authenticated ingestion and retrieval endpoints; added IPS gates enforce traceability, invariant declarations, and validation evidence.
+Advance the approved vision in ../01_vision/VISION.md and BUSINESS.md by recording the existing bounded semantic discovery service in the canonical IPS artifact set.
 
-## Validation
-Validate by running strict documentation audit, pre-coding gate, build, and test commands.
+## Contribution
+
+The bootstrap task restructures real service facts, records code-verified integration decisions, and preserves Git authority without inventing integrations or changing runtime behavior.
+
+## Success metric
+
+The adoption profile validates while retaining the real success metric of approximately 2,000-5,000 tokens saved per avoided raw Git read.
+
+## Invariant compatibility
+
+The task preserves source authority, authentication, source selection, sensitive-data, and Git-fallback invariants in ../17_governance/PROJECT_INVARIANTS.md.
+
+## Upstream and downstream links
+
+- Upstream: BUSINESS.md and ../01_vision/VISION.md.
+- Task: ../11_tasks/TASK-001-bootstrap-service.md.
+- Plan: ../21_execution_plans/EP-TASK-001-bootstrap-service.md.
+- Validation: ../12_validation/VAL-TASK-001-bootstrap-service.md.
+
+## Validation method
+
+Run the adoption validator and confirm every required capability is supported by the cited source and manifest evidence.

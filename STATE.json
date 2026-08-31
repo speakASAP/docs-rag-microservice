@@ -1,18 +1,13 @@
 {
-  "v": 1,
+  "schemaVersion": 1,
   "project": "docs-rag-microservice",
-  "stage": "deployed",
+  "lifecycle": "deployed",
   "health": "ok",
-  "cycle": 2,
-  "last_cycle_at": "2026-08-29T17:09:18Z",
-  "tasks_active": 0,
-  "tasks_failed_last_cycle": 0,
-  "open_task_ids": [],
-  "last_milestone": "direct-source-documentation-authority-cutover",
-  "next_focus": "Keep the shared repository catalog current when onboarding wisdom-quotes and future services.",
+  "activeTask": "none",
+  "lastUpdated": "2026-08-30",
+  "deployment": {"status": "operational", "lastMilestone": "direct-source-documentation-authority-cutover"},
   "blockers": [],
-  "budget_units_used": 0,
-  "notes": "2026-08-29: repository sources now come from shared/config/ecosystem-repositories.json; direct-source reindex covered all repositories and agent profiles; AppleDouble files are excluded; the copied docs/services snapshot was retired.",
-  "project_status": "operational",
-  "updated_at": "2026-08-29"
+  "followUps": ["Keep the shared repository catalog current when onboarding wisdom-quotes and future services; current service onboardings are the catalog-currency work named by this follow-up.", "The 2026-08-29 direct-source reindex covered repositories and agent profiles, excludes AppleDouble files, and retires the copied docs/services snapshot."],
+  "legacyState": {"cycle": 2, "lastCycleAt": "2026-08-29T17:09:18Z", "tasksActive": 0, "tasksFailedLastCycle": 0, "budgetUnitsUsed": 0},
+  "standardization": {"schemaVersion": "1.0", "repository": "docs-rag-microservice", "planningStatus": "ready", "lastValidationId": "VAL-WAVE0-DOCS-RAG-2026-08-31", "lastValidationStatus": "validated", "validationDebtCount": 0, "artifactIndex": "docs/registry/ARTIFACT_INDEX.json", "statusSource": "TASKS.md and pre-wave0 STATE.json operational snapshot"}
 }

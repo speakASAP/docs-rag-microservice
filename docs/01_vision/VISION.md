@@ -1,44 +1,41 @@
-# Vision
+# Vision: docs-rag-microservice
 
-```yaml
-id: VISION-001
 status: approved
-owner: platform-engineering
-created: 2026-06-13
-last_updated: 2026-06-13
 completeness_level: complete
-upstream:
-  - docs/00_constitution/CONSTITUTION.md
-downstream:
-  - docs/02_business_case/BUSINESS_CASE.md
-  - docs/04_systems/SYS-001-docs-rag-service.md
-related_adrs:
-  - docs/07_decisions/ADR-001-documentation-rag-service.md
-```
 
-## Original Intent
-Docs-rag-microservice provides cached ecosystem documentation knowledge through semantic retrieval so agents can ask focused questions instead of reading large sets of raw Git files.
+## One-sentence vision
 
-## Vision Goals
-- Index documentation from the ecosystem service repositories into a searchable knowledge base.
-- Return token-budgeted context blocks that agents can use directly in prompts.
-- Preserve service boundaries by keeping each source repository as the documentation source of truth.
-- Keep retrieval authenticated and safe for service-to-service use.
-- Lower agent token usage by roughly 2,000 to 5,000 tokens per successful retrieval compared with raw file reads.
+Give agents bounded semantic discovery over ecosystem Git documentation so they can avoid unnecessary raw reads without displacing repository authority.
 
-## Non-Goals
-- This service does not replace repository documentation ownership.
-- This service does not make RAG output authoritative over approved source docs.
-- This service does not expose unauthenticated ingestion or retrieval APIs.
-- This service does not store secrets or raw production records in documentation artifacts.
+## Problem statement
 
-## Success Signals
-- All target ecosystem repositories are indexed.
-- Retrieval latency remains below the documented service target.
-- Agent-context responses are relevant for deployment, Vault, authentication, and Kubernetes queries.
-- Qdrant vectors persist across pod restarts.
-- Ollama embeddings are reachable from Kubernetes workloads.
-- Agents consistently use this service before broad raw Git inspection when the service is available.
+Broad raw Git reading consumes agent context and tokens. Agents need focused candidate context while critical facts remain verifiable at the authoritative source path.
 
-## Validation
-The vision is validated by `GOALS.md`, retrieval tests, ingestion status checks, Qdrant persistence checks, and IPS deployment-readiness gates.
+## Target users
+
+AI agents, ecosystem services, repository owners, and platform operators.
+
+## Core user need
+
+A focused, source-attributed documentation result that can reduce unnecessary raw reading and still directs the user to Git for verification.
+
+## Key outcomes
+
+- Catalog-scoped semantic discovery over Markdown and MDX.
+- Token-bounded context with source paths.
+- Approximately 2,000-5,000 tokens saved per avoided raw Git read.
+- Git authority preserved when retrieval is unavailable or unconfident.
+
+## Non-goals
+
+Replacing Git authority, IPS graph traceability, deployment evidence, or runtime evidence; unauthenticated retrieval; copied snapshot authority.
+
+## Success criteria
+
+Successful avoided raw reads save approximately 2,000-5,000 tokens, retrieval remains source-attributed, and weak or unavailable results require Git fallback.
+
+## Approval
+
+Status: approved
+Approved by: project owner
+Approval evidence: owner-confirmation: docs-rag-microservice-onboarding-approved

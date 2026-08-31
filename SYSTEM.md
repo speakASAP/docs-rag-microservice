@@ -1,53 +1,55 @@
-# docs-rag-microservice - System
+# System: docs-rag-microservice
+
+status: validated
+completeness_level: validated
 
 ## Purpose
 
-Provide bounded semantic discovery over ecosystem Git documentation without
-becoming a competing source of truth.
+Provide bounded semantic discovery over ecosystem Git documentation without becoming a competing source of truth.
 
-## Runtime
+## Responsibilities
 
-- Node.js 20, NestJS 11, TypeScript
-- API port 3397
-- Public domain `docs-rag.alfares.cz`
-- PostgreSQL `docs_rag` database for chunks and ingestion jobs
-- Qdrant collection `ecosystem-docs` for vectors and text payloads
-- Ollama `nomic-embed-text` embeddings
+- Read only repository catalog entries marked docsRag true.
+- Chunk Markdown and MDX, generate Ollama embeddings, and persist chunks in PostgreSQL and vectors in Qdrant.
+- Run sequential six-hour ingestion when enabled, skip unchanged sources unless forced, and report failed sources as degraded.
+- Return token-bounded semantic context with source identity.
+- Exclude AppleDouble files and this repository retired docs/services snapshot.
+- Authenticate ingestion and retrieval with the service JWT; expose public health and sanitized central logging.
 
-## Source registry
+## Non-responsibilities
 
-`src/ingestion/repo-registry.ts` loads the canonical catalog from:
+- Owning ecosystem documentation or overriding owning repositories.
+- Replacing graph-first IPS traceability, Git review, deployment configuration, or runtime evidence.
+- Treating low-confidence or unavailable retrieval as proof documentation does not exist.
+- Operating the deploy queue, triggering ingestion, or modifying Ollama during documentation work.
 
-```text
-/data/repos/shared/config/ecosystem-repositories.json
-```
+## Inputs
 
-Only entries with `docsRag: true` are indexed. Checkout aliases and
-source-specific exclusions are declared in that catalog. Three local agent
-profiles are appended by the service.
+Catalog-approved Markdown and MDX, authenticated requests, Ollama nomic-embed-text embeddings, and PostgreSQL/Qdrant persistence responses.
 
-The service excludes AppleDouble `._*` files globally and excludes the retired
-`docs-rag-microservice/docs/services/` snapshot only for this source.
+## Outputs
 
-## Ingestion
+Semantic candidates with paths, token-bounded context, docs_rag chunk and job records, ecosystem-docs vectors, sanitized logs, and health status.
 
-- Scheduled every six hours when enabled.
-- Sources process sequentially.
-- Markdown and MDX are indexed.
-- Unchanged committed sources are skipped unless forced.
-- Each source is replaced in Qdrant/PostgreSQL during reindex.
-- A failed source does not stop the remaining sources, but its result is
-  incomplete and must be treated as degraded.
+## Dependencies
 
-## Retrieval
+PostgreSQL owns docs_rag chunks and ingestion jobs. Qdrant owns the ecosystem-docs collection. Docker-only ai-microservice-ollama-green on port 11435 supplies embeddings and is not a Kubernetes service. Central logging and the shared repository catalog are also required.
 
-Retrieval ranks semantic candidates. It does not replace graph-first IPS
-traceability, Git review, deployment configuration or runtime evidence.
+## Upstream traceability
 
-Responses that are unconfident or unavailable require direct Git fallback.
+This system implements BUSINESS.md and docs/01_vision/VISION.md: cached bounded discovery saves approximately 2,000-5,000 tokens per avoided raw Git read while preserving Git authority.
 
-## Deployment
+## Downstream artifacts
 
-Kubernetes namespace `statex-apps`; Vault path
-`secret/prod/docs-rag-microservice`; shared runner through
-`deploy.config.sh`.
+- docs/06_architecture/INTEGRATION_CONTRACT.md
+- docs/11_tasks/TASK-001-bootstrap-service.md
+- docs/21_execution_plans/EP-TASK-001-bootstrap-service.md
+- docs/12_validation/VAL-TASK-001-bootstrap-service.md
+
+## Validation criteria
+
+Health reports ok; catalog filtering and exclusions are applied; guarded routes reject missing JWTs; retrieval preserves source paths and needs Git fallback when unconfident; PostgreSQL migrations and Qdrant access use the stated database and collection.
+
+## Open questions
+
+Scheduled ingestion is disabled by default in .env.example; the deployed ConfigMap controls whether the six-hour schedule is enabled. Catalog currency during service onboarding remains a follow-up in STATE.json.

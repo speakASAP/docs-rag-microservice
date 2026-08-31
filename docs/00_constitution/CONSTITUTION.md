@@ -1,33 +1,42 @@
-# Constitution
+# Project Constitution: docs-rag-microservice
 
-```yaml
-id: CONST-001
 status: approved
-owner: platform-engineering
-created: 2026-06-13
-last_updated: 2026-06-13
 completeness_level: complete
-upstream: []
-downstream:
-  - docs/01_vision/VISION.md
-  - docs/17_governance/PROJECT_INVARIANTS.md
-related_adrs:
-  - docs/07_decisions/ADR-001-documentation-rag-service.md
-```
 
 ## Purpose
-This constitution defines non-negotiable delivery rules for docs-rag-microservice.
 
-## Project Laws
-- The service exists to provide centralized, authenticated documentation retrieval for AI agents and ecosystem services.
-- Documentation retrieval must reduce direct raw Git reads by agents when the service is available.
-- `/health` is the only public endpoint; ingestion and retrieval endpoints require service-to-service JWT authentication.
-- RAG output is advisory context for agents, not an authority that overrides service source repositories or approved documentation.
-- Secrets and production credentials must remain in Vault and Kubernetes Secret flows, not in repository docs, examples, prompts, tests, logs, or reports.
-- Operational changes must preserve traceability to business goals, validation evidence, and deployment rollback capability.
+Protect the approved intent to provide bounded semantic discovery over authoritative ecosystem Git documentation.
 
-## Immutable Scope
-AI agents must not edit this file after adoption. Human intent changes belong in `docs/01_vision/VISION_EVOLUTION.md` and require owner review.
+## Constitutional principles
 
-## Validation
-Deployment readiness must verify this file exists and was not changed by unreviewed implementation work.
+### Git authority
+
+Git repositories remain the source of truth; retrieval is advisory candidate context.
+
+### Bounded retrieval
+
+Retrieval must preserve source paths and direct low-confidence or unavailable queries to Git fallback.
+
+### Security
+
+Only health is public. Ingestion and retrieval require service JWT authentication. Secrets and sensitive source material must not be committed, logged, or documented.
+
+### Scope boundary
+
+The service indexes catalog-approved sources and does not create an independent documentation authority or copied snapshot authority.
+
+### Evidence
+
+Changes require traceability and validation evidence without operating deployment, ingestion, or Ollama infrastructure unless the task explicitly authorizes it.
+
+## Amendment process
+
+1. Record the proposed change, affected contracts, and compatibility impact.
+2. Obtain project-owner approval.
+3. Update dependent artifacts and validate the adoption profile.
+
+## Approval
+
+Status: approved
+Approved by: project owner
+Approval evidence: owner-confirmation: docs-rag-microservice-onboarding-approved

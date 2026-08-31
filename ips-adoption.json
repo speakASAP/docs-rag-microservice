@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "profile": "runtime-service",
+  "project": {"name": "docs-rag-microservice", "repository": "https://github.com/speakASAP/docs-rag-microservice.git"},
+  "standard": {"repository": "https://github.com/speakASAP/intent-preservation-system", "revision": "22c061cb5f4ff641bbdb90f10ad1e2072e04a9f2"},
+  "artifacts": {"readme": "README.md", "business": "BUSINESS.md", "system": "SYSTEM.md", "agents": "AGENTS.md", "operations": "AGENT_OPERATIONS.md", "claude": "CLAUDE.md", "tasks": "TASKS.md", "state": "STATE.json", "constitution": "docs/00_constitution/CONSTITUTION.md", "vision": "docs/01_vision/VISION.md", "integrationContract": "docs/06_architecture/INTEGRATION_CONTRACT.md", "projectInvariants": "docs/17_governance/PROJECT_INVARIANTS.md", "validationDebt": "docs/orchestrator/VALIDATION_DEBT.md", "bootstrapTask": "docs/11_tasks/TASK-001-bootstrap-service.md", "bootstrapGoalImpact": "docs/22_goal_impact/GOAL-IMPACT-TASK-001.md", "bootstrapExecutionPlan": "docs/21_execution_plans/EP-TASK-001-bootstrap-service.md", "bootstrapValidation": "docs/12_validation/VAL-TASK-001-bootstrap-service.md"},
+  "integrationReview": [
+    {"capability":"auth","component":"service-identity","decision":"required","reason":"ServiceAuthGuard validates JWT service tokens for guarded routes.","contract":"Bearer JWT protection for ingestion and retrieval","configuration":"JWT_SECRET from the secret flow","failureMode":"Requests without a valid token are rejected","validation":"Review service-auth.guard and guarded controllers"},
+    {"capability":"postgres","component":"db-server-postgres","decision":"required","reason":"TypeORM persists chunks and ingestion jobs in docs_rag.","contract":"PostgreSQL chunk and ingestion-job persistence","configuration":"DATABASE_URL or DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, and DB_NAME","failureMode":"Persistence-dependent work fails","validation":"Review app.module entities and migration"},
+    {"capability":"redis","component":"db-server-redis","decision":"not-applicable","reason":"No Redis client, dependency, or configuration is used."},
+    {"capability":"logging","component":"logging-microservice","decision":"required","reason":"CentralLogger sends sanitized structured logs when configured.","contract":"Structured log POST endpoint","configuration":"LOGGING_SERVICE_URL and LOGGING_SERVICE_API_PATH","failureMode":"Log delivery failure degrades observability without blocking execution","validation":"Review central-logger.service redaction and send path"},
+    {"capability":"notifications","component":"notifications-microservice","decision":"not-applicable","reason":"No notification client is used in source."},
+    {"capability":"ai","component":"ai-microservice","decision":"not-applicable","reason":"AI_SERVICE_URL is unused; Docker-only Ollama embeddings are a separate core runtime dependency."},
+    {"capability":"payments","component":"payments-microservice","decision":"not-applicable","reason":"No payments client or configuration is used."},
+    {"capability":"catalog","component":"catalog-microservice","decision":"not-applicable","reason":"The mounted repository catalog is not a catalog-microservice client."},
+    {"capability":"orders","component":"orders-microservice","decision":"not-applicable","reason":"No orders service client is used."},
+    {"capability":"warehouse","component":"warehouse-microservice","decision":"not-applicable","reason":"No warehouse service client is used."},
+    {"capability":"invoices","component":"invoices-microservice","decision":"not-applicable","reason":"No invoices service client is used."},
+    {"capability":"object-storage","component":"minio-microservice","decision":"not-applicable","reason":"No object-storage client is used."},
+    {"capability":"event-bus","component":"RabbitMQ","decision":"not-applicable","reason":"No event-bus dependency or client is implemented."},
+    {"capability":"docs-rag","component":"docs-rag-microservice","decision":"required","reason":"Runtime-service validator requires this capability; the service does not consume its own retrieval API.","contract":"Direct Git source discovery with repository paths","configuration":"Shared repository catalog and source mount","failureMode":"Git remains authoritative when retrieval is unavailable","validation":"Review source attribution and Git fallback contract"},
+    {"capability":"monitoring","component":"monitoring-microservice","decision":"required","reason":"Health reporting and Kubernetes probes make runtime health observable.","contract":"Public health endpoint and probes","configuration":"Port 3397 probes in k8s deployment","failureMode":"Unhealthy service fails readiness","validation":"Review health.controller and k8s deployment"},
+    {"capability":"backups","component":"backups-microservice","decision":"not-applicable","reason":"No backups service integration client is implemented."}
+  ]
+}
