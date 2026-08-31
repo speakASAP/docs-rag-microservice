@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "repository": "docs-rag-microservice",
+  "generated_at": "2026-08-31T11:24:55+02:00",
+  "artifacts": [
+    {
+      "id": "EP-TASK-001-BOOTSTRAP-SERVICE",
+      "type": "execution_plan",
+      "status": "done",
+      "title": "Bootstrap docs-rag-microservice execution plan",
+      "path": "docs/21_execution_plans/EP-TASK-001-bootstrap-service.md",
+      "parent_ids": [
+        "TASK-001-BOOTSTRAP-SERVICE"
+      ],
+      "updated_at": "2026-08-31T00:00:00Z"
+    },
+    {
+      "id": "GOAL-IMPACT-TASK-001",
+      "type": "goal",
+      "status": "validated",
+      "title": "Bootstrap docs-rag-microservice goal impact",
+      "path": "docs/22_goal_impact/GOAL-IMPACT-TASK-001.md",
+      "parent_ids": [
+        "VISION-DRAG-001"
+      ],
+      "updated_at": "2026-08-31T00:00:00Z"
+    },
+    {
+      "id": "TASK-001-BOOTSTRAP-SERVICE",
+      "type": "task",
+      "status": "done",
+      "title": "Bootstrap docs-rag-microservice",
+      "path": "docs/11_tasks/TASK-001-bootstrap-service.md",
+      "parent_ids": [
+        "GOAL-IMPACT-TASK-001"
+      ],
+      "updated_at": "2026-08-31T00:00:00Z"
+    },
+    {
+      "id": "VAL-TASK-001-BOOTSTRAP-SERVICE",
+      "type": "validation",
+      "status": "validated",
+      "title": "Bootstrap docs-rag-microservice validation",
+      "path": "docs/12_validation/VAL-TASK-001-bootstrap-service.md",
+      "parent_ids": [
+        "TASK-001-BOOTSTRAP-SERVICE"
+      ],
+      "updated_at": "2026-08-31T00:00:00Z"
+    },
+    {
+      "id": "VDEBT-2026-08-31-IPS-DOC-AUDIT",
+      "type": "validation_debt",
+      "status": "active",
+      "title": "Pre-existing IPS documentation audit debt",
+      "path": "docs/orchestrator/VALIDATION_DEBT.md",
+      "parent_ids": [
+        "VAL-TASK-001-BOOTSTRAP-SERVICE"
+      ],
+      "updated_at": "2026-08-31T00:00:00Z"
+    },
+    {
+      "id": "VISION-DRAG-001",
+      "type": "vision",
+      "status": "done",
+      "title": "docs-rag-microservice bounded discovery vision",
+      "path": "docs/01_vision/VISION.md",
+      "parent_ids": [],
+      "updated_at": "2026-08-31T00:00:00Z"
+    }
+  ],
+  "warnings": [
+    "[UNKNOWN: RunLayer project mapping for docs-rag-microservice is not verified in tracked artifacts.]"
+  ]
+}

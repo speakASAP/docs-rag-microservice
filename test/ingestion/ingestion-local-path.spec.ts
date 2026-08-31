@@ -104,6 +104,38 @@ describe('trigger ingestion honours the repository catalog over request defaults
     expect(job.status).toBe('completed');
   });
 
+  it('ignores a client-supplied remote URL and resolves to the catalog-approved source', async () => {
+    jest.spyOn(repoRegistry, 'getEcosystemRepos').mockReturnValue([
+      {
+        repoName: 'wisdom-quotes',
+        repoUrl: 'https://github.com/speakASAP/wisdom-quotes.git',
+        localPath: true,
+      },
+    ]);
+    const { service, gitSync } = buildService();
+    const runSpy = jest.spyOn(service as any, 'runIngestion');
+
+    const job = await service.triggerIngestion(
+      'wisdom-quotes',
+      'https://github.com/example/rogue-fork.git',
+      true,
+      false,
+      undefined,
+    );
+
+    expect(job.localPath).toBe(true);
+    expect(job.repoUrl).toBe('https://github.com/speakASAP/wisdom-quotes.git');
+
+    await settle(service, runSpy);
+    expect(gitSync.prepareForIngestion).toHaveBeenCalledWith(
+      'wisdom-quotes',
+      'https://github.com/speakASAP/wisdom-quotes.git',
+      true,
+      undefined,
+    );
+    expect(gitSync.cloneOrPull).not.toHaveBeenCalled();
+  });
+
   it('uses the catalog checkout alias as the mounted path', async () => {
     jest.spyOn(repoRegistry, 'getEcosystemRepos').mockReturnValue([
       {
@@ -178,27 +210,15 @@ describe('trigger ingestion honours the repository catalog over request defaults
     expect(gitSync.cloneOrPull).not.toHaveBeenCalled();
   });
 
-  it('still clones an unregistered repo when the request supplies a real remote', async () => {
+  it('rejects an unregistered repo even when the request supplies a remote URL', async () => {
     jest.spyOn(repoRegistry, 'getEcosystemRepos').mockReturnValue([]);
-    const { service, gitSync } = buildService(['/data/repos/external/README.md']);
-    const runSpy = jest.spyOn(service as any, 'runIngestion');
+    const { service, gitSync, jobRepo } = buildService(['/data/repos/external/README.md']);
 
-    const job = await service.triggerIngestion(
-      'external',
-      'https://github.com/example/external.git',
-      true,
-      false,
-      undefined,
-    );
-
-    expect(job.localPath).toBe(false);
-    await settle(service, runSpy);
-    expect(gitSync.prepareForIngestion).toHaveBeenCalledWith(
-      'external',
-      'https://github.com/example/external.git',
-      false,
-      undefined,
-    );
+    await expect(
+      service.triggerIngestion('external', 'https://github.com/example/external.git', true, false, undefined),
+    ).rejects.toThrow(/not registered in the ecosystem repository catalog/);
+    expect(jobRepo.create).not.toHaveBeenCalled();
+    expect(gitSync.cloneOrPull).not.toHaveBeenCalled();
   });
 });
 

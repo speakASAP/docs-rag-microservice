@@ -200,17 +200,15 @@ export class IngestionService implements OnModuleInit, OnModuleDestroy {
     localAbsolutePath?: string,
   ): Promise<IngestionJob> {
     const registryEntry = getEcosystemRepos().find((repo) => repo.repoName === repoName);
-    const requestsLocalCheckout = localPath || repoUrl === 'local' || localAbsolutePath !== undefined;
-    if (requestsLocalCheckout && !registryEntry) {
+    if (!registryEntry) {
       throw new BadRequestException(
-        `Cannot ingest '${repoName}' from a mounted checkout: it is not registered in the ` +
-          `ecosystem repository catalog (docsRag: true).`,
+        `Cannot ingest '${repoName}': it is not registered in the ecosystem repository catalog (docsRag: true).`,
       );
     }
 
-    const resolvedLocalAbsolutePath = registryEntry?.localAbsolutePath;
-    const resolvedLocalPath = Boolean(registryEntry?.localPath);
-    const resolvedRepoUrl = repoUrl === 'local' && registryEntry ? registryEntry.repoUrl : repoUrl;
+    const resolvedLocalAbsolutePath = registryEntry.localAbsolutePath;
+    const resolvedLocalPath = registryEntry.localPath;
+    const resolvedRepoUrl = registryEntry.repoUrl;
 
     if (localAbsolutePath !== undefined) {
       const approvedPath = this.gitSync.getLocalPath(repoName, resolvedLocalAbsolutePath);

@@ -10,6 +10,7 @@ Provide bounded semantic discovery over ecosystem Git documentation without beco
 ## Responsibilities
 
 - Read only repository catalog entries marked docsRag true.
+- Reject ingestion triggers unless the requested repository resolves to a catalog entry with docsRag true; use catalog-approved source URLs rather than client-supplied remote URLs.
 - Chunk Markdown and MDX, generate Ollama embeddings, and persist chunks in PostgreSQL and vectors in Qdrant.
 - Run sequential six-hour ingestion when enabled, skip unchanged sources unless forced, and report failed sources as degraded.
 - Read catalog allow-listed mounted repositories at their current checked-out HEAD without fetch, pull, or filesystem writes; retain clone/pull synchronization only for managed writable checkouts.
@@ -50,7 +51,7 @@ This system implements BUSINESS.md and docs/01_vision/VISION.md: cached bounded 
 
 ## Validation criteria
 
-Health reports ok; catalog filtering and exclusions are applied; allow-listed mounted repositories perform no Git writes and record checked-out HEAD while managed writable repositories still clone/pull; path traversal and client-selected local paths are rejected; guarded routes reject missing JWTs; retrieval preserves source paths and needs Git fallback when unconfident; PostgreSQL migrations and Qdrant access use the stated database and collection.
+Health reports ok; catalog filtering and exclusions are applied; ingestion triggers reject repositories that are not catalog-registered with docsRag true (including remote URL requests); allow-listed mounted repositories perform no Git writes and record checked-out HEAD while managed writable repositories still clone/pull; path traversal and client-selected local paths are rejected; guarded routes reject missing JWTs; retrieval preserves source paths and needs Git fallback when unconfident; PostgreSQL migrations and Qdrant access use the stated database and collection.
 
 ## Open questions
 

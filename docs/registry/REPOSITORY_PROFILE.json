@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "repository": "docs-rag-microservice",
+  "profile": "service",
+  "project_registration": {
+    "runlayer_project_slug": null,
+    "runlayer_permalink": null,
+    "status": "unmapped",
+    "warning": "[UNKNOWN: RunLayer project mapping for docs-rag-microservice is not verified in tracked artifacts.]"
+  },
+  "collectable_paths": [
+    "AGENTS.md",
+    "AGENT_OPERATIONS.md",
+    "BUSINESS.md",
+    "SYSTEM.md",
+    "TASKS.md",
+    "STATE.json",
+    "docs/00_constitution/CONSTITUTION.md",
+    "docs/01_vision/VISION.md",
+    "docs/11_tasks/TASK-001-bootstrap-service.md",
+    "docs/12_validation/VAL-TASK-001-bootstrap-service.md",
+    "docs/21_execution_plans/EP-TASK-001-bootstrap-service.md",
+    "docs/22_goal_impact/GOAL-IMPACT-TASK-001.md",
+    "docs/orchestrator/VALIDATION_DEBT.md",
+    "docs/registry/ARTIFACT_INDEX.json",
+    "docs/registry/REPOSITORY_PROFILE.json"
+  ],
+  "excluded_path_patterns": [
+    ".env",
+    ".env.*",
+    "**/secrets/**",
+    "**/keys/**",
+    "**/*.key",
+    "**/*.pem",
+    "**/logs/**",
+    "**/*.log",
+    "**/customer-data/**",
+    "**/customers/**",
+    "**/db-dumps/**",
+    "**/*.dump",
+    "**/qdrant-storage/**",
+    "**/qdrant-storage-backup-*/**",
+    "**/node_modules/**",
+    "**/coverage/**",
+    "src/**",
+    "dist/**",
+    "k8s/**",
+    "deploy.config.sh",
+    "scripts/deploy.sh"
+  ],
+  "owners": {
+    "business_intent": "project owner",
+    "technical_system": "docs-rag-microservice maintainer",
+    "planning_state": "orchestrator",
+    "integration": "docs-rag-microservice maintainer",
+    "registry_contract": "shared-wave0-v1"
+  }
+}

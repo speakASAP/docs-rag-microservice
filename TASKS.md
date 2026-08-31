@@ -2,29 +2,27 @@
 
 ## Active
 
-Read-only mounted repository ingestion fix is implemented and validated in the uncommitted worktree. It awaits owner review/commit; no production ingestion or deployment was triggered.
+Catalog-authoritative ingestion trigger hardening and Wave 0 v1 registry artifacts are implemented and being validated for commit/deploy completion.
 
 ## Ready next
 
-- Review and commit the mounted-versus-managed Git synchronization change.
-- After an authorized deployment, retry wisdom-quotes ingestion and verify its job records the mounted checkout HEAD SHA.
+- After deployment, rerun a wisdom-quotes ingestion trigger and verify the completed job records the mounted checkout HEAD SHA.
 - Keep the shared repository catalog current when onboarding wisdom-quotes and future services.
 
 ## Blocked
 
-Production verification is intentionally deferred because this task forbids commit, push, deploy, and ingestion triggers.
+None.
 
 ## Completed
 
-- Separated allow-listed mounted checkouts from managed writable clones in GitSyncService and ingestion.
-- Added read-only HEAD/no-FETCH_HEAD, writable clone/pull, allow-list, traversal, and commit-reuse regression tests.
-- Validated 49/49 tests and the TypeScript build; no source lint script/configuration exists.
-- Recorded the pre-existing 47-finding IPS documentation audit failure as validation debt.
-- Loaded sources from the shared repository catalog.
-- Reindexed registered repositories and agent profiles from direct paths.
-- Excluded AppleDouble files and retired the copied docs/services snapshot.
-- Completed IPS documentation adoption for this already-running production service.
+- Enforced catalog authority for `triggerIngestion`: every trigger now requires a registered repository catalog entry with `docsRag: true`, independent of request `repoUrl`/`localPath` hints.
+- Preserved mounted checkout mechanics (including checkout alias resolution) and retained client local-path override rejection against the catalog-approved path.
+- Added/updated targeted ingestion tests to reject unregistered remote URLs, retain unregistered local rejection, and confirm registered catalog remote/local requests resolve to catalog-approved sources.
+- Normalized `STATE.json` to shared Wave 0 v1 structure while preserving factual ingestion lifecycle context in compatibility text.
+- Added `docs/registry/REPOSITORY_PROFILE.json` and `docs/registry/ARTIFACT_INDEX.json` with a narrow documentation allowlist and strict exclusions for secrets/keys/logs/customer data/db dumps/vector index storage/node_modules/coverage/source/runtime/deploy config.
+- Validated targeted ingestion suites, TypeScript build, JSON parsing, profile/index validation, and deterministic artifact index ordering.
+- Preserved the existing documentation-audit validation debt entry `VDEBT-2026-08-31-IPS-DOC-AUDIT`.
 
 ## Handoff
 
-Changed source and tests are uncommitted by request. Validation used repository-local test scratch paths and left no scratch files. The pre-existing IPS documentation audit failure is recorded in `docs/orchestrator/VALIDATION_DEBT.md` and does not touch this change.
+No secrets or raw production data were recorded. Validation evidence is command-line only and references repository-local outputs.
