@@ -1,16 +1,13 @@
 # Tasks
 
 ## Active
-
 Catalog-authoritative ingestion trigger hardening and Wave 0 v1 registry artifacts are implemented and being validated for commit/deploy completion.
 
-## Ready next
-
+## Ready Next
 - After deployment, rerun a wisdom-quotes ingestion trigger and verify the completed job records the mounted checkout HEAD SHA.
 - Keep the shared repository catalog current when onboarding wisdom-quotes and future services.
 
 ## Blocked
-
 No known blockers are recorded; validation debt is tracked separately when discovered.
 
 ## Completed
