@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -22,6 +23,22 @@ interface RepositoryCatalog {
   repositories: CatalogEntry[];
 }
 
+interface CatalogSnapshot {
+  catalogPath: string;
+  reposRoot: string;
+  mtimeMs: number;
+  size: number;
+  repos: RepoEntry[];
+}
+
+const logger = new Logger('RepoRegistry');
+
+let snapshot: CatalogSnapshot | undefined;
+
+function defaultReposRoot(): string {
+  return process.env.GIT_BASE_PATH || process.env.GIT_REPOS_DIR || '/data/repos';
+}
+
 function resolveCatalogPath(reposRoot: string): string {
   const candidates = [
     process.env.ECOSYSTEM_REPOSITORY_CATALOG,
@@ -37,7 +54,7 @@ function resolveCatalogPath(reposRoot: string): string {
 }
 
 export function loadEcosystemRepos(
-  reposRoot = process.env.GIT_BASE_PATH || process.env.GIT_REPOS_DIR || '/data/repos',
+  reposRoot = defaultReposRoot(),
   catalogPath = resolveCatalogPath(reposRoot),
 ): RepoEntry[] {
   const catalog = JSON.parse(fs.readFileSync(catalogPath, 'utf-8')) as RepositoryCatalog;
@@ -80,4 +97,53 @@ export function loadEcosystemRepos(
   return [...repositories, ...profiles];
 }
 
-export const ECOSYSTEM_REPOS: RepoEntry[] = loadEcosystemRepos();
+/**
+ * The catalog is a live file on a mounted volume that other workstreams edit;
+ * a repo registered while this process is running must become ingestible
+ * without a restart. A one-shot module-level snapshot made a newly registered
+ * repo unknown to the registry, which silently downgraded it to
+ * localPath=false and sent ingestion into `git pull` on the read-only mount
+ * (wisdom-quotes, 2026-08-30). Re-read whenever the file changes; the stat is
+ * cheap and the parse only happens on change.
+ */
+export function getEcosystemRepos(
+  reposRoot = defaultReposRoot(),
+  catalogPathOverride?: string,
+): RepoEntry[] {
+  try {
+    const catalogPath = catalogPathOverride ?? resolveCatalogPath(reposRoot);
+    const stats = fs.statSync(catalogPath);
+    if (
+      snapshot &&
+      snapshot.catalogPath === catalogPath &&
+      snapshot.reposRoot === reposRoot &&
+      snapshot.mtimeMs === stats.mtimeMs &&
+      snapshot.size === stats.size
+    ) {
+      return snapshot.repos;
+    }
+
+    const repos = loadEcosystemRepos(reposRoot, catalogPath);
+    snapshot = { catalogPath, reposRoot, mtimeMs: stats.mtimeMs, size: stats.size, repos };
+    logger.log(`Loaded ecosystem repository catalog ${catalogPath}: ${repos.length} source(s)`);
+    return repos;
+  } catch (err) {
+    // Serving the last good catalog beats failing every ingestion because the
+    // file was mid-write, but it must never be silent.
+    if (!snapshot) throw err;
+    logger.error(
+      `Cannot re-read the ecosystem repository catalog: ${err instanceof Error ? err.message : String(err)}. ` +
+        `Serving the last known catalog (${snapshot.repos.length} sources) — newly registered repos will be missing.`,
+    );
+    return snapshot.repos;
+  }
+}
+
+/** Test hook: drops the cached catalog so the next read hits the filesystem. */
+export function resetEcosystemReposCache(): void {
+  snapshot = undefined;
+}
+
+// Prime at import time so a missing or malformed catalog fails the process at
+// startup rather than at the first ingestion request.
+getEcosystemRepos();

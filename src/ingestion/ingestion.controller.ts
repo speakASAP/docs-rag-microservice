@@ -4,7 +4,7 @@ import { IngestionService } from './ingestion.service';
 import { ZodValidationPipe } from '../contracts/zod-validation.pipe';
 import { parseOrThrow } from '../contracts/parse-or-throw';
 
-const TriggerIngestionRequestSchema = z.object({
+export const TriggerIngestionRequestSchema = z.object({
   repoName: z.string().min(1),
   repoUrl: z.string().min(1).default('local'),
   force: z.boolean().default(false),
@@ -25,7 +25,7 @@ const IngestionStatusResponseSchema = z.object({
   })),
 });
 
-type TriggerIngestionRequest = z.infer<typeof TriggerIngestionRequestSchema>;
+export type TriggerIngestionRequest = z.infer<typeof TriggerIngestionRequestSchema>;
 
 @Controller('ingestion')
 export class IngestionController {

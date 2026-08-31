@@ -1,4 +1,4 @@
-import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LessThan, Repository } from 'typeorm';
 import { randomUUID } from 'crypto';
@@ -8,7 +8,7 @@ import { GitSyncService } from './git-sync.service';
 import { MarkdownChunkerService } from './markdown-chunker.service';
 import { EmbeddingService } from './embedding.service';
 import { QdrantService } from '../qdrant/qdrant.service';
-import { ECOSYSTEM_REPOS } from './repo-registry';
+import { getEcosystemRepos } from './repo-registry';
 
 /**
  * A running job writes progress after every chunk batch. If updatedAt has not
@@ -84,7 +84,7 @@ export class IngestionService implements OnModuleInit, OnModuleDestroy {
   }
 
   private async createJob(repoName: string, repoUrl: string, localPath: boolean): Promise<IngestionJob> {
-    const registryEntry = ECOSYSTEM_REPOS.find((repo) => repo.repoName === repoName);
+    const registryEntry = getEcosystemRepos().find((repo) => repo.repoName === repoName);
     const job = this.jobRepo.create({
       repoName,
       repoUrl: repoUrl === 'local' && registryEntry ? registryEntry.repoUrl : repoUrl,
@@ -98,12 +98,13 @@ export class IngestionService implements OnModuleInit, OnModuleDestroy {
   }
 
   private async runAllSequentially(force: boolean): Promise<void> {
-    const total = ECOSYSTEM_REPOS.length;
+    const registry = getEcosystemRepos();
+    const total = registry.length;
     const failures: string[] = [];
     const startedAt = Date.now();
     this.logger.log(`Sequential ingestion starting: ${total} repos (force=${force})`);
 
-    for (const [index, repo] of ECOSYSTEM_REPOS.entries()) {
+    for (const [index, repo] of registry.entries()) {
       const label = `[${index + 1}/${total}] ${repo.repoName}`;
       const repoStartedAt = Date.now();
       try {
@@ -198,10 +199,22 @@ export class IngestionService implements OnModuleInit, OnModuleDestroy {
     localPath = false,
     localAbsolutePath?: string,
   ): Promise<IngestionJob> {
-    const registryEntry = ECOSYSTEM_REPOS.find((repo) => repo.repoName === repoName);
+    const registryEntry = getEcosystemRepos().find((repo) => repo.repoName === repoName);
     const resolvedLocalAbsolutePath = localAbsolutePath ?? registryEntry?.localAbsolutePath;
     const resolvedLocalPath = localPath || Boolean(registryEntry?.localPath);
     const resolvedRepoUrl = repoUrl === 'local' && registryEntry ? registryEntry.repoUrl : repoUrl;
+
+    // 'local' is the request-body placeholder meaning "resolve it from the
+    // catalog". With no catalog entry there is nothing to resolve, and letting
+    // it through hands the literal string to git, which then clones or pulls
+    // into the read-only repos mount and fails with an unrelated filesystem
+    // error. Reject the doomed request instead.
+    if (!resolvedLocalPath && resolvedRepoUrl === 'local') {
+      throw new BadRequestException(
+        `Cannot ingest '${repoName}': it is not registered in the ecosystem repository catalog ` +
+          `(docsRag: true) and the request supplied neither a clonable repoUrl nor localPath: true.`,
+      );
+    }
 
     const job = await this.createJob(repoName, resolvedRepoUrl, resolvedLocalPath);
 
@@ -217,7 +230,7 @@ export class IngestionService implements OnModuleInit, OnModuleDestroy {
     await this.jobRepo.save(job);
 
     try {
-      const registryEntry = ECOSYSTEM_REPOS.find((repo) => repo.repoName === job.repoName);
+      const registryEntry = getEcosystemRepos().find((repo) => repo.repoName === job.repoName);
       const localPath = job.localPath
         ? this.gitSync.getLocalPath(job.repoName, localAbsolutePath)
         : await this.gitSync.cloneOrPull(job.repoName, job.repoUrl);
@@ -337,7 +350,7 @@ export class IngestionService implements OnModuleInit, OnModuleDestroy {
     // runs detached. Calling it per repo therefore releases all 40 repos onto
     // Ollama at once, which is exactly what produced the "fetch failed" storms.
     // Run the repos through one sequential chain instead.
-    for (const repo of ECOSYSTEM_REPOS) {
+    for (const repo of getEcosystemRepos()) {
       repos.push(repo.repoName);
     }
 
