@@ -11,7 +11,7 @@ Catalog-authoritative ingestion trigger hardening and Wave 0 v1 registry artifac
 
 ## Blocked
 
-None.
+No known blockers are recorded; validation debt is tracked separately when discovered.
 
 ## Completed
 
