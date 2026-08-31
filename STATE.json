@@ -3,11 +3,44 @@
   "project": "docs-rag-microservice",
   "lifecycle": "deployed",
   "health": "ok",
-  "activeTask": "none",
-  "lastUpdated": "2026-08-30",
-  "deployment": {"status": "operational", "lastMilestone": "direct-source-documentation-authority-cutover"},
-  "blockers": [],
-  "followUps": ["Keep the shared repository catalog current when onboarding wisdom-quotes and future services; current service onboardings are the catalog-currency work named by this follow-up.", "The 2026-08-29 direct-source reindex covered repositories and agent profiles, excludes AppleDouble files, and retires the copied docs/services snapshot."],
-  "legacyState": {"cycle": 2, "lastCycleAt": "2026-08-29T17:09:18Z", "tasksActive": 0, "tasksFailedLastCycle": 0, "budgetUnitsUsed": 0},
-  "standardization": {"schemaVersion": "1.0", "repository": "docs-rag-microservice", "planningStatus": "ready", "lastValidationId": "VAL-WAVE0-DOCS-RAG-2026-08-31", "lastValidationStatus": "validated", "validationDebtCount": 0, "artifactIndex": "docs/registry/ARTIFACT_INDEX.json", "statusSource": "TASKS.md and pre-wave0 STATE.json operational snapshot"}
+  "activeTask": "read-only-mounted-repository-ingestion-ready-uncommitted",
+  "lastUpdated": "2026-08-31",
+  "deployment": {
+    "status": "operational-unchanged",
+    "lastMilestone": "direct-source-documentation-authority-cutover",
+    "pendingChange": "mounted repositories use checked-out HEAD without Git writes; managed writable repositories retain clone/pull"
+  },
+  "blockers": [
+    "Production verification is deferred by explicit instruction: do not commit, push, deploy, or trigger ingestion."
+  ],
+  "followUps": [
+    "Review and commit the validated read-only mounted repository ingestion change.",
+    "After authorized deployment, retry wisdom-quotes ingestion and verify the completed job records the mounted checkout HEAD SHA.",
+    "Keep the shared repository catalog current when onboarding wisdom-quotes and future services."
+  ],
+  "validation": {
+    "status": "validated-uncommitted",
+    "tests": "12 suites, 49 tests passed",
+    "build": "npm run build passed",
+    "lint": "not configured",
+    "docsAudit": "failed with 47 pre-existing findings recorded as VDEBT-2026-08-31-IPS-DOC-AUDIT",
+    "validationDebt": 1
+  },
+  "legacyState": {
+    "cycle": 2,
+    "lastCycleAt": "2026-08-29T17:09:18Z",
+    "tasksActive": 1,
+    "tasksFailedLastCycle": 0,
+    "budgetUnitsUsed": 0
+  },
+  "standardization": {
+    "schemaVersion": "1.0",
+    "repository": "docs-rag-microservice",
+    "planningStatus": "ready-for-owner-review",
+    "lastValidationId": "VAL-READONLY-GIT-SYNC-2026-08-31",
+    "lastValidationStatus": "validated-uncommitted",
+    "validationDebtCount": 1,
+    "artifactIndex": "docs/registry/ARTIFACT_INDEX.json",
+    "statusSource": "TASKS.md and current uncommitted worktree"
+  }
 }

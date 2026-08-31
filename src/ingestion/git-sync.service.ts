@@ -6,6 +6,11 @@ import * as path from 'path';
 const MARKDOWN_EXTENSIONS = ['.md', '.mdx'];
 const EXCLUDED_DIRS = ['node_modules', '.git', 'dist', 'coverage', 'vendor'];
 
+export interface PreparedRepository {
+  localPath: string;
+  commitHash: string;
+}
+
 @Injectable()
 export class GitSyncService {
   private readonly logger = new Logger(GitSyncService.name);
@@ -13,6 +18,27 @@ export class GitSyncService {
 
   constructor() {
     this.reposDir = process.env.GIT_BASE_PATH || process.env.GIT_REPOS_DIR || '/data/repos';
+  }
+
+  async prepareForIngestion(
+    repoName: string,
+    repoUrl: string,
+    readOnlyLocal: boolean,
+    localAbsolutePath?: string,
+  ): Promise<PreparedRepository> {
+    const localPath = readOnlyLocal
+      ? this.getLocalPath(repoName, localAbsolutePath)
+      : await this.cloneOrPull(repoName, repoUrl);
+
+    if (readOnlyLocal) {
+      const stats = fs.statSync(localPath);
+      if (!stats.isDirectory()) {
+        throw new Error(`Mounted repository path is not a directory: ${localPath}`);
+      }
+      this.logger.log(`Using mounted checkout for ${repoName} without fetch or pull`);
+    }
+
+    return { localPath, commitHash: await this.getHeadCommit(localPath) };
   }
 
   async cloneOrPull(repoName: string, repoUrl: string): Promise<string> {
@@ -23,7 +49,7 @@ export class GitSyncService {
       const git: SimpleGit = simpleGit(localPath);
       await git.pull();
     } else {
-      this.logger.log(`Cloning ${repoName} from ${repoUrl}...`);
+      this.logger.log(`Cloning managed repository ${repoName}...`);
       fs.mkdirSync(localPath, { recursive: true });
       await simpleGit().clone(repoUrl, localPath);
     }
@@ -33,9 +59,11 @@ export class GitSyncService {
 
   async getHeadCommit(localPath: string): Promise<string> {
     try {
-      const git: SimpleGit = simpleGit(localPath);
-      const log = await git.log({ maxCount: 1 });
-      const hash = log.latest?.hash;
+      const git: SimpleGit = simpleGit({
+        baseDir: localPath,
+        config: [`safe.directory=${localPath}`],
+      });
+      const hash = (await git.revparse(['--verify', 'HEAD'])).trim();
       if (!hash) {
         this.logger.warn(`No commits found at ${localPath}; treating as 'unknown'`);
         return 'unknown';
@@ -86,7 +114,19 @@ export class GitSyncService {
   }
 
   getLocalPath(repoName: string, localAbsolutePath?: string): string {
-    return localAbsolutePath ? path.resolve(localAbsolutePath) : path.join(this.reposDir, repoName);
+    if (!/^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(repoName) || repoName === '.' || repoName === '..') {
+      throw new Error(`Unsafe repository name: ${repoName}`);
+    }
+
+    if (localAbsolutePath) return path.resolve(localAbsolutePath);
+
+    const reposRoot = path.resolve(this.reposDir);
+    const localPath = path.resolve(reposRoot, repoName);
+    const relativePath = path.relative(reposRoot, localPath);
+    if (relativePath.startsWith('..') || path.isAbsolute(relativePath)) {
+      throw new Error(`Repository path escapes the configured root: ${repoName}`);
+    }
+    return localPath;
   }
 
   private walkDir(

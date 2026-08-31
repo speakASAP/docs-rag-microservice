@@ -35,6 +35,12 @@ describe('trigger ingestion honours the repository catalog over request defaults
       getLocalPath: jest.fn((repoName: string, absolute?: string) => absolute ?? `/data/repos/${repoName}`),
       cloneOrPull: jest.fn(async (repoName: string) => `/data/repos/${repoName}`),
       getHeadCommit: jest.fn(async () => 'abc123'),
+      prepareForIngestion: jest.fn(
+        async (repoName: string, repoUrl: string, readOnlyLocal: boolean, absolute?: string) => ({
+          localPath: readOnlyLocal ? absolute ?? `/data/repos/${repoName}` : `/data/repos/${repoName}`,
+          commitHash: 'abc123',
+        }),
+      ),
       listMarkdownFiles: jest.fn(async () => files),
       readFile: jest.fn(async () => '# Wisdom\n\nQuotes.'),
     };
@@ -88,7 +94,12 @@ describe('trigger ingestion honours the repository catalog over request defaults
     expect(job.repoUrl).toBe('https://github.com/speakASAP/wisdom-quotes.git');
 
     await settle(service, runSpy);
-    expect(gitSync.getLocalPath).toHaveBeenCalledWith('wisdom-quotes', undefined);
+    expect(gitSync.prepareForIngestion).toHaveBeenCalledWith(
+      'wisdom-quotes',
+      'https://github.com/speakASAP/wisdom-quotes.git',
+      true,
+      undefined,
+    );
     expect(gitSync.cloneOrPull).not.toHaveBeenCalled();
     expect(job.status).toBe('completed');
   });
@@ -108,7 +119,12 @@ describe('trigger ingestion honours the repository catalog over request defaults
     await service.triggerIngestion('allegro-service', 'local', true, false, undefined);
 
     await settle(service, runSpy);
-    expect(gitSync.getLocalPath).toHaveBeenCalledWith('allegro-service', '/data/repos/allegro');
+    expect(gitSync.prepareForIngestion).toHaveBeenCalledWith(
+      'allegro-service',
+      'https://github.com/speakASAP/allegro.git',
+      true,
+      '/data/repos/allegro',
+    );
     expect(gitSync.cloneOrPull).not.toHaveBeenCalled();
   });
 
@@ -133,6 +149,22 @@ describe('trigger ingestion honours the repository catalog over request defaults
     expect(job.localPath).toBe(true);
     await settle(service, runSpy);
     expect(gitSync.cloneOrPull).not.toHaveBeenCalled();
+  });
+
+  it('rejects a client-selected local path that differs from the catalog checkout', async () => {
+    jest.spyOn(repoRegistry, 'getEcosystemRepos').mockReturnValue([
+      {
+        repoName: 'wisdom-quotes',
+        repoUrl: 'https://github.com/speakASAP/wisdom-quotes.git',
+        localPath: true,
+      },
+    ]);
+    const { service, jobRepo } = buildService();
+
+    await expect(
+      service.triggerIngestion('wisdom-quotes', 'local', true, true, '/data/repos/../shared'),
+    ).rejects.toThrow(/Cannot override the catalog-approved checkout path/);
+    expect(jobRepo.create).not.toHaveBeenCalled();
   });
 
   it('rejects an unregistered repo instead of handing the "local" placeholder to git', async () => {
@@ -161,7 +193,12 @@ describe('trigger ingestion honours the repository catalog over request defaults
 
     expect(job.localPath).toBe(false);
     await settle(service, runSpy);
-    expect(gitSync.cloneOrPull).toHaveBeenCalledWith('external', 'https://github.com/example/external.git');
+    expect(gitSync.prepareForIngestion).toHaveBeenCalledWith(
+      'external',
+      'https://github.com/example/external.git',
+      false,
+      undefined,
+    );
   });
 });
 

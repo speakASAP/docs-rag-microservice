@@ -17,6 +17,10 @@ describe('IngestionService commit reuse', () => {
       getLocalPath: jest.fn(() => '/repos/catalog-microservice'),
       cloneOrPull: jest.fn(),
       getHeadCommit: jest.fn(async () => options.commitHash),
+      prepareForIngestion: jest.fn(async () => ({
+        localPath: '/repos/catalog-microservice',
+        commitHash: options.commitHash,
+      })),
       listMarkdownFiles: jest.fn(async () => options.files ?? ['/repos/catalog-microservice/README.md']),
       readFile: jest.fn(async () => '# Catalog\n\nGoal 24 order affinity blockers.'),
     };

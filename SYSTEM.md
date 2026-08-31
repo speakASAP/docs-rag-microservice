@@ -12,6 +12,8 @@ Provide bounded semantic discovery over ecosystem Git documentation without beco
 - Read only repository catalog entries marked docsRag true.
 - Chunk Markdown and MDX, generate Ollama embeddings, and persist chunks in PostgreSQL and vectors in Qdrant.
 - Run sequential six-hour ingestion when enabled, skip unchanged sources unless forced, and report failed sources as degraded.
+- Read catalog allow-listed mounted repositories at their current checked-out HEAD without fetch, pull, or filesystem writes; retain clone/pull synchronization only for managed writable checkouts.
+- Resolve mounted Git HEAD with a command-scoped safe-directory setting and persist the real commit SHA for unchanged-source detection and chunk audit metadata.
 - Return token-bounded semantic context with source identity.
 - Exclude AppleDouble files and this repository retired docs/services snapshot.
 - Authenticate ingestion and retrieval with the service JWT; expose public health and sanitized central logging.
@@ -48,7 +50,7 @@ This system implements BUSINESS.md and docs/01_vision/VISION.md: cached bounded 
 
 ## Validation criteria
 
-Health reports ok; catalog filtering and exclusions are applied; guarded routes reject missing JWTs; retrieval preserves source paths and needs Git fallback when unconfident; PostgreSQL migrations and Qdrant access use the stated database and collection.
+Health reports ok; catalog filtering and exclusions are applied; allow-listed mounted repositories perform no Git writes and record checked-out HEAD while managed writable repositories still clone/pull; path traversal and client-selected local paths are rejected; guarded routes reject missing JWTs; retrieval preserves source paths and needs Git fallback when unconfident; PostgreSQL migrations and Qdrant access use the stated database and collection.
 
 ## Open questions
 

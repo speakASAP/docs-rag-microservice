@@ -200,20 +200,26 @@ export class IngestionService implements OnModuleInit, OnModuleDestroy {
     localAbsolutePath?: string,
   ): Promise<IngestionJob> {
     const registryEntry = getEcosystemRepos().find((repo) => repo.repoName === repoName);
-    const resolvedLocalAbsolutePath = localAbsolutePath ?? registryEntry?.localAbsolutePath;
-    const resolvedLocalPath = localPath || Boolean(registryEntry?.localPath);
+    const requestsLocalCheckout = localPath || repoUrl === 'local' || localAbsolutePath !== undefined;
+    if (requestsLocalCheckout && !registryEntry) {
+      throw new BadRequestException(
+        `Cannot ingest '${repoName}' from a mounted checkout: it is not registered in the ` +
+          `ecosystem repository catalog (docsRag: true).`,
+      );
+    }
+
+    const resolvedLocalAbsolutePath = registryEntry?.localAbsolutePath;
+    const resolvedLocalPath = Boolean(registryEntry?.localPath);
     const resolvedRepoUrl = repoUrl === 'local' && registryEntry ? registryEntry.repoUrl : repoUrl;
 
-    // 'local' is the request-body placeholder meaning "resolve it from the
-    // catalog". With no catalog entry there is nothing to resolve, and letting
-    // it through hands the literal string to git, which then clones or pulls
-    // into the read-only repos mount and fails with an unrelated filesystem
-    // error. Reject the doomed request instead.
-    if (!resolvedLocalPath && resolvedRepoUrl === 'local') {
-      throw new BadRequestException(
-        `Cannot ingest '${repoName}': it is not registered in the ecosystem repository catalog ` +
-          `(docsRag: true) and the request supplied neither a clonable repoUrl nor localPath: true.`,
-      );
+    if (localAbsolutePath !== undefined) {
+      const approvedPath = this.gitSync.getLocalPath(repoName, resolvedLocalAbsolutePath);
+      const requestedPath = this.gitSync.getLocalPath(repoName, localAbsolutePath);
+      if (requestedPath !== approvedPath) {
+        throw new BadRequestException(
+          `Cannot override the catalog-approved checkout path for '${repoName}'.`,
+        );
+      }
     }
 
     const job = await this.createJob(repoName, resolvedRepoUrl, resolvedLocalPath);
@@ -231,10 +237,12 @@ export class IngestionService implements OnModuleInit, OnModuleDestroy {
 
     try {
       const registryEntry = getEcosystemRepos().find((repo) => repo.repoName === job.repoName);
-      const localPath = job.localPath
-        ? this.gitSync.getLocalPath(job.repoName, localAbsolutePath)
-        : await this.gitSync.cloneOrPull(job.repoName, job.repoUrl);
-      const commitHash = await this.gitSync.getHeadCommit(localPath);
+      const { localPath, commitHash } = await this.gitSync.prepareForIngestion(
+        job.repoName,
+        job.repoUrl,
+        job.localPath,
+        localAbsolutePath,
+      );
 
       const latestCompleted = await this.jobRepo.findOne({
         where: { repoName: job.repoName, status: 'completed' },
