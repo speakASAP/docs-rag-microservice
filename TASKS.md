@@ -1,16 +1,25 @@
-# Tasks
+
+
+# Tasks: docs-rag-microservice
 
 ## Active
+
 Catalog-authoritative ingestion trigger hardening and Wave 0 v1 registry artifacts are implemented and being validated for commit/deploy completion.
 
-## Ready Next
+
+## Ready next
+
 - After deployment, rerun a wisdom-quotes ingestion trigger and verify the completed job records the mounted checkout HEAD SHA.
 - Keep the shared repository catalog current when onboarding wisdom-quotes and future services.
 
+
 ## Blocked
+
 No known blockers are recorded; validation debt is tracked separately when discovered.
 
+
 ## Completed
+
 
 - Enforced catalog authority for `triggerIngestion`: every trigger now requires a registered repository catalog entry with `docsRag: true`, independent of request `repoUrl`/`localPath` hints.
 - Preserved mounted checkout mechanics (including checkout alias resolution) and retained client local-path override rejection against the catalog-approved path.
@@ -20,6 +29,8 @@ No known blockers are recorded; validation debt is tracked separately when disco
 - Validated targeted ingestion suites, TypeScript build, JSON parsing, profile/index validation, and deterministic artifact index ordering.
 - Preserved the existing documentation-audit validation debt entry `VDEBT-2026-08-31-IPS-DOC-AUDIT`.
 
+
 ## Handoff
+
 
 No secrets or raw production data were recorded. Validation evidence is command-line only and references repository-local outputs.
