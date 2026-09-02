@@ -1,8 +1,10 @@
 ---
 status: review
 owner: repository-owner
-last_updated: 2026-08-31
+last_updated: 2026-09-02
 ---
+
+<!-- [MISSING: production success metrics are not independently evidenced here: all-repository vector count, search latency, persistence across restart, and end-to-end retrieval/ingestion checks were not run under the no-kubectl/no-docker constraint. Current code and history show the migration mechanisms exist, so this remains review rather than abandoned or done.] -->
 
 # Docs-RAG Production Migration & Ecosystem Ingestion Plan
 
