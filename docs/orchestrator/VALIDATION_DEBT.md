@@ -24,3 +24,24 @@ Validation debt never excuses a current-task failure. Entries must identify owne
 ## Update format
 
 When debt exists, record ID, date, command, sanitized failure, scope, owner, current-task impact, unblock condition, and evidence path.
+
+### VDEBT-2026-09-03-INGESTION-NULL-BYTE
+
+- Date: 2026-09-03
+- Command: `POST /ingestion/trigger` (scheduled re-index of `speakasap`)
+- Sanitized failure: `invalid byte sequence for encoding "UTF8": 0x00` — 6 occurrences in the last 7 days. A source file in that repository contains a NUL byte, which Postgres rejects on insert.
+- Scope: `speakasap` ingestion only; other repositories index normally.
+- Owner: docs-rag ingestion maintainer.
+- Unblock condition: strip or reject NUL bytes during chunk extraction before insert.
+- Current-task impact: none; production metrics verification for the RAG migration plan did not touch chunk extraction.
+
+### VDEBT-2026-09-03-READONLY-FETCH-HEAD
+
+- Date: 2026-09-03
+- Command: `POST /ingestion/trigger` (`wisdom-quotes`)
+- Sanitized failure: `cannot open '.git/FETCH_HEAD': Read-only file system` — 1 occurrence. The mounted checkout is intentionally read-only, so any code path attempting a fetch fails rather than reading the mounted HEAD.
+- Scope: mounted read-only checkouts.
+- Owner: docs-rag ingestion maintainer.
+- Unblock condition: ensure the mounted-checkout path never attempts a network fetch.
+- Current-task impact: none; the 2026-09-03 verification run completed and recorded the correct HEAD SHA, so this is intermittent rather than blocking.
+

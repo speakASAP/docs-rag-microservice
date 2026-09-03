@@ -8,12 +8,12 @@
     "deployment": "kubernetes"
   },
   "planning": {
-    "status": "review",
+    "status": "done",
     "active_goal_ids": [],
     "next_ready_goal_ids": [],
     "blocked_goal_ids": [],
     "active_workstream_ids": [],
-    "last_updated_at": "2026-08-31T11:24:55+02:00"
+    "last_updated_at": "2026-09-03T17:05:00+02:00"
   },
   "delivery": {
     "last_validation_id": "VAL-TASK-001-BOOTSTRAP-SERVICE",
@@ -24,6 +24,6 @@
   "collection": {
     "profile": "service",
     "artifact_index": "docs/registry/ARTIFACT_INDEX.json",
-    "status_source": "human-and-agent-maintained; legacy compatibility: read-only mounted repository ingestion remains deployed, ingestion triggers are catalog-authoritative (docsRag=true), and post-deploy wisdom-quotes HEAD capture verification remains a follow-up"
+    "status_source": "human-and-agent-maintained; read-only mounted repository ingestion is deployed, ingestion triggers are catalog-authoritative (docsRag=true), and post-deploy wisdom-quotes HEAD capture was verified in production on 2026-09-03"
   }
 }

@@ -1,6 +1,6 @@
 # EP-TASK-001-bootstrap-service: Bootstrap docs-rag-microservice
 
-status: implemented
+status: validated
 completeness_level: complete
 
 ## Upstream traceability

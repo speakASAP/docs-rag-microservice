@@ -2,7 +2,7 @@
 
 ```yaml
 id: EP-TASK-001
-status: approved
+status: reviewed
 owner: platform-engineering
 created: 2026-06-13
 last_updated: 2026-06-13

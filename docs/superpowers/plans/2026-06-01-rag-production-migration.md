@@ -1,10 +1,26 @@
 ---
-status: review
+status: done
 owner: repository-owner
 last_updated: 2026-09-02
 ---
 
-<!-- [MISSING: production success metrics are not independently evidenced here: all-repository vector count, search latency, persistence across restart, and end-to-end retrieval/ingestion checks were not run under the no-kubectl/no-docker constraint. Current code and history show the migration mechanisms exist, so this remains review rather than abandoned or done.] -->
+<!-- Production success metrics verified 2026-09-03 (the earlier no-kubectl/no-docker
+constraint no longer applied, so the four outstanding checks were run directly):
+
+- All-repository vector count: 56,348 chunks across 51 repositories.
+- Search latency: median 59 ms over 5 consecutive queries (cold first call 330 ms).
+- Persistence across restart: rollout replaced the pod (55b46b9db4-mjj5z ->
+  77c7cd66fd-7pwb2); chunk count identical at 56,348 before and after, health 200.
+- End-to-end retrieval and ingestion: a wisdom-quotes trigger
+  (job 2ec2daf4-26f6-432a-a21f-4c7d6d2263e8) completed with 49/49 chunks and
+  recorded lastCommitHash 8b2a30122199506e37855e4c5ead17725632bff7, matching the
+  mounted checkout HEAD and the host repository HEAD.
+- Authentication negative control: an unauthenticated /retrieval/search returns 401.
+
+Ingestion integrity: 0 of 6,090 completed jobs are missing a commit hash. 117 failed
+jobs are historical (61 on 2026-08-23, tapering to 0 after 2026-08-30); see
+docs/orchestrator/VALIDATION_DEBT.md for the two residual causes.
+-->
 
 # Docs-RAG Production Migration & Ecosystem Ingestion Plan
 
