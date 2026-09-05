@@ -4,7 +4,7 @@
   "service": {
     "name": "docs-rag-microservice",
     "kind": "infrastructure",
-    "lifecycle": "deployed",
+    "lifecycle": "active",
     "deployment": "kubernetes"
   },
   "planning": {
