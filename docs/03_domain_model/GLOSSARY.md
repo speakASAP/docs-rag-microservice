@@ -23,7 +23,7 @@ related_adrs: []
 - Qdrant collection: The vector database collection `ecosystem-docs` used for documentation chunks.
 - Repository catalog: The machine-readable source registry at `shared/config/ecosystem-repositories.json`.
 - Repository source of truth: The original service repository documentation, which remains authoritative over indexed copies.
-- Service-to-service JWT: HS256 bearer token required for all endpoints except `/health`.
+- Service-to-service JWT: an Auth-issued **RS256** bearer token, one principal per `(caller → target)` pair, required for all endpoints except `/health`. This service's own legacy HS256 `JWT_SECRET` path still works for existing callers but is closed to new ones — see [`auth-microservice/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md`](../../../auth-microservice/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md).
 - Derived index: Disposable PostgreSQL and Qdrant records rebuilt from cataloged Git repositories.
 
 ## Validation

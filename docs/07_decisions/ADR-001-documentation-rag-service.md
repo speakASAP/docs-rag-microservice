@@ -2,7 +2,7 @@
 
 ```yaml
 id: ADR-001
-status: approved
+status: accepted
 owner: platform-engineering
 created: 2026-06-13
 last_updated: 2026-06-13

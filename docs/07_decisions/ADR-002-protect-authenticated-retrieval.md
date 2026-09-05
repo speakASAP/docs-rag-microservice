@@ -2,7 +2,7 @@
 
 ```yaml
 id: ADR-002
-status: approved
+status: accepted
 owner: platform-engineering
 created: 2026-06-13
 last_updated: 2026-06-13
@@ -21,6 +21,16 @@ related_adrs:
 The service exposes documentation search and ingestion capabilities for internal agents and services. Ingestion can alter indexed knowledge, and retrieval may expose internal operational context.
 
 ## Decision
+
+> **Superseded 2026-08-25 for the algorithm and credential shape** by
+> [`auth-microservice/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md`](../../../auth-microservice/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md).
+> The decision to protect ingestion and retrieval **stands**. The mechanism does
+> not: new callers use an Auth-issued **RS256** service JWT, one principal per
+> `(caller → target)` pair, minted only with
+> `auth-microservice/scripts/provision-service-token.js`. HS256 and a shared
+> `JWT_SECRET` are legacy — the existing path keeps working, but no new caller
+> may adopt it.
+
 Keep `/health` public for liveness only. Require HS256 service-to-service JWT authentication on ingestion and retrieval endpoints.
 
 ## Consequences
