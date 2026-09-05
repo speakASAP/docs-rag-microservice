@@ -767,21 +767,6 @@ In `SYSTEM.md`, replace the "Key services" section's OpenAI line:
 
 - [ ] **Step 4: Create `docs/RAG_USAGE.md`**
 
-```bash
-cat > /home/ssf/Documents/Github/docs-rag-microservice/docs/RAG_USAGE.md << 'DOC'
-# RAG Service Usage Guide
-
-## Why use this service?
-
-Each query to this service instead of reading raw git files saves **2000–5000 tokens**.
-With 35 repos indexed, all ecosystem knowledge is searchable in one call.
-
-## Endpoints
-
-All endpoints require `Authorization: Bearer <JWT_TOKEN>` (service-to-service JWT, HS256).
-
-### Semantic search
-```
 POST /retrieval/search
 {
   "query": "how does vault secret rotation work",
