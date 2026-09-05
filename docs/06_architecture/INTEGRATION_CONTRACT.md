@@ -31,7 +31,7 @@ docs-rag-microservice owns PostgreSQL chunk and ingestion-job records and Qdrant
 
 ## Authentication and authorization
 
-Machine-accessible ingestion and retrieval routes follow the canonical service-identity standard. Auth is the only signer; receivers validate through Auth or an approved local RS256 verifier, create a separate service actor, explicitly enforce target-scoped roles, and deny and error-log undecorated routes. Pair credentials are delivered only through Vault -> ExternalSecret -> Kubernetes Secret -> secretKeyRef. Public health is explicitly public.
+For machine service identity, follow the sole canonical [`SERVICE_IDENTITY_CONSUMER_STANDARD.md`](../../../auth-microservice/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md). It is not reproduced here.
 
 ## Synchronous dependencies
 

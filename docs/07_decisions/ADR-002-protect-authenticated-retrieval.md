@@ -22,14 +22,7 @@ The service exposes documentation search and ingestion capabilities for internal
 
 ## Decision
 
-Keep health public for liveness only. Ingestion and retrieval are machine-accessible
-routes governed solely by auth-microservice/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md.
-Each caller-to-docs-rag-microservice pair has one Auth-registered RS256 bearer JWT,
-minted or re-minted only by auth-microservice/scripts/provision-service-token.js.
-The receiver validates through Auth or an approved local RS256 verifier, creates a
-separate service actor, declares and enforces target-scoped roles per route, and
-denies and error-logs undecorated routes. Credentials flow only through Vault ->
-ExternalSecret -> Kubernetes Secret -> secretKeyRef.
+For machine service identity, follow the sole canonical [`SERVICE_IDENTITY_CONSUMER_STANDARD.md`](../../../auth-microservice/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md). It is not reproduced here.
 
 ## Consequences
 Runtime `JWT_SECRET` must come through Vault/Kubernetes secrets, agents need bearer tokens, health checks remain unauthenticated, and examples must use placeholders.
