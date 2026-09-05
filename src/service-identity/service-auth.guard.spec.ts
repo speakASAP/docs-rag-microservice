@@ -68,6 +68,32 @@ describe('ServiceAuthGuard', () => {
     await expect(guard.canActivate(contextFor(`Bearer ${hs256('runlayer')}`))).resolves.toBe(true);
   });
 
+  it('lets an ingest principal poll ingestion status', async () => {
+    // A publisher triggers a job and then polls until it completes. Leaving
+    // `ingest` out of the read set made cliplot's publish_docs_rag.sh 401
+    // halfway through, after it had already started an ingestion run.
+    jest.isolateModules(() => undefined);
+    const verifier = require('../auth/jwt-verifier');
+    const spy = jest
+      .spyOn(verifier, 'verifyAuthToken')
+      .mockResolvedValue({ sub: 'svc-cliplot--docs-rag', roles: ['internal:docs-rag-microservice:ingest'] });
+
+    const guard = new ServiceAuthGuard(reflectorFor(DOCS_RAG_READ_ROLES));
+    await expect(guard.canActivate(contextFor('Bearer rs256-token'))).resolves.toBe(true);
+    spy.mockRestore();
+  });
+
+  it('denies a readonly principal on an ingest route', async () => {
+    const verifier = require('../auth/jwt-verifier');
+    const spy = jest
+      .spyOn(verifier, 'verifyAuthToken')
+      .mockResolvedValue({ sub: 'svc-runlayer--docs-rag', roles: ['internal:docs-rag-microservice:readonly'] });
+
+    const guard = new ServiceAuthGuard(reflectorFor(DOCS_RAG_INGEST_ROLES));
+    await expect(guard.canActivate(contextFor('Bearer rs256-token'))).rejects.toThrow('Insufficient role');
+    spy.mockRestore();
+  });
+
   it('denies an undecorated route rather than falling back to a default role set', async () => {
     const guard = new ServiceAuthGuard(reflectorFor(undefined));
     await expect(guard.canActivate(contextFor(`Bearer ${hs256('runlayer')}`))).rejects.toThrow(

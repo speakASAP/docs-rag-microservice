@@ -9,7 +9,10 @@
  * Two tiers, narrowest first:
  *   READ    - semantic search, agent context, ingestion status. This is what
  *             every consuming service and agent actually needs; nothing else
- *             in this list does.
+ *             in this list does. `ingest` is included because a publisher must
+ *             be able to poll the status of the job it just started: cliplot's
+ *             publish_docs_rag.sh triggers, then polls until the job completes.
+ *             Excluding it made that script 401 halfway through.
  *   INGEST  - trigger ingestion. Operator surface, not a service-caller one:
  *             ingestion is self-scheduled on an internal interval, so a normal
  *             consumer never needs to trigger it.
@@ -25,6 +28,7 @@ export const DOCS_RAG_READ_ROLES = [
   'global:superadmin',
   'internal:docs-rag-microservice:admin',
   'internal:docs-rag-microservice:readonly',
+  'internal:docs-rag-microservice:ingest',
 ] as const;
 
 export const DOCS_RAG_INGEST_ROLES = [
