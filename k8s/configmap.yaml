@@ -12,6 +12,11 @@ data:
   DOMAIN: "docs-rag.alfares.cz"
   PORT: "3397"
   AUTH_SERVICE_URL: "http://auth-microservice.statex-apps.svc.cluster.local:3370"
+  # Legacy HS256 service tokens are still accepted, read-only, while callers are
+  # re-minted as auth-issued RS256 principals. Set to "false" to close the window
+  # once ServiceAuthGuard stops logging "Legacy HS256 token accepted".
+  # Plan: shared/../docs/superpowers/plans/2026-09-05-docs-rag-rs256-migration.md
+  ALLOW_HS256_FALLBACK: "true"
   LOGGING_SERVICE_URL: "http://logging-microservice.statex-apps.svc.cluster.local:3367"
   LOGGING_SERVICE_API_PATH: "/api/logs"
   NOTIFICATION_SERVICE_URL: "http://notifications-microservice.statex-apps.svc.cluster.local:3368"

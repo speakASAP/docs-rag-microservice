@@ -2,6 +2,8 @@ import { Controller, Post, Body, HttpCode, UsePipes } from '@nestjs/common';
 import { z } from 'zod';
 import { RetrievalService } from './retrieval.service';
 import { ZodValidationPipe } from '../contracts/zod-validation.pipe';
+import { Roles } from '../auth/roles.decorator';
+import { DOCS_RAG_READ_ROLES } from '../auth/roles.constants';
 
 const SearchRequestSchema = z.object({
   query: z.string().min(1),
@@ -26,7 +28,9 @@ type AgentContextRequest = z.infer<typeof AgentContextRequestSchema>;
 export class RetrievalController {
   constructor(private readonly retrievalService: RetrievalService) {}
 
+  // A read despite being POST: classified by effect, not HTTP verb.
   @Post('search')
+  @Roles(...DOCS_RAG_READ_ROLES)
   @HttpCode(200)
   @UsePipes(new ZodValidationPipe(SearchRequestSchema))
   async search(@Body() body: SearchRequest) {
@@ -34,6 +38,7 @@ export class RetrievalController {
   }
 
   @Post('agent-context')
+  @Roles(...DOCS_RAG_READ_ROLES)
   @HttpCode(200)
   @UsePipes(new ZodValidationPipe(AgentContextRequestSchema))
   async agentContext(@Body() body: AgentContextRequest) {

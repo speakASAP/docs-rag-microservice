@@ -3,6 +3,8 @@ import { z } from 'zod';
 import { IngestionService } from './ingestion.service';
 import { ZodValidationPipe } from '../contracts/zod-validation.pipe';
 import { parseOrThrow } from '../contracts/parse-or-throw';
+import { Roles } from '../auth/roles.decorator';
+import { DOCS_RAG_INGEST_ROLES, DOCS_RAG_READ_ROLES } from '../auth/roles.constants';
 
 export const TriggerIngestionRequestSchema = z.object({
   repoName: z.string().min(1),
@@ -32,6 +34,7 @@ export class IngestionController {
   constructor(private readonly ingestionService: IngestionService) {}
 
   @Post('trigger')
+  @Roles(...DOCS_RAG_INGEST_ROLES)
   @HttpCode(202)
   @UsePipes(new ZodValidationPipe(TriggerIngestionRequestSchema))
   async trigger(@Body() body: TriggerIngestionRequest) {
@@ -46,13 +49,16 @@ export class IngestionController {
   }
 
   @Post('trigger-all')
+  @Roles(...DOCS_RAG_INGEST_ROLES)
   @HttpCode(202)
   async triggerAll(@Body() body: { force?: boolean }) {
     const force = body?.force ?? false;
     return this.ingestionService.triggerAll(force);
   }
 
+  // Observing job state is a read; it must not require ingest rights.
   @Get('status')
+  @Roles(...DOCS_RAG_READ_ROLES)
   async status() {
     const jobs = await this.ingestionService.getStatus();
     return parseOrThrow(
