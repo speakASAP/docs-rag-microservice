@@ -16,6 +16,14 @@ shared/config/ecosystem-repositories.json
 Repositories with `docsRag: true` are mounted and indexed directly. There is no
 central copied snapshot.
 
+## Authorization
+
+Every caller is a service or an HTTP agent, so access is governed only by
+[`auth-microservice/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md`](../../auth-microservice/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md):
+an Auth-issued, per-pair RS256 service token with an `internal:docs-rag-microservice:*`
+role. Never mint one locally, never share one between callers, and never substitute an
+API key or a caller-asserted header.
+
 ## Endpoints
 
 ### Semantic search
