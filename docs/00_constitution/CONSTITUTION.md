@@ -19,7 +19,7 @@ Retrieval must preserve source paths and direct low-confidence or unavailable qu
 
 ### Security
 
-Only health is public. Ingestion and retrieval require service JWT authentication. Secrets and sensitive source material must not be committed, logged, or documented.
+Only health is public. Ingestion and retrieval machine authentication is governed solely by the [Service Identity Consumer Standard](https://github.com/speakASAP/auth-microservice/blob/main/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md). Secrets and sensitive source material must not be committed, logged, or documented.
 
 ### Scope boundary
 

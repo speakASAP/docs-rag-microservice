@@ -25,7 +25,7 @@ The service exposes documentation search and ingestion capabilities for internal
 For machine service identity, follow the sole canonical [`SERVICE_IDENTITY_CONSUMER_STANDARD.md`](../../../auth-microservice/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md). It is not reproduced here.
 
 ## Consequences
-Runtime `JWT_SECRET` must come through Vault/Kubernetes secrets, agents need bearer tokens, health checks remain unauthenticated, and examples must use placeholders.
+Apply all machine-identity provisioning, delivery, enforcement, validation, and rotation requirements from that standard. Health checks remain unauthenticated and examples use placeholders.
 
 ## Validation
 Validate with service identity tests, endpoint behavior, deployment secret configuration, and sensitive-data scans.

@@ -23,7 +23,7 @@ related_adrs: []
 - Qdrant collection: The vector database collection `ecosystem-docs` used for documentation chunks.
 - Repository catalog: The machine-readable source registry at `shared/config/ecosystem-repositories.json`.
 - Repository source of truth: The original service repository documentation, which remains authoritative over indexed copies.
-- Service-to-service JWT: an Auth-issued RS256 bearer token, one principal per caller-to-target pair, governed solely by auth-microservice/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md.
+- Service-to-service identity: governed solely by the [Service Identity Consumer Standard](https://github.com/speakASAP/auth-microservice/blob/main/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md).
 - Derived index: Disposable PostgreSQL and Qdrant records rebuilt from cataloged Git repositories.
 
 ## Validation

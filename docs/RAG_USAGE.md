@@ -23,7 +23,7 @@ central copied snapshot.
 ```http
 POST /retrieval/search
 Content-Type: application/json
-Authorization: Bearer <pair-specific Auth-issued RS256 JWT>
+Authorization: Bearer <service-token>
 
 {
   "query": "deployment standard",
@@ -38,7 +38,7 @@ Authorization: Bearer <pair-specific Auth-issued RS256 JWT>
 ```http
 POST /retrieval/agent-context
 Content-Type: application/json
-Authorization: Bearer <pair-specific Auth-issued RS256 JWT>
+Authorization: Bearer <service-token>
 
 {
   "query": "new service integration requirements",

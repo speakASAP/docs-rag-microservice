@@ -17,7 +17,7 @@ Provide bounded semantic discovery over ecosystem Git documentation without beco
 - Resolve mounted Git HEAD with a command-scoped safe-directory setting and persist the real commit SHA for unchanged-source detection and chunk audit metadata.
 - Return token-bounded semantic context with source identity.
 - Exclude AppleDouble files and this repository retired docs/services snapshot.
-- Authenticate ingestion and retrieval with the service JWT; expose public health and sanitized central logging.
+- Authenticate ingestion and retrieval exclusively under the [Service Identity Consumer Standard](https://github.com/speakASAP/auth-microservice/blob/main/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md); expose public health and sanitized central logging.
 
 ## Non-responsibilities
 

@@ -8,7 +8,7 @@ Record code-verified ecosystem capability decisions for this production document
 
 | Capability | Decision | Evidence |
 | --- | --- | --- |
-| Auth | required | Machine routes follow auth-microservice/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md: Auth-issued per-pair RS256 bearer JWTs, target-scoped roles, a separate service actor, and fail-closed role enforcement. |
+| Auth | required | Machine routes follow the [Service Identity Consumer Standard](https://github.com/speakASAP/auth-microservice/blob/main/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md). |
 | PostgreSQL | required | TypeORM owns docs_rag chunks and ingestion jobs. |
 | Redis | not-applicable | No Redis dependency, client, or configuration is used. |
 | Logging | required | CentralLogger posts sanitized payloads to logging configuration. |
