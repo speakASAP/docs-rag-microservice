@@ -8,13 +8,15 @@ Read shared documentation authority, the ecosystem map, BUSINESS.md, SYSTEM.md, 
 
 Git is authoritative and docs-RAG is a derived projection. Use retrieval for discovery, then verify critical claims at returned paths. Retrieval failure or low confidence is not evidence of absence.
 
+For every service-to-service call, use the sole [Service Identity Consumer Standard](https://github.com/speakASAP/auth-microservice/blob/main/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md); this repository defines no separate service credential or authorization model.
+
 ## Intent preservation system
 
 Preserve Vision to Goal Impact to System to Feature to Task to Execution Plan to Coding Prompt to Code to Validation. Follow task, plan, and validation artifacts before changing behavior.
 
 ## Safety and operations
 
-Do not print service tokens, sensitive embeddings, raw production documents, or customer data. Do not recreate snapshots, trigger ingestion, operate the deploy queue, or modify Ollama during documentation-only work.
+Do not print credentials, sensitive embeddings, raw production documents, or customer data. Do not recreate snapshots, trigger ingestion, operate the deploy queue, or modify Ollama during documentation-only work.
 
 ## Project-specific rules
 

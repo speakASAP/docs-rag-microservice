@@ -13,7 +13,6 @@ upstream:
 downstream:
   - docs/05_subsystems/SUB-001-ingestion.md
   - docs/05_subsystems/SUB-002-retrieval.md
-  - docs/05_subsystems/SUB-003-service-identity-and-operations.md
 related_adrs:
   - docs/07_decisions/ADR-001-documentation-rag-service.md
   - docs/07_decisions/ADR-002-protect-authenticated-retrieval.md
@@ -40,7 +39,7 @@ Provide centralized semantic retrieval and token-budgeted agent context over eco
 - Repository configuration and local documentation paths.
 - Markdown documentation files.
 - Retrieval and ingestion API requests.
-- JWT secret and service configuration from Vault/Kubernetes environment.
+- Runtime configuration from Vault/Kubernetes environment; service-to-service authentication is governed exclusively by the [Service Identity Consumer Standard](https://github.com/speakASAP/auth-microservice/blob/main/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md).
 
 ## Outputs
 - Qdrant vectors and metadata.
