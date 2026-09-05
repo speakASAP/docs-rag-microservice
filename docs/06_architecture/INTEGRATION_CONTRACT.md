@@ -8,7 +8,7 @@ Record code-verified ecosystem capability decisions for this production document
 
 | Capability | Decision | Evidence |
 | --- | --- | --- |
-| Auth | required | ServiceAuthGuard validates JWT_SECRET for guarded routes. |
+| Auth | required | Machine routes follow auth-microservice/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md: Auth-issued per-pair RS256 bearer JWTs, target-scoped roles, a separate service actor, and fail-closed role enforcement. |
 | PostgreSQL | required | TypeORM owns docs_rag chunks and ingestion jobs. |
 | Redis | not-applicable | No Redis dependency, client, or configuration is used. |
 | Logging | required | CentralLogger posts sanitized payloads to logging configuration. |
@@ -31,7 +31,7 @@ docs-rag-microservice owns PostgreSQL chunk and ingestion-job records and Qdrant
 
 ## Authentication and authorization
 
-ServiceAuthGuard applies a JWT service boundary to ingestion and retrieval. Public health is explicitly marked public. The JWT secret is supplied by the secret flow and is never documented as a value.
+Machine-accessible ingestion and retrieval routes follow the canonical service-identity standard. Auth is the only signer; receivers validate through Auth or an approved local RS256 verifier, create a separate service actor, explicitly enforce target-scoped roles, and deny and error-log undecorated routes. Pair credentials are delivered only through Vault -> ExternalSecret -> Kubernetes Secret -> secretKeyRef. Public health is explicitly public.
 
 ## Synchronous dependencies
 
