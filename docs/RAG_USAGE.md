@@ -3,6 +3,8 @@
 docs-RAG provides candidate context from approved ecosystem Git repositories.
 It is not a documentation store and not an authority layer.
 
+Service calls follow auth-microservice/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md.
+
 ## Sources
 
 The canonical source list is:
@@ -21,7 +23,7 @@ central copied snapshot.
 ```http
 POST /retrieval/search
 Content-Type: application/json
-Authorization: <service token>
+Authorization: Bearer <pair-specific Auth-issued RS256 JWT>
 
 {
   "query": "deployment standard",
@@ -36,7 +38,7 @@ Authorization: <service token>
 ```http
 POST /retrieval/agent-context
 Content-Type: application/json
-Authorization: <service token>
+Authorization: Bearer <pair-specific Auth-issued RS256 JWT>
 
 {
   "query": "new service integration requirements",

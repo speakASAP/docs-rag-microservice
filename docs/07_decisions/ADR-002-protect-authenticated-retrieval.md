@@ -22,16 +22,14 @@ The service exposes documentation search and ingestion capabilities for internal
 
 ## Decision
 
-> **Superseded 2026-08-25 for the algorithm and credential shape** by
-> [`auth-microservice/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md`](../../../auth-microservice/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md).
-> The decision to protect ingestion and retrieval **stands**. The mechanism does
-> not: new callers use an Auth-issued **RS256** service JWT, one principal per
-> `(caller → target)` pair, minted only with
-> `auth-microservice/scripts/provision-service-token.js`. HS256 and a shared
-> `JWT_SECRET` are legacy — the existing path keeps working, but no new caller
-> may adopt it.
-
-Keep `/health` public for liveness only. Require HS256 service-to-service JWT authentication on ingestion and retrieval endpoints.
+Keep health public for liveness only. Ingestion and retrieval are machine-accessible
+routes governed solely by auth-microservice/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md.
+Each caller-to-docs-rag-microservice pair has one Auth-registered RS256 bearer JWT,
+minted or re-minted only by auth-microservice/scripts/provision-service-token.js.
+The receiver validates through Auth or an approved local RS256 verifier, creates a
+separate service actor, declares and enforces target-scoped roles per route, and
+denies and error-logs undecorated routes. Credentials flow only through Vault ->
+ExternalSecret -> Kubernetes Secret -> secretKeyRef.
 
 ## Consequences
 Runtime `JWT_SECRET` must come through Vault/Kubernetes secrets, agents need bearer tokens, health checks remain unauthenticated, and examples must use placeholders.
