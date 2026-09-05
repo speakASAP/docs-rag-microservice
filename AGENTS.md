@@ -8,7 +8,7 @@ Read shared documentation authority, the ecosystem map, BUSINESS.md, SYSTEM.md, 
 
 Git is authoritative and docs-RAG is a derived projection. Use retrieval for discovery, then verify critical claims at returned paths. Retrieval failure or low confidence is not evidence of absence.
 
-For every service-to-service call, use the sole [Service Identity Consumer Standard](https://github.com/speakASAP/auth-microservice/blob/main/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md); this repository defines no separate service credential or authorization model.
+For every service-to-service call, use the sole [Service Identity Consumer Standard](../auth-microservice/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md); this repository defines no separate service credential or authorization model.
 
 ## Intent preservation system
 

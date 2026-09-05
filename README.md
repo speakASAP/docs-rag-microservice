@@ -14,7 +14,7 @@ Catalog-scoped Markdown/MDX ingestion, Ollama embeddings, Qdrant semantic retrie
 
 ## Interfaces
 
-Health, retrieval search, agent context, ingestion trigger, ingestion trigger-all, and ingestion status are HTTP interfaces. All except health use machine authentication governed solely by the [Service Identity Consumer Standard](https://github.com/speakASAP/auth-microservice/blob/main/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md).
+Health, retrieval search, agent context, ingestion trigger, ingestion trigger-all, and ingestion status are HTTP interfaces. All except health use machine authentication governed solely by the [Service Identity Consumer Standard](../auth-microservice/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md).
 
 ## Development
 

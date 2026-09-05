@@ -39,7 +39,7 @@ Provide centralized semantic retrieval and token-budgeted agent context over eco
 - Repository configuration and local documentation paths.
 - Markdown documentation files.
 - Retrieval and ingestion API requests.
-- Runtime configuration from Vault/Kubernetes environment; service-to-service authentication is governed exclusively by the [Service Identity Consumer Standard](https://github.com/speakASAP/auth-microservice/blob/main/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md).
+- Runtime configuration from Vault/Kubernetes environment; service-to-service authentication is governed exclusively by the [Service Identity Consumer Standard](../../../auth-microservice/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md).
 
 ## Outputs
 - Qdrant vectors and metadata.
