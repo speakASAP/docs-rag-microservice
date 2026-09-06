@@ -1,16 +1,12 @@
 /**
  * Auth-issued RS256 verification via JWKS.
  *
- * docs-RAG previously verified HS256 against a shared symmetric secret, and
- * shipped `JwtUtil.sign()` inside the verifying service — holding the secret
- * needed to *verify* was the same as holding the secret needed to *mint*, so
- * every one of the 22 deployments that mounted it could forge any identity.
- * Under RS256 this service holds only auth's public key and cannot sign at all.
+ * This service holds only auth's public key and cannot sign. HS256 verification
+ * and local minting were removed (Phase 4); unsupported algorithms fail closed.
  *
- * Modelled on `notifications-microservice/src/auth/jwt-verifier.ts`, which is
- * the completed reference for this migration. Implemented on node:crypto rather
- * than `jsonwebtoken` because docs-RAG does not depend on it and node 24
- * imports JWK public keys natively.
+ * Modelled on `notifications-microservice/src/auth/jwt-verifier.ts`. Implemented
+ * on node:crypto rather than `jsonwebtoken` because docs-RAG does not depend on
+ * it and node 24 imports JWK public keys natively.
  *
  * The key set is cached because it is fetched on the request path; a miss on an
  * unknown `kid` refetches once so auth key rotation needs no redeploy here.
@@ -90,8 +86,7 @@ export interface VerifiedPayload {
 
 /**
  * Verify an auth-issued RS256 token. Throws UnauthorizedException on any
- * failure. HS256 is never accepted here — that lane lives in ServiceAuthGuard
- * behind ALLOW_HS256_FALLBACK and is removed once every caller is migrated.
+ * failure. HS256 and other algorithms are refused immediately.
  */
 export async function verifyAuthToken(token: string): Promise<VerifiedPayload> {
   const parts = token.split('.');

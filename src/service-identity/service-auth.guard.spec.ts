@@ -3,8 +3,10 @@
  *
  * The defect these cover: before roles existed, every route resolved to the same
  * authority, so any credential that could read one document could also call
- * POST /ingestion/trigger-all and re-index every repository. The first two tests
+ * POST /ingestion/trigger-all and re-index every repository. The first tests
  * are the regression guard for that.
+ *
+ * HS256 is closed: any legacy shared-secret token must fail immediately.
  */
 
 import { ExecutionContext, UnauthorizedException } from '@nestjs/common';
@@ -15,9 +17,7 @@ import { IS_PUBLIC_KEY } from './public.decorator';
 import { ROLES_KEY } from '../auth/roles.decorator';
 import { DOCS_RAG_INGEST_ROLES, DOCS_RAG_READ_ROLES } from '../auth/roles.constants';
 
-const SECRET = 'test-secret';
-
-function hs256(serviceId: string, secret = SECRET): string {
+function hs256(serviceId: string, secret = 'test-secret'): string {
   const b = (o: unknown) => Buffer.from(JSON.stringify(o)).toString('base64url');
   const now = Math.floor(Date.now() / 1000);
   const h = b({ alg: 'HS256', typ: 'JWT' });
@@ -45,17 +45,6 @@ function reflectorFor(roles?: readonly string[], isPublic = false): Reflector {
 }
 
 describe('ServiceAuthGuard', () => {
-  const original = { ...process.env };
-
-  beforeEach(() => {
-    process.env.JWT_SECRET = SECRET;
-    process.env.ALLOW_HS256_FALLBACK = 'true';
-  });
-
-  afterEach(() => {
-    process.env = { ...original };
-  });
-
   it('denies a legacy HS256 caller on an ingest route', async () => {
     const guard = new ServiceAuthGuard(reflectorFor(DOCS_RAG_INGEST_ROLES));
     await expect(guard.canActivate(contextFor(`Bearer ${hs256('runlayer')}`))).rejects.toThrow(
@@ -63,16 +52,17 @@ describe('ServiceAuthGuard', () => {
     );
   });
 
-  it('allows a legacy HS256 caller on a read route while the window is open', async () => {
+  it('denies a legacy HS256 caller on a read route', async () => {
     const guard = new ServiceAuthGuard(reflectorFor(DOCS_RAG_READ_ROLES));
-    await expect(guard.canActivate(contextFor(`Bearer ${hs256('runlayer')}`))).resolves.toBe(true);
+    await expect(guard.canActivate(contextFor(`Bearer ${hs256('runlayer')}`))).rejects.toThrow(
+      UnauthorizedException,
+    );
   });
 
   it('lets an ingest principal poll ingestion status', async () => {
     // A publisher triggers a job and then polls until it completes. Leaving
     // `ingest` out of the read set made cliplot's publish_docs_rag.sh 401
     // halfway through, after it had already started an ingestion run.
-    jest.isolateModules(() => undefined);
     const verifier = require('../auth/jwt-verifier');
     const spy = jest
       .spyOn(verifier, 'verifyAuthToken')
@@ -109,20 +99,5 @@ describe('ServiceAuthGuard', () => {
   it('rejects a missing Authorization header on a protected route', async () => {
     const guard = new ServiceAuthGuard(reflectorFor(DOCS_RAG_READ_ROLES));
     await expect(guard.canActivate(contextFor())).rejects.toThrow('Missing service token');
-  });
-
-  it('rejects an HS256 token signed with the wrong secret', async () => {
-    const guard = new ServiceAuthGuard(reflectorFor(DOCS_RAG_READ_ROLES));
-    await expect(
-      guard.canActivate(contextFor(`Bearer ${hs256('runlayer', 'wrong-secret')}`)),
-    ).rejects.toThrow(UnauthorizedException);
-  });
-
-  it('rejects every HS256 token once the fallback window is closed', async () => {
-    process.env.ALLOW_HS256_FALLBACK = 'false';
-    const guard = new ServiceAuthGuard(reflectorFor(DOCS_RAG_READ_ROLES));
-    await expect(guard.canActivate(contextFor(`Bearer ${hs256('runlayer')}`))).rejects.toThrow(
-      UnauthorizedException,
-    );
   });
 });
