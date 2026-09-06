@@ -10,7 +10,6 @@ interface CentralLogPayload {
   level: CentralLogLevel;
   msg: string;
   timestamp: string;
-  context?: string;
   duration_ms?: number;
   correlation_id?: string;
   metadata?: Record<string, unknown>;
@@ -62,7 +61,27 @@ export class CentralLogger extends ConsoleLogger {
         method: 'POST',
         headers: centralLogHeaders(),
         body: JSON.stringify(payload),
-      }).catch(() => undefined);
+      })
+        .then(async (res) => {
+          // A rejected log is a lost log. Report it on the local console --
+          // the one channel that cannot itself be blackholed by this failure.
+          if (!res.ok) {
+            let detail = '';
+            try {
+              detail = (await res.text()).slice(0, 300);
+            } catch {
+              detail = '<unreadable body>';
+            }
+            console.warn(
+              `[CentralLogger] central log ingest rejected: HTTP ${res.status} ${detail}`,
+            );
+          }
+        })
+        .catch((err) => {
+          console.warn(
+            `[CentralLogger] central log ingest failed: ${err?.message ?? String(err)}`,
+          );
+        });
     }, 0);
   }
 
@@ -77,10 +96,18 @@ export class CentralLogger extends ConsoleLogger {
       level,
       msg: stringifyMessage(message),
       timestamp: new Date().toISOString(),
-      ...(context ? { context } : {}),
+
       ...(durationMs !== undefined ? { duration_ms: durationMs } : {}),
       ...(correlationId ? { correlation_id: correlationId } : {}),
-      ...(Object.keys(sanitizedMetadata).length > 0 ? { metadata: sanitizedMetadata } : {}),
+      ...(() => {
+        // `context` must travel inside metadata: the logging-microservice
+        // LogEntryDto runs with forbidNonWhitelisted, so a top-level `context`
+        // is rejected with 400 "property context should not exist" and the log
+        // is lost. This silently blackholed every docs-rag log from
+        // 2026-07-06 until 2026-09-06.
+        const merged = context ? { ...sanitizedMetadata, context } : sanitizedMetadata;
+        return Object.keys(merged).length > 0 ? { metadata: merged } : {};
+      })(),
     };
   }
 }
