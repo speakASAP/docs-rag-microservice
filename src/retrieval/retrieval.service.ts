@@ -154,7 +154,10 @@ export class RetrievalService {
     const confident = topScore >= CONFIDENT_MATCH_SCORE;
 
     if (!confident) {
-      this.logger.warn(
+      // Expected empty-result path — not a service fault. Keep at debug so it
+      // stays on the local console / central debug stream and does not enter
+      // logging's error-index (warn+), which would raise ServiceLoggingErrors.
+      this.logger.debug(
         `No confident match for query="${req.query}" ` +
           `(top score ${topScore.toFixed(3)} < ${CONFIDENT_MATCH_SCORE}); ` +
           `returning explicit no-match instead of ${response.results.length} weak chunks`,
