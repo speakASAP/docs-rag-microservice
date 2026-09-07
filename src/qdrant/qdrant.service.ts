@@ -57,10 +57,16 @@ export class QdrantService implements OnModuleInit {
 
   async upsertBatch(collection: string, points: QdrantPoint[]): Promise<void> {
     if (points.length === 0) return;
-    await this.client.upsert(collection, {
-      wait: true,
-      points: points.map((p) => ({ id: p.id, vector: p.vector, payload: p.payload })),
-    });
+    try {
+      await this.client.upsert(collection, {
+        wait: true,
+        points: points.map((p) => ({ id: p.id, vector: p.vector, payload: p.payload })),
+      });
+    } catch (err) {
+      // Bare undici "fetch failed" hid whether Ollama or Qdrant broke ingestion
+      // (2026-09-07 monitoring-microservice died at 79/110 with no named endpoint).
+      throw new Error(`Qdrant upsert to ${this.describe(collection)} failed: ${describeFetchError(err)}`);
+    }
     this.logger.log(`Upserted ${points.length} points to ${collection}`);
   }
 
@@ -91,10 +97,27 @@ export class QdrantService implements OnModuleInit {
       wait: true,
       filter,
     };
-    await this.client.delete(collection, deleteParams as Parameters<QdrantClient['delete']>[1]);
+    try {
+      await this.client.delete(collection, deleteParams as Parameters<QdrantClient['delete']>[1]);
+    } catch (err) {
+      throw new Error(`Qdrant delete on ${this.describe(collection)} failed: ${describeFetchError(err)}`);
+    }
   }
 
   getDefaultCollection(): string {
     return this.collectionName;
   }
+
+  private describe(collection: string): string {
+    return `${process.env.QDRANT_URL || 'http://localhost:6333'}/collections/${collection}`;
+  }
+}
+
+/** Undici collapses connection reset, DNS, and refused into "fetch failed". */
+function describeFetchError(err: unknown): string {
+  if (!(err instanceof Error)) return String(err);
+  const cause = (err as Error & { cause?: unknown }).cause;
+  if (cause instanceof Error) return `${err.message} (cause: ${cause.message})`;
+  if (cause !== undefined && cause !== null) return `${err.message} (cause: ${String(cause)})`;
+  return err.message;
 }

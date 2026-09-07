@@ -90,12 +90,11 @@ export class EmbeddingService {
     } catch (err) {
       // Node reports both connection refusal and abort as a bare "fetch
       // failed", which is what made the 2026-07-16 outage so hard to read.
-      // Name the endpoint, the model and the timeout in the error itself.
-      const cause = err instanceof Error ? err.message : String(err);
+      // Name the endpoint, the model, the timeout, and undici's cause.
       const timedOut = err instanceof Error && err.name === 'TimeoutError';
       throw new Error(
         `Ollama embedding request to ${this.ollamaUrl}/api/embeddings ` +
-          `(model=${this.model}) ${timedOut ? `timed out after ${EMBED_TIMEOUT_MS}ms` : `failed: ${cause}`}`,
+          `(model=${this.model}) ${timedOut ? `timed out after ${EMBED_TIMEOUT_MS}ms` : `failed: ${describeFetchError(err)}`}`,
       );
     }
 
@@ -118,4 +117,13 @@ export class EmbeddingService {
   getModelName(): string {
     return this.model;
   }
+}
+
+/** Undici collapses connection reset, DNS, and refused into "fetch failed". */
+function describeFetchError(err: unknown): string {
+  if (!(err instanceof Error)) return String(err);
+  const cause = (err as Error & { cause?: unknown }).cause;
+  if (cause instanceof Error) return `${err.message} (cause: ${cause.message})`;
+  if (cause !== undefined && cause !== null) return `${err.message} (cause: ${String(cause)})`;
+  return err.message;
 }
