@@ -3,8 +3,6 @@
 docs-RAG provides candidate context from approved ecosystem Git repositories.
 It is not a documentation store and not an authority layer.
 
-Service calls follow auth-microservice/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md.
-
 ## Sources
 
 The canonical source list is:
@@ -18,11 +16,10 @@ central copied snapshot.
 
 ## Authorization
 
-Every caller is a service or an HTTP agent, so access is governed only by
-[`auth-microservice/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md`](../../auth-microservice/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md):
-an Auth-issued, per-pair RS256 service token with an `internal:docs-rag-microservice:*`
-role. Never mint one locally, never share one between callers, and never substitute an
-API key or a caller-asserted header.
+Machine callers only:
+[`auth-microservice/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md`](../../auth-microservice/docs/SERVICE_IDENTITY_CONSUMER_STANDARD.md).
+Do not restate protocol here. Receiver role prefix for this service:
+`internal:docs-rag-microservice:*`.
 
 ## Endpoints
 
