@@ -4,7 +4,19 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 const MARKDOWN_EXTENSIONS = ['.md', '.mdx'];
+// Directories that never hold indexable documentation. Python virtualenvs are
+// matched by prefix (.venv, .venv-load, .venv-signature-test): walking them
+// yields no markdown and trips over their internal python -> python3 -> python
+// symlink cycles, which are broken by design and warned about once per file.
 const EXCLUDED_DIRS = ['node_modules', '.git', 'dist', 'coverage', 'vendor'];
+const EXCLUDED_DIR_PREFIXES = ['.venv'];
+
+function isExcludedDir(name: string): boolean {
+  return (
+    EXCLUDED_DIRS.includes(name) ||
+    EXCLUDED_DIR_PREFIXES.some((prefix) => name === prefix || name.startsWith(`${prefix}`))
+  );
+}
 
 export interface PreparedRepository {
   localPath: string;
@@ -169,7 +181,7 @@ export class GitSyncService {
     }
 
     for (const entry of entries) {
-      if (EXCLUDED_DIRS.includes(entry.name)) continue;
+      if (isExcludedDir(entry.name)) continue;
       // AppleDouble resource-fork files can contain NUL bytes and are not
       // documentation even when their names end in .md.
       if (entry.name.startsWith('._')) continue;
