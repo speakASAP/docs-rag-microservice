@@ -57,7 +57,32 @@ export class GitSyncService {
     return localPath;
   }
 
+  /** readlink that never throws; undefined when the path is not a symlink. */
+  private safeReadLink(fullPath: string): string | undefined {
+    try {
+      return fs.readlinkSync(fullPath);
+    } catch {
+      return undefined;
+    }
+  }
+
   async getHeadCommit(localPath: string): Promise<string> {
+    // Not every indexed source is a git checkout: the agent-profile mounts
+    // (/data/agent-profiles/{claude,codex,cursor}) are plain directories. Asking
+    // git for HEAD there always fails, so it logged an error on every run and
+    // still fell back to 'unknown' -- noise that says nothing about health.
+    //
+    // A non-git source has no commit to compare, so a full re-index IS the
+    // correct behaviour; report it at debug and reserve the error for a path
+    // that looks like a repository but cannot be read (a genuine fault, such as
+    // the safe.directory ownership case below).
+    if (!fs.existsSync(path.join(localPath, '.git'))) {
+      this.logger.debug(
+        `${localPath} is not a git checkout; indexing it in full every run by design.`,
+      );
+      return 'unknown';
+    }
+
     try {
       const git: SimpleGit = simpleGit({
         baseDir: localPath,
@@ -169,9 +194,31 @@ export class GitSyncService {
         try {
           stat = fs.statSync(fullPath);
         } catch (err) {
-          this.logger.warn(
-            `Skipping unresolvable symlink ${fullPath}: ${err instanceof Error ? err.message : String(err)}`,
-          );
+          // A symlink pointing outside the mounted tree cannot resolve here and
+          // never will: the agent-profile mounts contain host-absolute links
+          // (e.g. .claude/CLAUDE.md -> /home/ssf/Documents/Github/shared/...),
+          // and that host path does not exist inside the container, where the
+          // same tree is mounted at /data/repos. Their targets are already
+          // indexed directly from the shared checkout, so nothing is lost.
+          //
+          // Reported at debug: this is a known, permanent property of the mount
+          // layout, not a fault. It previously logged one warn per file per run
+          // -- 142 events -- which escalated to a critical alert saying nothing
+          // about health. A link that fails for any OTHER reason is a real
+          // problem and still surfaces as a warning.
+          const target = this.safeReadLink(fullPath);
+          const unresolvableHostPath =
+            target !== undefined && path.isAbsolute(target) && !fs.existsSync(target);
+
+          if (unresolvableHostPath) {
+            this.logger.debug(
+              `Skipping symlink ${fullPath} -> ${target}: target is outside the mounted tree.`,
+            );
+          } else {
+            this.logger.warn(
+              `Skipping unresolvable symlink ${fullPath}: ${err instanceof Error ? err.message : String(err)}`,
+            );
+          }
           continue;
         }
         isDirectory = stat.isDirectory();
