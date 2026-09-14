@@ -282,9 +282,30 @@ export class IngestionService implements OnModuleInit, OnModuleDestroy {
       });
       await this.chunkRepo.delete({ repoName: job.repoName });
 
+      let unreadableFiles = 0;
+
       for (const filePath of files) {
         const relativePath = filePath.replace(localPath, '').replace(/^\//, '');
-        const content = await this.gitSync.readFile(filePath);
+        let content: string;
+        try {
+          content = await this.gitSync.readFile(filePath);
+        } catch (err: any) {
+          // One unreadable file must not fail the repo. The chunk delete above
+          // has already run, so throwing here leaves the repo with an EMPTY
+          // index until a later run succeeds -- which is how jarvis silently
+          // dropped out of search for two days on a single root-owned 0640
+          // README. Skip the file, count it, and let the rest index.
+          //
+          // Still loud: every skip is logged with its cause, and a non-zero
+          // count is reported as a warning at the end of the run.
+          unreadableFiles++;
+          this.logger.warn(
+            `Skipping unreadable file in ${job.repoName}: ${relativePath} (${err?.code ?? err?.message})`,
+          );
+          job.chunksProcessed++;
+          await this.jobRepo.save(job);
+          continue;
+        }
         const chunks = this.chunker.chunk(content, relativePath, { repoName: job.repoName });
 
         if (chunks.length === 0) {
@@ -337,6 +358,13 @@ export class IngestionService implements OnModuleInit, OnModuleDestroy {
       job.lastCommitHash = commitHash;
       await this.jobRepo.save(job);
       this.logger.log(`Ingestion complete for ${job.repoName}: ${job.chunksProcessed} files processed`);
+      if (unreadableFiles > 0) {
+        // A completed run that silently dropped files is exactly the kind of
+        // partial success that hides a permissions regression, so say it plainly.
+        this.logger.warn(
+          `Ingestion for ${job.repoName} skipped ${unreadableFiles} unreadable file(s); their content is NOT in the index`,
+        );
+      }
     } catch (err) {
       job.status = 'failed';
       job.errorMessage = err instanceof Error ? err.message : String(err);

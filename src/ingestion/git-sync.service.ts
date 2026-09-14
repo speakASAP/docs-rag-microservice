@@ -8,7 +8,11 @@ const MARKDOWN_EXTENSIONS = ['.md', '.mdx'];
 // matched by prefix (.venv, .venv-load, .venv-signature-test): walking them
 // yields no markdown and trips over their internal python -> python3 -> python
 // symlink cycles, which are broken by design and warned about once per file.
-const EXCLUDED_DIRS = ['node_modules', '.git', 'dist', 'coverage', 'vendor'];
+// `.cargo-home` is a vendored Rust registry (jarvis/engine). Its crate sources
+// carry markdown that is not our documentation, and cargo unpacks some of them
+// root-owned 0640 -- unreadable to the uid this service runs as, which aborted
+// the whole jarvis repo on one README.
+const EXCLUDED_DIRS = ['node_modules', '.git', 'dist', 'coverage', 'vendor', '.cargo-home', 'target'];
 const EXCLUDED_DIR_PREFIXES = ['.venv'];
 
 function isExcludedDir(name: string): boolean {
